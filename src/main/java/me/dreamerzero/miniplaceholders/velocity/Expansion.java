@@ -24,7 +24,7 @@ public interface Expansion {
     TagResolver getAudiencePlaceholders(Audience audience);
 
     /**
-     * 
+     * Get the relational placeholders based on two audiences
      * @param audience
      * @param otherAudience
      * @since 1.0.0
@@ -97,7 +97,7 @@ public interface Expansion {
         Builder addRelationalPlaceholder(String name, BiFunction<Audience, Audience, Component> placeholder);
 
         /**
-         * 
+         * Adds a global placeholder
          * @param name
          * @param placeholder
          * @since 1.0.0
@@ -106,8 +106,8 @@ public interface Expansion {
         Builder addGlobalPlaceholder(String name, Supplier<Component> placeholder);
 
         /**
-         * 
-         * @return
+         * Build the Expansion
+         * @return the new expansion
          */
         Expansion build();
     }

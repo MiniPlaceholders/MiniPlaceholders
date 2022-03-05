@@ -11,7 +11,7 @@ import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.Displayname;
+import org.junit.jupiter.api.DisplayName;
 
 import me.dreamerzero.miniplaceholders.velocity.Expansion;
 import net.kyori.adventure.audience.Audience;
@@ -21,9 +21,9 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 
 public class PlaceholderTest {
-    static final Component expected = Component.text("Player Name: 4drian3d");
+
     @Test
-    @Displayname("Placeholder Test")
+    @DisplayName("Placeholder Test")
     void placeholdersTest(){
         Player player = mock(Player.class);
         when(player.getUsername()).thenReturn("4drian3d");
@@ -49,6 +49,7 @@ public class PlaceholderTest {
 
         final TagResolver resolvers = expansion.getAudiencePlaceholders(player);
 
+        final Component expected = Component.text("Player Name: 4drian3d");
         final Component result = MiniMessage.miniMessage().deserialize("Player Name: <example-name>", resolvers);
 
         assertEquals(expected, result);
