@@ -13,9 +13,6 @@ import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 
-/**
- * Expansion that contains placeholders
- */
 final class ExpansionImpl implements Expansion {
     private final String name;
     private final Map<String, Function<Audience, Component>> audiencePlaceholders;
@@ -98,6 +95,12 @@ final class ExpansionImpl implements Expansion {
         }
 
         @Override
+        public Builder globalPlaceholder(String name, TagResolver resolver){
+            globalPlaceholders.resolver(resolver);
+            return this;
+        }
+
+        @Override
         public Expansion build(){
             return new ExpansionImpl(expansionName, audiencePlaceholders, relationalPlaceholders, globalPlaceholders.build());
         }
@@ -106,7 +109,7 @@ final class ExpansionImpl implements Expansion {
     @Override
     public boolean equals(Object o){
         if(this==o) return true;
-        if(!(o instanceof ExpansionImpl)) return false;
+        if(o == null || o.getClass() != ExpansionImpl.class) return false;
         return ((ExpansionImpl)o).name.equals(this.name);
     }
 

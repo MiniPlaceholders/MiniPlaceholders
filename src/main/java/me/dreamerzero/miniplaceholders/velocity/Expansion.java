@@ -5,9 +5,13 @@ import java.util.function.Function;
 
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 
+/**
+ * Expansion that contains placeholders
+ */
 public interface Expansion {
     /**
      * Get the expansion name
@@ -54,6 +58,9 @@ public interface Expansion {
         return new ExpansionImpl.Builder(name);
     }
 
+    /**
+     * Expansion Builder
+     */
     public static interface Builder {
         /**
          * Adds an audience placeholder
@@ -61,7 +68,7 @@ public interface Expansion {
          * Example use:
          * <pre>
          *  Expansion.Builder builder = Expansion.builder("player");
-         *  builder.addPlayerPlaceholder("name", audience -> {
+         *  builder.audiencePlaceholder("name", audience -> {
          *      if(audience instanceof Player){
          *          return Component.text(((Player)audience).getUsername());
          *      } else {
@@ -75,7 +82,7 @@ public interface Expansion {
          *
          * <pre>
          *  Player player = event.getPlayer();
-         *  TagResolver resolver = expansion.getAudiencePlaceholder(player);
+         *  TagResolver resolver = expansion.audiencePlaceholder(player);
          *  Component messageReplaced = MiniMessage.deserialize({@link String}, resolver);
          * </pre>
          * @param name the placeholder name
@@ -110,6 +117,24 @@ public interface Expansion {
          * @return
          */
         Builder globalPlaceholder(String name, Tag placeholder);
+
+        /**
+         * Adds a global tagresolver placeholder
+         * @param name
+         * @param resolver
+         * @return
+         */
+        Builder globalPlaceholder(String name, TagResolver resolver);
+
+        /**
+         * Adds a global component placeholder
+         * @param name
+         * @param component
+         * @return
+         */
+        default Builder globalPlaceholder(String name, ComponentLike component) {
+            return this.globalPlaceholder(name, Tag.selfClosingInserting(component));
+        }
 
         /**
          * Build the Expansion
