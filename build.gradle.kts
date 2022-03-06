@@ -11,6 +11,7 @@ repositories {
 
 dependencies {
     compileOnly("com.velocitypowered:velocity-api:3.1.2-SNAPSHOT")
+    annotationProcessor("com.velocitypowered:velocity-api:3.1.2-SNAPSHOT")
 
     testImplementation("com.velocitypowered:velocity-api:3.1.2-SNAPSHOT")
     testImplementation(platform("org.junit:junit-bom:5.8.1"))

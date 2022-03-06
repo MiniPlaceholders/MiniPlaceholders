@@ -3,13 +3,13 @@ package me.dreamerzero.miniplaceholders.velocity;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.BiFunction;
-import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 
@@ -20,40 +20,35 @@ final class ExpansionImpl implements Expansion {
     private final String name;
     private final Map<String, Function<Audience, Component>> audiencePlaceholders;
     private final Map<String, BiFunction<Audience, Audience, Component>> relationalPlaceholders;
-    private final Map<String, Supplier<Component>> globalPlaceholders;
-    private final Consumer<String> debugConsumer;
+    private final TagResolver globalPlaceholders;
 
     ExpansionImpl(
         String expansionName,
         Map<String, Function<Audience, Component>> audiencePlaceholders,
         Map<String, BiFunction<Audience, Audience, Component>> relationalPlaceholders,
-        Map<String, Supplier<Component>> globalPlaceholders,
-        Consumer<String> debugConsumer){
+        TagResolver globalPlaceholders){
             this.name = expansionName+"-";
             this.audiencePlaceholders = audiencePlaceholders;
             this.relationalPlaceholders = relationalPlaceholders;
             this.globalPlaceholders = globalPlaceholders;
-            if(debugConsumer != null) this.debugConsumer = debugConsumer;
-            else this.debugConsumer = st -> {};
     }
 
     @Override
-    public String getExpansionName(){
+    public String name(){
         return this.name;
     }
 
     @Override
-    public TagResolver getAudiencePlaceholders(Audience audience){
+    public TagResolver audiencePlaceholders(Audience audience){
         TagResolver.Builder placeholders = TagResolver.builder();
-        audiencePlaceholders.forEach((st, func) -> {
-            placeholders.resolver(Placeholder.component(st, func.apply(audience)));
-            debugConsumer.accept("Added Placeholder" +st+"to Expansion"+name);
-        });
+        audiencePlaceholders.forEach((st, func) ->
+            placeholders.resolver(Placeholder.component(st, func.apply(audience)))
+        );
         return placeholders.build();
     }
 
     @Override
-    public TagResolver getRelationalPlaceholders(Audience audience, Audience otherAudience){
+    public TagResolver relationalPlaceholders(Audience audience, Audience otherAudience){
         TagResolver.Builder placeholders = TagResolver.builder();
         relationalPlaceholders.forEach((st, bif) ->
             placeholders.resolver(Placeholder.component(st, bif.apply(audience, otherAudience)))
@@ -62,50 +57,49 @@ final class ExpansionImpl implements Expansion {
     }
 
     @Override
-    public TagResolver getGlobalPlaceholders(){
-        TagResolver.Builder placeholders = TagResolver.builder();
-        globalPlaceholders.forEach((st, func) ->
-            placeholders.resolver(Placeholder.component(st, func.get()))
-        );
-        return placeholders.build();
+    public TagResolver globalPlaceholders(){
+        return this.globalPlaceholders;
+    }
+
+    @Override
+    public void register(){
+        MiniPlaceholders.expansions.add(this);
     }
 
     static class Builder implements Expansion.Builder {
         private final String expansionName;
         private final Map<String, Function<Audience, Component>> audiencePlaceholders;
         private final Map<String, BiFunction<Audience, Audience, Component>> relationalPlaceholders;
-        private final Map<String, Supplier<Component>> globalPlaceholders;
+        private TagResolver.Builder globalPlaceholders;
 
         Builder(String name){
-            this.expansionName = name.toLowerCase(Locale.ROOT).concat("-");
+            this.expansionName = name.toLowerCase(Locale.ROOT).concat("_");
             this.audiencePlaceholders = new HashMap<>();
             this.relationalPlaceholders = new HashMap<>();
-            this.globalPlaceholders = new HashMap<>();
+            this.globalPlaceholders = TagResolver.builder();
         }
 
         @Override
-        public Builder addAudiencePlaceholder(String name, Function<Audience, Component> placeholder){
+        public Builder audiencePlaceholder(String name, Function<Audience, Component> placeholder){
             audiencePlaceholders.put(expansionName+name, placeholder);
             return this;
         }
 
         @Override
-        public Builder addRelationalPlaceholder(String name, BiFunction<Audience, Audience, Component> placeholder){
-            relationalPlaceholders.put(expansionName+"rel-"+name, placeholder);
+        public Builder relationalPlaceholder(String name, BiFunction<Audience, Audience, Component> placeholder){
+            relationalPlaceholders.put(expansionName+"rel_"+name, placeholder);
             return this;
         }
 
         @Override
-        public Builder addGlobalPlaceholder(String name, Supplier<Component> placeholder){
-            globalPlaceholders.put(expansionName+name, placeholder);
+        public Builder globalPlaceholder(String name, Tag placeholder){
+            globalPlaceholders.tag(expansionName+name, placeholder);
             return this;
         }
 
         @Override
         public Expansion build(){
-            ExpansionImpl exp = new ExpansionImpl(expansionName, audiencePlaceholders, relationalPlaceholders, globalPlaceholders, null);
-            MiniPlaceholders.expansions.add(exp);
-            return exp;
+            return new ExpansionImpl(expansionName, audiencePlaceholders, relationalPlaceholders, globalPlaceholders.build());
         }
     }
 
@@ -118,6 +112,6 @@ final class ExpansionImpl implements Expansion {
 
     @Override
     public int hashCode(){
-        return 31 + name.hashCode();
+        return Objects.hash(name.hashCode());
     }
 }

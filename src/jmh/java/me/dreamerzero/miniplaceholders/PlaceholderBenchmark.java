@@ -9,6 +9,7 @@ import com.velocitypowered.api.proxy.Player;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 
 import org.openjdk.jmh.annotations.Benchmark;
@@ -28,15 +29,15 @@ public class PlaceholderBenchmark {
         when(player.getPlayerListHeader()).thenReturn(Component.text("a"));
         when(player.getPlayerListFooter()).thenReturn(Component.text("b"));
         Expansion.Builder expansion = Expansion.builder("benchmark")
-            .addAudiencePlaceholder("name", p -> Component.text(((Player)p).getUsername()))
-            .addAudiencePlaceholder("uuid", p->Component.text(((Player)p).getUniqueId().toString()))
-            .addAudiencePlaceholder("tablist", p -> Component.text("tablist"))
-            .addAudiencePlaceholder("aea", p -> Component.text("aea"))
-            .addAudiencePlaceholder("tablistfooter", p -> Component.text("footer"))
+            .audiencePlaceholder("name", p -> Component.text(((Player)p).getUsername()))
+            .audiencePlaceholder("uuid", p->Component.text(((Player)p).getUniqueId().toString()))
+            .audiencePlaceholder("tablist", p -> Component.text("tablist"))
+            .audiencePlaceholder("aea", p -> Component.text("aea"))
+            .audiencePlaceholder("tablistfooter", p -> Component.text("footer"))
         ;
 
         Expansion expansionBuilded = expansion.build();
-        expansionBuilded.getAudiencePlaceholders(player);
+        expansionBuilded.audiencePlaceholders(player);
         final TagResolver resolvers = MiniPlaceholders.getAudiencePlaceholders(player);
 
         MiniMessage.miniMessage().deserialize("Player Name: <benchmark-name>", resolvers);
@@ -45,8 +46,9 @@ public class PlaceholderBenchmark {
     @Benchmark
     public void singleBench(){
         Expansion.builder("single")
-            .addGlobalPlaceholder("servername", () -> Component.text("Peruviankkit")).build()
-        ;
+            .globalPlaceholder("servername", Tag.selfClosingInserting(Component.text("Peruviankkit")))
+            .build()
+            .register();
 
         TagResolver resolvers = MiniPlaceholders.getGlobalPlaceholders();
 

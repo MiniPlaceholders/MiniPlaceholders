@@ -14,10 +14,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
 
 import me.dreamerzero.miniplaceholders.velocity.Expansion;
+import me.dreamerzero.miniplaceholders.velocity.MiniPlaceholders;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 
 public class PlaceholderTest {
@@ -35,24 +37,27 @@ public class PlaceholderTest {
 
         when(proxy.getAllPlayers()).thenReturn(Set.of());
 
-
         Expansion expansion = Expansion.builder("example")
-            .addAudiencePlaceholder("name", p -> Component.text(((Player)p).getUsername()))
-            .addAudiencePlaceholder("uuid", p->Component.text(((Player)p).getUniqueId().toString()))
-            .addAudiencePlaceholder("tablist", p->Component.text("tablist"))
-            .addAudiencePlaceholder("aea", p -> Component.text("aea"))
-            .addAudiencePlaceholder("tablistfooter", p -> Component.text("footer"))
-            .addGlobalPlaceholder("playercount", ()->Component.text("Online Players: "+proxy.getAllPlayers().size()))
-            .addRelationalPlaceholder("isEnemy", (p,o) ->
-                isEnemy(p,o) ? Component.text("Enemy", NamedTextColor.RED) : Component.text("Neutral", NamedTextColor.GREEN))
+            .audiencePlaceholder("name", p -> Component.text(((Player)p).getUsername()))
+            .audiencePlaceholder("uuid", p->Component.text(((Player)p).getUniqueId().toString()))
+            .audiencePlaceholder("tablist", p->Component.text("tablist"))
+            .audiencePlaceholder("aea", p -> Component.text("aea"))
+            .audiencePlaceholder("tablistfooter", p -> Component.text("footer"))
+            .globalPlaceholder("playercount", Tag.selfClosingInserting(Component.text("Online Players: "+proxy.getAllPlayers().size())))
+            .relationalPlaceholder("isEnemy", (p,o) ->
+                this.isEnemy(p,o) ? Component.text("Enemy", NamedTextColor.RED) : Component.text("Neutral", NamedTextColor.GREEN))
             .build();
 
-        final TagResolver resolvers = expansion.getAudiencePlaceholders(player);
+        final TagResolver resolvers = TagResolver.resolver(expansion.audiencePlaceholders(player), expansion.globalPlaceholders());
 
-        final Component expected = Component.text("Player Name: 4drian3d");
-        final Component result = MiniMessage.miniMessage().deserialize("Player Name: <example-name>", resolvers);
+        final Component expected = Component.text("Player Name: 4drian3d, Online Players: 0");
+        final Component result = MiniMessage.miniMessage().deserialize("Player Name: <example_name>, <example_playercount>", resolvers);
 
         assertEquals(expected, result);
+
+        expansion.register();
+
+        assertEquals(Component.text("Online Players: 0"), MiniMessage.miniMessage().deserialize("<example_playercount>", MiniPlaceholders.getGlobalPlaceholders()));
     }
 
     private boolean isEnemy(Audience player, Audience otherplayer){

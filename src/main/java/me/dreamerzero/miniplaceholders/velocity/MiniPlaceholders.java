@@ -34,7 +34,7 @@ public final class MiniPlaceholders {
      */
     public static TagResolver getGlobalPlaceholders() {
         TagResolver.Builder resolvers = TagResolver.builder();
-        expansions.forEach(exp -> resolvers.resolver(exp.getGlobalPlaceholders()));
+        expansions.forEach(exp -> resolvers.resolver(exp.globalPlaceholders()));
 
         return resolvers.build();
     }
@@ -51,7 +51,7 @@ public final class MiniPlaceholders {
      */
     public static TagResolver getAudiencePlaceholders(Audience audience) {
         TagResolver.Builder resolvers = TagResolver.builder();
-        expansions.forEach(exp -> resolvers.resolver(exp.getAudiencePlaceholders(audience)));
+        expansions.forEach(exp -> resolvers.resolver(exp.audiencePlaceholders(audience)));
 
         return resolvers.build();
     }
@@ -68,7 +68,7 @@ public final class MiniPlaceholders {
      */
     public static TagResolver getRelationalPlaceholders(Audience audience, Audience otherAudience) {
         TagResolver.Builder resolvers = TagResolver.builder();
-        expansions.forEach(exp -> resolvers.resolver(exp.getRelationalPlaceholders(audience, otherAudience)));
+        expansions.forEach(exp -> resolvers.resolver(exp.relationalPlaceholders(audience, otherAudience)));
 
         return resolvers.build();
     }

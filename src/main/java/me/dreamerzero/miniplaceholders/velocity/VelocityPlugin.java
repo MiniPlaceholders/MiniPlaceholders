@@ -10,10 +10,11 @@ import org.slf4j.Logger;
 
 @Plugin(
     name = "MiniPlaceholders",
-    id = "miniplaceholder",
+    id = "miniplaceholders",
     version = "1.0.0",
     authors = {"4drian3d"}
 )
+@ApiStatus.Internal
 public class VelocityPlugin {
     private final Logger logger;
     @Inject
@@ -25,6 +26,6 @@ public class VelocityPlugin {
     @Subscribe
     @ApiStatus.Internal
     public void onProxyInitialize(ProxyInitializeEvent event) {
-        logger.info("Starting MiniPlaceholderAPI");
+        logger.info("Starting MiniPlaceholders Velocity");
     }
 }

@@ -2,10 +2,10 @@ package me.dreamerzero.miniplaceholders.velocity;
 
 import java.util.function.BiFunction;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 
 public interface Expansion {
@@ -13,7 +13,7 @@ public interface Expansion {
      * Get the expansion name
      * @return the expansion name
      */
-    String getExpansionName();
+    String name();
 
     /**
      * Get the {@link TagResolver} of the desired {@link Audience}
@@ -21,7 +21,7 @@ public interface Expansion {
      * @since 1.0.0
      * @return
      */
-    TagResolver getAudiencePlaceholders(Audience audience);
+    TagResolver audiencePlaceholders(Audience audience);
 
     /**
      * Get the relational placeholders based on two audiences
@@ -30,14 +30,20 @@ public interface Expansion {
      * @since 1.0.0
      * @return
      */
-    TagResolver getRelationalPlaceholders(Audience audience, Audience otherAudience);
+    TagResolver relationalPlaceholders(Audience audience, Audience otherAudience);
 
     /**
      * Get global placeholders
      * @since 1.0.0
      * @return the global placeholders
      */
-    TagResolver getGlobalPlaceholders();
+    TagResolver globalPlaceholders();
+
+    /**
+     * Register this expansion
+     * @since 1.0.0
+     */
+    void register();
 
     /**
      * Creates a new Expansion Builder
@@ -77,7 +83,7 @@ public interface Expansion {
          * @since 1.0.0
          * @return the {@link Builder} itself
          */
-        Builder addAudiencePlaceholder(String name, Function<Audience, Component> placeholder);
+        Builder audiencePlaceholder(String name, Function<Audience, Component> placeholder);
 
         /**
          * Adds an Relational Placeholder based on two audiences
@@ -94,7 +100,7 @@ public interface Expansion {
          * @since 1.0.0
          * @return
          */
-        Builder addRelationalPlaceholder(String name, BiFunction<Audience, Audience, Component> placeholder);
+        Builder relationalPlaceholder(String name, BiFunction<Audience, Audience, Component> placeholder);
 
         /**
          * Adds a global placeholder
@@ -103,7 +109,7 @@ public interface Expansion {
          * @since 1.0.0
          * @return
          */
-        Builder addGlobalPlaceholder(String name, Supplier<Component> placeholder);
+        Builder globalPlaceholder(String name, Tag placeholder);
 
         /**
          * Build the Expansion

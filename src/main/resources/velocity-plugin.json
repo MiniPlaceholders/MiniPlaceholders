@@ -1,9 +1,0 @@
-{
-  "id":"miniplaceholderapi",
-  "name":"MiniPlaceholderAPI",
-  "version":"${project.version}",
-  "description":"Add permissions to access your servers",
-  "authors":["4drian3d"],
-  "dependencies":[],
-  "main":"me.dreamerzero.miniplaceholderapi.MiniPlaceholderAPI"
-}
