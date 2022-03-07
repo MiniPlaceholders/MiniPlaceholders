@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.Optional;
 import java.util.Set;
 
 import com.velocitypowered.api.proxy.Player;
@@ -16,6 +17,7 @@ import me.dreamerzero.miniplaceholders.testobjects.TestPlayer;
 import me.dreamerzero.miniplaceholders.velocity.Expansion;
 import me.dreamerzero.miniplaceholders.velocity.MiniPlaceholders;
 import me.dreamerzero.miniplaceholders.velocity.placeholder.AudiencePlaceholder;
+import me.dreamerzero.miniplaceholders.velocity.placeholder.GlobalPlaceholder;
 import me.dreamerzero.miniplaceholders.velocity.placeholder.RelationalPlaceholder;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
@@ -71,13 +73,17 @@ public class PlaceholderTest {
     void globalExpansionPlaceholderTest(){
         ProxyServer proxy = mock(ProxyServer.class);
         when(proxy.getAllPlayers()).thenReturn(Set.of());
+        when(proxy.getAllServers()).thenReturn(Set.of());
+        when(proxy.getPlayer("Juan")).thenReturn(Optional.empty());
 
         Expansion expansion = Expansion.builder("global")
             .globalPlaceholder("players", Tag.selfClosingInserting(Component.text(proxy.getAllPlayers().size())))
+            .globalPlaceholder(GlobalPlaceholder.create("servers", () -> Component.text(proxy.getAllServers().size())))
+            .globalPlaceholder("juanname", Component.text(proxy.getPlayer("Juan").orElse(new TestPlayer("Juan")).getUsername()))
             .build();
 
-        final Component expected = Component.text("Online players: 0");
-        final Component actual = MiniMessage.miniMessage().deserialize("Online players: <global_players>", expansion.globalPlaceholders());
+        final Component expected = Component.text("Online players: 0 | Servers: 0 | a: Juan");
+        final Component actual = MiniMessage.miniMessage().deserialize("Online players: <global_players> | Servers: <global_servers> | a: <global_juanname>", expansion.globalPlaceholders());
 
         assertEquals(expected, actual);
     }
@@ -94,6 +100,28 @@ public class PlaceholderTest {
         Component actual = MiniMessage.miniMessage().deserialize("<instance_hello> player", MiniPlaceholders.getGlobalPlaceholders());
 
         assertContentEquals(expected, actual);
+    }
+
+    @Test
+    @DisplayName("Filtered Expansion")
+    void filteredExpansion(){
+        Expansion expansion = Expansion.builder("filter")
+            .audiencePlaceholder(AudiencePlaceholder.create("name", (aud) -> Component.text(((Player)aud).getUsername())))
+            .filter(Player.class)
+            .build();
+
+        Player player = new TestPlayer("TestPlayer04");
+        Audience emptyAudience = Audience.empty();
+
+        String string = "Player Name: <filter_name>";
+
+        Component playerExpected = Component.text("Player Name: TestPlayer04");
+        Component emptyExpected = Component.text("Player Name: <filter_name>");
+
+        assertEquals(playerExpected, MiniMessage.miniMessage().deserialize(string, expansion.audiencePlaceholders(player)));
+        assertEquals(emptyExpected, MiniMessage.miniMessage().deserialize(string, expansion.audiencePlaceholders(emptyAudience)));
+
+
     }
 
     private boolean isEnemy(Audience player, Audience otherplayer){

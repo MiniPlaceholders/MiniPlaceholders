@@ -6,6 +6,7 @@ import java.util.Objects;
 import java.util.Set;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import me.dreamerzero.miniplaceholders.velocity.placeholder.AudiencePlaceholder;
 import me.dreamerzero.miniplaceholders.velocity.placeholder.GlobalPlaceholder;
@@ -20,16 +21,19 @@ final class ExpansionImpl implements Expansion {
     private final Set<PlaceholderTag.Single> audiencePlaceholders;
     private final Set<PlaceholderTag.Relational> relationalPlaceholders;
     private final TagResolver globalPlaceholders;
+    private final Class<? extends Audience> filterClass;
 
     ExpansionImpl(
         @NotNull String expansionName,
         @NotNull Set<PlaceholderTag.Single> audiencePlaceholders,
         @NotNull Set<PlaceholderTag.Relational> relationalPlaceholders,
-        @NotNull TagResolver globalPlaceholders){
+        @NotNull TagResolver globalPlaceholders,
+        @Nullable Class<? extends Audience> filterClass){
             this.name = expansionName+"-";
             this.audiencePlaceholders = audiencePlaceholders;
             this.relationalPlaceholders = relationalPlaceholders;
             this.globalPlaceholders = globalPlaceholders;
+            this.filterClass = filterClass;
     }
 
     @Override
@@ -43,6 +47,8 @@ final class ExpansionImpl implements Expansion {
 
         Objects.requireNonNull(audience, () -> "the audience cannot be null");
 
+        if(filterClass != null && !filterClass.isInstance(audience)) return TagResolver.empty();
+
         TagResolver.Builder placeholders = TagResolver.builder();
         audiencePlaceholders.forEach(pl -> placeholders.resolver(pl.of(audience)));
         return placeholders.build();
@@ -54,6 +60,8 @@ final class ExpansionImpl implements Expansion {
 
         Objects.requireNonNull(audience, () -> "the audience cannot be null");
         Objects.requireNonNull(otherAudience, () -> "the other audience cannot be null");
+
+        if(filterClass != null && (!filterClass.isInstance(audience) || !filterClass.isInstance(otherAudience))) return TagResolver.empty();
 
         TagResolver.Builder placeholders = TagResolver.builder();
         relationalPlaceholders.forEach(pl -> placeholders.resolver(pl.of(audience, otherAudience)));
@@ -75,6 +83,7 @@ final class ExpansionImpl implements Expansion {
         private final Set<PlaceholderTag.Single> audiencePlaceholders;
         private final Set<PlaceholderTag.Relational> relationalPlaceholders;
         private final TagResolver.Builder globalPlaceholders;
+        private Class<? extends Audience> filterClass;
 
         Builder(@NotNull String name){
             this.expansionName = name.toLowerCase(Locale.ROOT).concat("_");
@@ -110,15 +119,21 @@ final class ExpansionImpl implements Expansion {
 
         @Override
         public Builder globalPlaceholder(@NotNull GlobalPlaceholder globalPlaceholder){
-            Objects.requireNonNull(globalPlaceholder, ()-> "the global placeholder cannot be null");
+            Objects.requireNonNull(globalPlaceholder, () -> "the global placeholder cannot be null");
 
             globalPlaceholders.resolver(PlaceholderTag.Global.create(expansionName+globalPlaceholder.name(), globalPlaceholder.get()));
             return this;
         }
 
         @Override
+        public Builder filter(Class<? extends Audience> clazz) {
+            this.filterClass = clazz;
+            return this;
+        }
+
+        @Override
         public @NotNull Expansion build(){
-            return new ExpansionImpl(expansionName, audiencePlaceholders, relationalPlaceholders, globalPlaceholders.build());
+            return new ExpansionImpl(expansionName, audiencePlaceholders, relationalPlaceholders, globalPlaceholders.build(), filterClass);
         }
     }
 

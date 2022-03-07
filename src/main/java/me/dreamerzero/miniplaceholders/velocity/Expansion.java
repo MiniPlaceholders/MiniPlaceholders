@@ -1,6 +1,7 @@
 package me.dreamerzero.miniplaceholders.velocity;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import me.dreamerzero.miniplaceholders.velocity.placeholder.AudiencePlaceholder;
 import me.dreamerzero.miniplaceholders.velocity.placeholder.GlobalPlaceholder;
@@ -12,6 +13,20 @@ import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 
 /**
  * Expansion that contains placeholders
+ *
+ * <p>Usage Example:</p>
+ * <pre>
+ *  Player player = event.getPlayer();
+ *  Expansion.Builder builder = Expansion.builder("player")
+ *      .audiencePlaceholder(AudiencePlaceholder.create("name", (p) -> Component.text(((Player)p).getUsername()))
+ *      .build();
+ *  Expansion expansion = builder.build();
+ *  // You can also call the {@link Expansion#register} method to register
+ *  // the {@link Extension} in the {@link MiniPlaceholders} global Extensions and
+ *  // use it in {@link MiniPlaceholders#getAudiencePlaceholders(Audience)} e.g.
+ *  TagResolver resolver = expansion.audiencePlaceholder(player);
+ *  player.sendMessage(MiniMessage.miniMessage().deserialize("Hello <luckperms_prefix> <player_name>", resolver));
+ * </pre>
  */
 public interface Expansion {
     /**
@@ -30,10 +45,14 @@ public interface Expansion {
 
     /**
      * Get the relational placeholders based on two audiences
-     * @param audience
-     * @param otherAudience
+     *
+     * <p>The resulting TagResolver will give results according
+     * to the 2 {@link Audience} provided and when called
+     * at any time will retrieve the required values</p>
+     * @param audience the main audience
+     * @param otherAudience the secondary audience
      * @since 1.0.0
-     * @return
+     * @return A TagResolver with variable placeholders between 2 Audiences
      */
     @NotNull TagResolver relationalPlaceholders(@NotNull Audience audience, @NotNull Audience otherAudience);
 
@@ -61,33 +80,33 @@ public interface Expansion {
 
     /**
      * Expansion Builder
+     * <p>Example use:</p>
+     * <pre>
+     *  Expansion.Builder builder = Expansion.builder("player");
+     *  builder
+     *      // Thanks to this filter, a cast can be performed without the probability of a ClassCastException
+     *      .filter(Player.class)
+     *      .audiencePlaceholder("name", audience -> Component.text(((Player)audience).getUsername()));
+     *  Expansion expansion = builder.build();
+     * </pre>
+     *
+     * then use it:
+     *
+     * <pre>
+     *  Player player = event.getPlayer();
+     *  TagResolver resolver = expansion.audiencePlaceholder(player);
+     *  Component messageReplaced = MiniMessage.deserialize({@link String}, resolver);
+     * </pre>
      */
     public static interface Builder {
         /**
          * Adds an audience placeholder
          *
-         * Example use:
-         * <pre>
-         *  Expansion.Builder builder = Expansion.builder("player");
-         *  builder.audiencePlaceholder("name", audience -> {
-         *      if(audience instanceof Player){
-         *          return Component.text(((Player)audience).getUsername());
-         *      } else {
-         *          return Component.empty();
-         *      }
-         *  });
-         *  Expansion expansion = builder.build();
-         * </pre>
+         * <p>This type of Placeholder depends on a specific audience to obtain its values</p>
          *
-         * then use it:
-         *
-         * <pre>
-         *  Player player = event.getPlayer();
-         *  TagResolver resolver = expansion.audiencePlaceholder(player);
-         *  Component messageReplaced = MiniMessage.deserialize({@link String}, resolver);
-         * </pre>
-         * @param name the placeholder name
-         * @param placeholder the placeholder
+         * <p>The content of this Placeholder is cached
+         * and can mutate depending on when it is invoked</p>
+         * @param audiencePlaceholder the single placeholder
          * @since 1.0.0
          * @return the {@link Builder} itself
          */
@@ -96,13 +115,15 @@ public interface Expansion {
         /**
          * Adds an Relational Placeholder based on two audiences
          *
-         * This type of placeholder allows you to create
+         * <p>This type of placeholder allows you to create
          * components based on a 2-audiences relationship,
          * one is the one on which the placeholder
          * is based and the other is the one on which
-         * the placeholder is displayed.
-         * @param name
-         * @param placeholder
+         * the placeholder is displayed.</p>
+         *
+         * <p>The content of this Placeholder is cached
+         * and can mutate depending on when it is invoked</p>
+         * @param relationalPlaceholder the relation placeholder
          * @since 1.0.0
          * @return the {@link Builder} itself
          */
@@ -110,6 +131,11 @@ public interface Expansion {
 
         /**
          * Adds a global placeholder
+         *
+         * <p>This type of Placeholder does not depend on any value and can be called at any time</p>
+         *
+         * <p>The content of this Placeholder can be cached and can mutate
+         * depending on when it is invoked depending on how the Tag is created</p>
          * @param name the placeholder name
          * @param tag the tag to be returned in case the name is matched
          * @return the {@link Builder} itself
@@ -118,6 +144,9 @@ public interface Expansion {
 
         /**
          * Adds a global placeholder
+         *
+         * <p>The content of this Placeholder is cached
+         * and can mutate depending on when it is invoked</p>
          * @param globalPlaceholder the global placeholder
          * @return the {@link Builder} itself
          */
@@ -125,7 +154,7 @@ public interface Expansion {
 
         /**
          * Adds a global component placeholder.
-         * <p><bold>This placeholder is not cached</p>
+         * <p><b>This placeholder is not cached</p>
          * @param name the placeholder name
          * @param component the component to return
          * @return the {@link Builder} itself
@@ -133,6 +162,20 @@ public interface Expansion {
         default Builder globalPlaceholder(@NotNull String name, @NotNull ComponentLike component) {
             return this.globalPlaceholder(name, Tag.selfClosingInserting(component));
         }
+
+        /**
+         * Filter the type of Audiences that this expansion can receive
+         * <p>In case the {@link Expansion#audiencePlaceholders(Audience)} or
+         * {@link Expansion#relationalPlaceholders(Audience, Audience)} method is called
+         * and the provided audiences are not instances of
+         * the specified class, a {@link TagResolver#empty} will be returned</p>
+         *
+         * <p>This eliminates the need to perform a manual
+         * <pre>if(!(audience instanceof Player)) return TagResolver.empty();</pre>
+         * @param clazz the class to filter
+         * @return the {@link Builder} itself
+         */
+        Builder filter(@Nullable Class<? extends Audience> clazz);
 
         /**
          * Build the Expansion
