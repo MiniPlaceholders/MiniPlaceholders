@@ -17,15 +17,15 @@ import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 
 final class ExpansionImpl implements Expansion {
     private final String name;
-    private final Set<PlaceholderTag.Audience> audiencePlaceholders;
+    private final Set<PlaceholderTag.Single> audiencePlaceholders;
     private final Set<PlaceholderTag.Relational> relationalPlaceholders;
     private final TagResolver globalPlaceholders;
 
     ExpansionImpl(
-        String expansionName,
-        Set<PlaceholderTag.Audience> audiencePlaceholders,
-        Set<PlaceholderTag.Relational> relationalPlaceholders,
-        TagResolver globalPlaceholders){
+        @NotNull String expansionName,
+        @NotNull Set<PlaceholderTag.Single> audiencePlaceholders,
+        @NotNull Set<PlaceholderTag.Relational> relationalPlaceholders,
+        @NotNull TagResolver globalPlaceholders){
             this.name = expansionName+"-";
             this.audiencePlaceholders = audiencePlaceholders;
             this.relationalPlaceholders = relationalPlaceholders;
@@ -38,7 +38,7 @@ final class ExpansionImpl implements Expansion {
     }
 
     @Override
-    public TagResolver audiencePlaceholders(@NotNull Audience audience){
+    public @NotNull TagResolver audiencePlaceholders(@NotNull Audience audience){
         if(audiencePlaceholders.isEmpty()) return TagResolver.empty();
 
         Objects.requireNonNull(audience, () -> "the audience cannot be null");
@@ -49,7 +49,7 @@ final class ExpansionImpl implements Expansion {
     }
 
     @Override
-    public TagResolver relationalPlaceholders(@NotNull Audience audience, @NotNull Audience otherAudience){
+    public @NotNull TagResolver relationalPlaceholders(@NotNull Audience audience, @NotNull Audience otherAudience){
         if(relationalPlaceholders.isEmpty()) return TagResolver.empty();
 
         Objects.requireNonNull(audience, () -> "the audience cannot be null");
@@ -61,7 +61,7 @@ final class ExpansionImpl implements Expansion {
     }
 
     @Override
-    public TagResolver globalPlaceholders(){
+    public @NotNull TagResolver globalPlaceholders(){
         return this.globalPlaceholders;
     }
 
@@ -72,9 +72,9 @@ final class ExpansionImpl implements Expansion {
 
     static class Builder implements Expansion.Builder {
         private final String expansionName;
-        private final Set<PlaceholderTag.Audience> audiencePlaceholders;
+        private final Set<PlaceholderTag.Single> audiencePlaceholders;
         private final Set<PlaceholderTag.Relational> relationalPlaceholders;
-        private TagResolver.Builder globalPlaceholders;
+        private final TagResolver.Builder globalPlaceholders;
 
         Builder(@NotNull String name){
             this.expansionName = name.toLowerCase(Locale.ROOT).concat("_");
@@ -87,7 +87,7 @@ final class ExpansionImpl implements Expansion {
         public Builder audiencePlaceholder(@NotNull AudiencePlaceholder audiencePlaceholder){
             Objects.requireNonNull(audiencePlaceholder, () -> "the audience placeholder cannot be null");
 
-            audiencePlaceholders.add(PlaceholderTag.Audience.create(expansionName+audiencePlaceholder.name(), audiencePlaceholder.get()));
+            audiencePlaceholders.add(PlaceholderTag.Single.create(expansionName+audiencePlaceholder.name(), audiencePlaceholder.get()));
             return this;
         }
 

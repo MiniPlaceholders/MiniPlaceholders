@@ -7,6 +7,7 @@ import java.util.function.Supplier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
@@ -25,19 +26,19 @@ public abstract class PlaceholderTag implements TagResolver.WithoutArguments {
     }
 
     public static class Relational {
-        private final BiFunction<net.kyori.adventure.audience.Audience, net.kyori.adventure.audience.Audience, Component> function;
+        private final BiFunction<Audience, Audience, Component> function;
         private final String name;
 
-        protected Relational(String name, BiFunction<net.kyori.adventure.audience.Audience, net.kyori.adventure.audience.Audience, Component> function){
+        protected Relational(String name, BiFunction<Audience, net.kyori.adventure.audience.Audience, Component> function){
             this.name = name;
             this.function = function;
         }
 
-        public static Relational create(String name, BiFunction<net.kyori.adventure.audience.Audience, net.kyori.adventure.audience.Audience, Component> function){
+        public static Relational create(String name, BiFunction<Audience, Audience, Component> function){
             return new Relational(name, function);
         }
 
-        public TagResolver of(net.kyori.adventure.audience.Audience audience, net.kyori.adventure.audience.Audience otherAudience){
+        public TagResolver of(Audience audience, Audience otherAudience){
             return TagResolver.resolver(new PlaceholderTag(name) {
                 @Override
                 public Tag tag() {
@@ -47,20 +48,20 @@ public abstract class PlaceholderTag implements TagResolver.WithoutArguments {
         }
     }
 
-    public static class Audience {
-        private final Function<net.kyori.adventure.audience.Audience, Component> function;
+    public static class Single {
+        private final Function<Audience, Component> function;
         private final String name;
 
-        protected Audience(String name, Function<net.kyori.adventure.audience.Audience, Component> function){
+        protected Single(String name, Function<Audience, Component> function){
             this.name = name;
             this.function = function;
         }
 
-        public static Audience create(String name, Function<net.kyori.adventure.audience.Audience, Component> function){
-            return new Audience(name, function);
+        public static Single create(String name, Function<Audience, Component> function){
+            return new Single(name, function);
         }
 
-        public TagResolver of(net.kyori.adventure.audience.Audience audience){
+        public TagResolver of(Audience audience){
             return TagResolver.resolver(new PlaceholderTag(name) {
                 @Override
                 public Tag tag() {
