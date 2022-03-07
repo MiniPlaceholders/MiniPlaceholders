@@ -1,11 +1,9 @@
 package me.dreamerzero.miniplaceholders.velocity;
 
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Objects;
-import java.util.function.BiFunction;
-import java.util.function.Function;
+import java.util.Set;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -14,20 +12,19 @@ import me.dreamerzero.miniplaceholders.velocity.placeholder.GlobalPlaceholder;
 import me.dreamerzero.miniplaceholders.velocity.placeholder.RelationalPlaceholder;
 import me.dreamerzero.miniplaceholders.velocity.tag.PlaceholderTag;
 import net.kyori.adventure.audience.Audience;
-import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 
 final class ExpansionImpl implements Expansion {
     private final String name;
-    private final Map<String, Function<Audience, Component>> audiencePlaceholders;
-    private final Map<String, BiFunction<Audience, Audience, Component>> relationalPlaceholders;
+    private final Set<PlaceholderTag.Audience> audiencePlaceholders;
+    private final Set<PlaceholderTag.Relational> relationalPlaceholders;
     private final TagResolver globalPlaceholders;
 
     ExpansionImpl(
         String expansionName,
-        Map<String, Function<Audience, Component>> audiencePlaceholders,
-        Map<String, BiFunction<Audience, Audience, Component>> relationalPlaceholders,
+        Set<PlaceholderTag.Audience> audiencePlaceholders,
+        Set<PlaceholderTag.Relational> relationalPlaceholders,
         TagResolver globalPlaceholders){
             this.name = expansionName+"-";
             this.audiencePlaceholders = audiencePlaceholders;
@@ -47,14 +44,7 @@ final class ExpansionImpl implements Expansion {
         Objects.requireNonNull(audience, () -> "the audience cannot be null");
 
         TagResolver.Builder placeholders = TagResolver.builder();
-        audiencePlaceholders.forEach((st, func) ->
-            placeholders.resolver(new PlaceholderTag(st){
-                @Override
-                public Tag tag(){
-                    return Tag.selfClosingInserting(func.apply(audience));
-                }
-            })
-        );
+        audiencePlaceholders.forEach(pl -> placeholders.resolver(pl.of(audience)));
         return placeholders.build();
     }
 
@@ -66,14 +56,7 @@ final class ExpansionImpl implements Expansion {
         Objects.requireNonNull(otherAudience, () -> "the other audience cannot be null");
 
         TagResolver.Builder placeholders = TagResolver.builder();
-        relationalPlaceholders.forEach((st, bif) ->
-            placeholders.resolver(new PlaceholderTag(st){
-                @Override
-                public Tag tag(){
-                    return Tag.selfClosingInserting(bif.apply(audience, otherAudience));
-                }
-            })
-        );
+        relationalPlaceholders.forEach(pl -> placeholders.resolver(pl.of(audience, otherAudience)));
         return placeholders.build();
     }
 
@@ -89,14 +72,14 @@ final class ExpansionImpl implements Expansion {
 
     static class Builder implements Expansion.Builder {
         private final String expansionName;
-        private final Map<String, Function<Audience, Component>> audiencePlaceholders;
-        private final Map<String, BiFunction<Audience, Audience, Component>> relationalPlaceholders;
+        private final Set<PlaceholderTag.Audience> audiencePlaceholders;
+        private final Set<PlaceholderTag.Relational> relationalPlaceholders;
         private TagResolver.Builder globalPlaceholders;
 
         Builder(@NotNull String name){
             this.expansionName = name.toLowerCase(Locale.ROOT).concat("_");
-            this.audiencePlaceholders = new HashMap<>();
-            this.relationalPlaceholders = new HashMap<>();
+            this.audiencePlaceholders = new HashSet<>();
+            this.relationalPlaceholders = new HashSet<>();
             this.globalPlaceholders = TagResolver.builder();
         }
 
@@ -104,7 +87,7 @@ final class ExpansionImpl implements Expansion {
         public Builder audiencePlaceholder(@NotNull AudiencePlaceholder audiencePlaceholder){
             Objects.requireNonNull(audiencePlaceholder, () -> "the audience placeholder cannot be null");
 
-            audiencePlaceholders.put(expansionName+audiencePlaceholder.name(), audiencePlaceholder.get());
+            audiencePlaceholders.add(PlaceholderTag.Audience.create(expansionName+audiencePlaceholder.name(), audiencePlaceholder.get()));
             return this;
         }
 
@@ -112,7 +95,7 @@ final class ExpansionImpl implements Expansion {
         public Builder relationalPlaceholder(@NotNull RelationalPlaceholder relationalPlaceholder){
             Objects.requireNonNull(relationalPlaceholder, () -> "the relational placeholder cannot be null");
 
-            relationalPlaceholders.put(expansionName+"rel_"+relationalPlaceholder.name(), relationalPlaceholder.get());
+            relationalPlaceholders.add(PlaceholderTag.Relational.create(expansionName+"rel_"+relationalPlaceholder.name(), relationalPlaceholder.get()));
             return this;
         }
 
@@ -129,12 +112,7 @@ final class ExpansionImpl implements Expansion {
         public Builder globalPlaceholder(@NotNull GlobalPlaceholder globalPlaceholder){
             Objects.requireNonNull(globalPlaceholder, ()-> "the global placeholder cannot be null");
 
-            globalPlaceholders.resolver(new PlaceholderTag(expansionName+globalPlaceholder.name()) {
-                @Override
-                public Tag tag(){
-                    return Tag.selfClosingInserting(globalPlaceholder.get().get());
-                }
-            });
+            globalPlaceholders.resolver(PlaceholderTag.Global.create(expansionName+globalPlaceholder.name(), globalPlaceholder.get()));
             return this;
         }
 
