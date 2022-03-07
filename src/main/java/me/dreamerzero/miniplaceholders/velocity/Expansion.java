@@ -1,10 +1,11 @@
 package me.dreamerzero.miniplaceholders.velocity;
 
-import java.util.function.BiFunction;
-import java.util.function.Function;
+import org.jetbrains.annotations.NotNull;
 
+import me.dreamerzero.miniplaceholders.velocity.placeholder.AudiencePlaceholder;
+import me.dreamerzero.miniplaceholders.velocity.placeholder.GlobalPlaceholder;
+import me.dreamerzero.miniplaceholders.velocity.placeholder.RelationalPlaceholder;
 import net.kyori.adventure.audience.Audience;
-import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
@@ -17,7 +18,7 @@ public interface Expansion {
      * Get the expansion name
      * @return the expansion name
      */
-    String name();
+    @NotNull String name();
 
     /**
      * Get the {@link TagResolver} of the desired {@link Audience}
@@ -25,7 +26,7 @@ public interface Expansion {
      * @since 1.0.0
      * @return
      */
-    TagResolver audiencePlaceholders(Audience audience);
+    @NotNull TagResolver audiencePlaceholders(@NotNull Audience audience);
 
     /**
      * Get the relational placeholders based on two audiences
@@ -34,14 +35,14 @@ public interface Expansion {
      * @since 1.0.0
      * @return
      */
-    TagResolver relationalPlaceholders(Audience audience, Audience otherAudience);
+    @NotNull TagResolver relationalPlaceholders(@NotNull Audience audience, @NotNull Audience otherAudience);
 
     /**
      * Get global placeholders
      * @since 1.0.0
      * @return the global placeholders
      */
-    TagResolver globalPlaceholders();
+    @NotNull TagResolver globalPlaceholders();
 
     /**
      * Register this expansion
@@ -54,7 +55,7 @@ public interface Expansion {
      * @param name the expansion name
      * @return a new expansion builder
      */
-    public static Expansion.Builder builder(String name){
+    public static Expansion.Builder builder(@NotNull String name){
         return new ExpansionImpl.Builder(name);
     }
 
@@ -90,7 +91,7 @@ public interface Expansion {
          * @since 1.0.0
          * @return the {@link Builder} itself
          */
-        Builder audiencePlaceholder(String name, Function<Audience, Component> placeholder);
+        Builder audiencePlaceholder(@NotNull AudiencePlaceholder audiencePlaceholder);
 
         /**
          * Adds an Relational Placeholder based on two audiences
@@ -100,46 +101,43 @@ public interface Expansion {
          * one is the one on which the placeholder
          * is based and the other is the one on which
          * the placeholder is displayed.
-         * 
-         * 
          * @param name
          * @param placeholder
          * @since 1.0.0
-         * @return
+         * @return the {@link Builder} itself
          */
-        Builder relationalPlaceholder(String name, BiFunction<Audience, Audience, Component> placeholder);
+        Builder relationalPlaceholder(@NotNull RelationalPlaceholder relationalPlaceholder);
 
         /**
          * Adds a global placeholder
-         * @param name
-         * @param placeholder
-         * @since 1.0.0
-         * @return
+         * @param name the placeholder name
+         * @param tag the tag to be returned in case the name is matched
+         * @return the {@link Builder} itself
          */
-        Builder globalPlaceholder(String name, Tag placeholder);
+        Builder globalPlaceholder(@NotNull String name, @NotNull Tag tag);
 
         /**
-         * Adds a global tagresolver placeholder
-         * @param name
-         * @param resolver
-         * @return
+         * Adds a global placeholder
+         * @param globalPlaceholder the global placeholder
+         * @return the {@link Builder} itself
          */
-        Builder globalPlaceholder(String name, TagResolver resolver);
+        Builder globalPlaceholder(@NotNull GlobalPlaceholder globalPlaceholder);
 
         /**
-         * Adds a global component placeholder
-         * @param name
-         * @param component
-         * @return
+         * Adds a global component placeholder.
+         * <p><bold>This placeholder is not cached</p>
+         * @param name the placeholder name
+         * @param component the component to return
+         * @return the {@link Builder} itself
          */
-        default Builder globalPlaceholder(String name, ComponentLike component) {
+        default Builder globalPlaceholder(@NotNull String name, @NotNull ComponentLike component) {
             return this.globalPlaceholder(name, Tag.selfClosingInserting(component));
         }
 
         /**
          * Build the Expansion
-         * @return the new expansion
+         * @return a new {@link Expansion}
          */
-        Expansion build();
+        @NotNull Expansion build();
     }
 }

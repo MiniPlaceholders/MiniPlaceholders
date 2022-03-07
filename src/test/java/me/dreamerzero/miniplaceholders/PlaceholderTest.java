@@ -15,12 +15,13 @@ import org.junit.jupiter.api.DisplayName;
 import me.dreamerzero.miniplaceholders.testobjects.TestPlayer;
 import me.dreamerzero.miniplaceholders.velocity.Expansion;
 import me.dreamerzero.miniplaceholders.velocity.MiniPlaceholders;
+import me.dreamerzero.miniplaceholders.velocity.placeholder.AudiencePlaceholder;
+import me.dreamerzero.miniplaceholders.velocity.placeholder.RelationalPlaceholder;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.Tag;
-import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 
 public class PlaceholderTest {
@@ -31,10 +32,18 @@ public class PlaceholderTest {
         Player player = new TestPlayer("4drian3d");
 
         Expansion expansion = Expansion.builder("example")
-            .audiencePlaceholder("name", p -> Component.text(((Player)p).getUsername()))
-            .audiencePlaceholder("uuid", p -> Component.text(((Player)p).getUniqueId().toString()))
-            .audiencePlaceholder("tablistheader", p-> ((Player)p).getPlayerListHeader())
-            .audiencePlaceholder("tablistfooter", p -> ((Player)p).getPlayerListFooter())
+            .audiencePlaceholder(AudiencePlaceholder.create(
+                "name", p -> Component.text(((Player)p).getUsername())
+            ))
+            .audiencePlaceholder(AudiencePlaceholder.create(
+                "uuid", p -> Component.text(((Player)p).getUniqueId().toString())
+            ))
+            .audiencePlaceholder(AudiencePlaceholder.create(
+                "tablistheader", p-> ((Player)p).getPlayerListHeader()
+            ))
+            .audiencePlaceholder(AudiencePlaceholder.create(
+                "tablistfooter", p -> ((Player)p).getPlayerListFooter()
+            ))
             .build();
 
         final Component expected = Component.text("Player Name: 4drian3d");
@@ -50,7 +59,8 @@ public class PlaceholderTest {
         Player p2 = new TestPlayer("PlayerTwo");
 
         Expansion expansion = Expansion.builder("relational")
-            .relationalPlaceholder("enemy", (p, o) -> this.isEnemy(p,o) ? Component.text("Enemy", NamedTextColor.RED) : Component.text("Neutral", NamedTextColor.GREEN))
+            .relationalPlaceholder(RelationalPlaceholder.create(
+                "enemy", (p, o) -> this.isEnemy(p,o) ? Component.text("Enemy", NamedTextColor.RED) : Component.text("Neutral", NamedTextColor.GREEN)))
             .build();
 
         assertEquals(MiniMessage.miniMessage().deserialize("You are <red>Enemy"), MiniMessage.miniMessage().deserialize("You are <relational_rel_enemy>", expansion.relationalPlaceholders(p1, p2)));
@@ -63,7 +73,7 @@ public class PlaceholderTest {
         when(proxy.getAllPlayers()).thenReturn(Set.of());
 
         Expansion expansion = Expansion.builder("global")
-            .globalPlaceholder("players", TagResolver.caching((name) -> Tag.selfClosingInserting(Component.text(proxy.getAllPlayers().size()))))
+            .globalPlaceholder("players", Tag.selfClosingInserting(Component.text(proxy.getAllPlayers().size())))
             .build();
 
         final Component expected = Component.text("Online players: 0");

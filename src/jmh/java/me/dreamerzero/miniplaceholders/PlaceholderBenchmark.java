@@ -18,6 +18,7 @@ import org.openjdk.jmh.annotations.State;
 
 import me.dreamerzero.miniplaceholders.velocity.Expansion;
 import me.dreamerzero.miniplaceholders.velocity.MiniPlaceholders;
+import me.dreamerzero.miniplaceholders.velocity.placeholder.AudiencePlaceholder;
 
 @State(Scope.Benchmark)
 public class PlaceholderBenchmark {
@@ -29,12 +30,21 @@ public class PlaceholderBenchmark {
         when(player.getPlayerListHeader()).thenReturn(Component.text("a"));
         when(player.getPlayerListFooter()).thenReturn(Component.text("b"));
         Expansion.Builder expansion = Expansion.builder("benchmark")
-            .audiencePlaceholder("name", p -> Component.text(((Player)p).getUsername()))
-            .audiencePlaceholder("uuid", p->Component.text(((Player)p).getUniqueId().toString()))
-            .audiencePlaceholder("tablist", p -> Component.text("tablist"))
-            .audiencePlaceholder("aea", p -> Component.text("aea"))
-            .audiencePlaceholder("tablistfooter", p -> Component.text("footer"))
-        ;
+            .audiencePlaceholder(AudiencePlaceholder.create(
+                "name", p -> Component.text(((Player)p).getUsername())
+            ))
+            .audiencePlaceholder(AudiencePlaceholder.create(
+                "uuid", p->Component.text(((Player)p).getUniqueId().toString())
+            ))
+            .audiencePlaceholder(AudiencePlaceholder.create(
+                "tablist", p -> ((Player)p).getPlayerListHeader()
+            ))
+            .audiencePlaceholder(AudiencePlaceholder.create(
+                "aea", p -> Component.text("aea")
+            ))
+            .audiencePlaceholder(AudiencePlaceholder.create(
+                "tablistfooter", p -> Component.text("footer")
+            ));
 
         Expansion expansionBuilded = expansion.build();
         expansionBuilded.audiencePlaceholders(player);

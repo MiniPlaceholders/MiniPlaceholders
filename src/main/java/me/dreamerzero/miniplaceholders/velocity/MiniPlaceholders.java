@@ -2,7 +2,10 @@ package me.dreamerzero.miniplaceholders.velocity;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
+
+import org.jetbrains.annotations.NotNull;
 
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
@@ -32,7 +35,9 @@ public final class MiniPlaceholders {
      * @return global placeholders independient of any audience
      * @see TagResolver
      */
-    public static TagResolver getGlobalPlaceholders() {
+    public static @NotNull TagResolver getGlobalPlaceholders() {
+        if(expansions.isEmpty()) return TagResolver.empty();
+
         TagResolver.Builder resolvers = TagResolver.builder();
         expansions.forEach(exp -> resolvers.resolver(exp.globalPlaceholders()));
 
@@ -42,14 +47,18 @@ public final class MiniPlaceholders {
     /**
      * Get the TagResolver based on an Audience
      *
-     * <pre>TagResolver resolver = MiniPlaceholders.getAudiencerPlaceholders({@link Audience});
+     * <pre>TagResolver resolver = MiniPlaceholders.getAudiencePlaceholders({@link Audience});
      * Component messageParsed = MiniMessage.miniMessage().deserialize({@link String}, resolver);</pre>
      *
      * @since 1.0.0
      * @param audience the audience
      * @return {@link TagResolver} with placeholders based on an audience
      */
-    public static TagResolver getAudiencePlaceholders(Audience audience) {
+    public static TagResolver getAudiencePlaceholders(@NotNull Audience audience) {
+        if(expansions.isEmpty()) return TagResolver.empty();
+
+        Objects.requireNonNull(audience, () -> "audience cannot be null");
+
         TagResolver.Builder resolvers = TagResolver.builder();
         expansions.forEach(exp -> resolvers.resolver(exp.audiencePlaceholders(audience)));
 
@@ -66,7 +75,12 @@ public final class MiniPlaceholders {
      * @param otherAudience another audience
      * @return placeholders based on two audiences
      */
-    public static TagResolver getRelationalPlaceholders(Audience audience, Audience otherAudience) {
+    public static TagResolver getRelationalPlaceholders(@NotNull Audience audience, @NotNull Audience otherAudience) {
+        if(expansions.isEmpty()) return TagResolver.empty();
+
+        Objects.requireNonNull(audience, () -> "audience cannot be null");
+        Objects.requireNonNull(otherAudience, () -> "otherAudience cannot be null");
+
         TagResolver.Builder resolvers = TagResolver.builder();
         expansions.forEach(exp -> resolvers.resolver(exp.relationalPlaceholders(audience, otherAudience)));
 

@@ -7,10 +7,15 @@ import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+import org.jetbrains.annotations.NotNull;
+
+import me.dreamerzero.miniplaceholders.velocity.placeholder.AudiencePlaceholder;
+import me.dreamerzero.miniplaceholders.velocity.placeholder.GlobalPlaceholder;
+import me.dreamerzero.miniplaceholders.velocity.placeholder.RelationalPlaceholder;
+import me.dreamerzero.miniplaceholders.velocity.tag.PlaceholderTag;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.tag.Tag;
-import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 
 final class ExpansionImpl implements Expansion {
@@ -36,19 +41,38 @@ final class ExpansionImpl implements Expansion {
     }
 
     @Override
-    public TagResolver audiencePlaceholders(Audience audience){
+    public TagResolver audiencePlaceholders(@NotNull Audience audience){
+        if(audiencePlaceholders.isEmpty()) return TagResolver.empty();
+
+        Objects.requireNonNull(audience, () -> "the audience cannot be null");
+
         TagResolver.Builder placeholders = TagResolver.builder();
         audiencePlaceholders.forEach((st, func) ->
-            placeholders.resolver(Placeholder.component(st, func.apply(audience)))
+            placeholders.resolver(new PlaceholderTag(st){
+                @Override
+                public Tag tag(){
+                    return Tag.selfClosingInserting(func.apply(audience));
+                }
+            })
         );
         return placeholders.build();
     }
 
     @Override
-    public TagResolver relationalPlaceholders(Audience audience, Audience otherAudience){
+    public TagResolver relationalPlaceholders(@NotNull Audience audience, @NotNull Audience otherAudience){
+        if(relationalPlaceholders.isEmpty()) return TagResolver.empty();
+
+        Objects.requireNonNull(audience, () -> "the audience cannot be null");
+        Objects.requireNonNull(otherAudience, () -> "the other audience cannot be null");
+
         TagResolver.Builder placeholders = TagResolver.builder();
         relationalPlaceholders.forEach((st, bif) ->
-            placeholders.resolver(Placeholder.component(st, bif.apply(audience, otherAudience)))
+            placeholders.resolver(new PlaceholderTag(st){
+                @Override
+                public Tag tag(){
+                    return Tag.selfClosingInserting(bif.apply(audience, otherAudience));
+                }
+            })
         );
         return placeholders.build();
     }
@@ -69,7 +93,7 @@ final class ExpansionImpl implements Expansion {
         private final Map<String, BiFunction<Audience, Audience, Component>> relationalPlaceholders;
         private TagResolver.Builder globalPlaceholders;
 
-        Builder(String name){
+        Builder(@NotNull String name){
             this.expansionName = name.toLowerCase(Locale.ROOT).concat("_");
             this.audiencePlaceholders = new HashMap<>();
             this.relationalPlaceholders = new HashMap<>();
@@ -77,31 +101,45 @@ final class ExpansionImpl implements Expansion {
         }
 
         @Override
-        public Builder audiencePlaceholder(String name, Function<Audience, Component> placeholder){
-            audiencePlaceholders.put(expansionName+name, placeholder);
+        public Builder audiencePlaceholder(@NotNull AudiencePlaceholder audiencePlaceholder){
+            Objects.requireNonNull(audiencePlaceholder, () -> "the audience placeholder cannot be null");
+
+            audiencePlaceholders.put(expansionName+audiencePlaceholder.name(), audiencePlaceholder.get());
             return this;
         }
 
         @Override
-        public Builder relationalPlaceholder(String name, BiFunction<Audience, Audience, Component> placeholder){
-            relationalPlaceholders.put(expansionName+"rel_"+name, placeholder);
+        public Builder relationalPlaceholder(@NotNull RelationalPlaceholder relationalPlaceholder){
+            Objects.requireNonNull(relationalPlaceholder, () -> "the relational placeholder cannot be null");
+
+            relationalPlaceholders.put(expansionName+"rel_"+relationalPlaceholder.name(), relationalPlaceholder.get());
             return this;
         }
 
         @Override
-        public Builder globalPlaceholder(String name, Tag placeholder){
+        public Builder globalPlaceholder(@NotNull String name, @NotNull Tag placeholder){
+            Objects.requireNonNull(name, () -> "the placeholder name cannot be null");
+            Objects.requireNonNull(placeholder, () -> "the Tag cannot be null");
+
             globalPlaceholders.tag(expansionName+name, placeholder);
             return this;
         }
 
         @Override
-        public Builder globalPlaceholder(String name, TagResolver resolver){
-            globalPlaceholders.resolver(resolver);
+        public Builder globalPlaceholder(@NotNull GlobalPlaceholder globalPlaceholder){
+            Objects.requireNonNull(globalPlaceholder, ()-> "the global placeholder cannot be null");
+
+            globalPlaceholders.resolver(new PlaceholderTag(expansionName+globalPlaceholder.name()) {
+                @Override
+                public Tag tag(){
+                    return Tag.selfClosingInserting(globalPlaceholder.get().get());
+                }
+            });
             return this;
         }
 
         @Override
-        public Expansion build(){
+        public @NotNull Expansion build(){
             return new ExpansionImpl(expansionName, audiencePlaceholders, relationalPlaceholders, globalPlaceholders.build());
         }
     }
