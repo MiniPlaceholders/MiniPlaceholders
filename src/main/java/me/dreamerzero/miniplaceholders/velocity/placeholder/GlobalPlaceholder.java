@@ -1,14 +1,18 @@
 package me.dreamerzero.miniplaceholders.velocity.placeholder;
 
-import java.util.function.Supplier;
+import java.util.Objects;
 
-import net.kyori.adventure.text.Component;
+import org.jetbrains.annotations.NotNull;
 
-public class GlobalPlaceholder extends ExpansionPlaceholder<Supplier<Component>> {
-    private GlobalPlaceholder(String name, Supplier<Component> supplier){
-        super(name, supplier);
+import net.kyori.adventure.text.minimessage.tag.Tag;
+
+public class GlobalPlaceholder extends ExpansionPlaceholder<Tag> {
+    private GlobalPlaceholder(String name, Tag tag){
+        super(name, tag);
     }
-    public static GlobalPlaceholder create(String name, Supplier<Component> supplier){
-        return new GlobalPlaceholder(name, supplier);
+    public static GlobalPlaceholder create(@NotNull final String name, @NotNull final Tag tag){
+        return new GlobalPlaceholder(
+            Objects.requireNonNull(name, () -> "the placeholder name cannot be null"),
+            Objects.requireNonNull(tag, () -> "the tag cannot be null"));
     }
 }

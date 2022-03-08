@@ -35,16 +35,16 @@ public class PlaceholderTest {
 
         Expansion expansion = Expansion.builder("example")
             .audiencePlaceholder(AudiencePlaceholder.create(
-                "name", p -> Component.text(((Player)p).getUsername())
+                "name", p -> Tag.selfClosingInserting(Component.text(((Player)p).getUsername()))
             ))
             .audiencePlaceholder(AudiencePlaceholder.create(
-                "uuid", p -> Component.text(((Player)p).getUniqueId().toString())
+                "uuid", p -> Tag.selfClosingInserting(Component.text(((Player)p).getUniqueId().toString()))
             ))
             .audiencePlaceholder(AudiencePlaceholder.create(
-                "tablistheader", p-> ((Player)p).getPlayerListHeader()
+                "tablistheader", p-> Tag.selfClosingInserting(((Player)p).getPlayerListHeader())
             ))
             .audiencePlaceholder(AudiencePlaceholder.create(
-                "tablistfooter", p -> ((Player)p).getPlayerListFooter()
+                "tablistfooter", p -> Tag.selfClosingInserting(((Player)p).getPlayerListFooter())
             ))
             .build();
 
@@ -62,7 +62,7 @@ public class PlaceholderTest {
 
         Expansion expansion = Expansion.builder("relational")
             .relationalPlaceholder(RelationalPlaceholder.create(
-                "enemy", (p, o) -> this.isEnemy(p,o) ? Component.text("Enemy", NamedTextColor.RED) : Component.text("Neutral", NamedTextColor.GREEN)))
+                "enemy", (p, o) -> Tag.selfClosingInserting(this.isEnemy(p,o) ? Component.text("Enemy", NamedTextColor.RED) : Component.text("Neutral", NamedTextColor.GREEN))))
             .build();
 
         assertEquals(MiniMessage.miniMessage().deserialize("You are <red>Enemy"), MiniMessage.miniMessage().deserialize("You are <relational_rel_enemy>", expansion.relationalPlaceholders(p1, p2)));
@@ -77,13 +77,12 @@ public class PlaceholderTest {
         when(proxy.getPlayer("Juan")).thenReturn(Optional.empty());
 
         Expansion expansion = Expansion.builder("global")
-            .globalPlaceholder("players", Tag.selfClosingInserting(Component.text(proxy.getAllPlayers().size())))
-            .globalPlaceholder(GlobalPlaceholder.create("servers", () -> Component.text(proxy.getAllServers().size())))
-            .globalPlaceholder("juanname", Component.text(proxy.getPlayer("Juan").orElse(new TestPlayer("Juan")).getUsername()))
+            .globalPlaceholder(GlobalPlaceholder.create("players", Tag.selfClosingInserting(Component.text(proxy.getAllPlayers().size()))))
+            .globalPlaceholder(GlobalPlaceholder.create("servers", Tag.selfClosingInserting(Component.text(proxy.getAllServers().size()))))
             .build();
 
-        final Component expected = Component.text("Online players: 0 | Servers: 0 | a: Juan");
-        final Component actual = MiniMessage.miniMessage().deserialize("Online players: <global_players> | Servers: <global_servers> | a: <global_juanname>", expansion.globalPlaceholders());
+        final Component expected = Component.text("Online players: 0 | Servers: 0");
+        final Component actual = MiniMessage.miniMessage().deserialize("Online players: <global_players> | Servers: <global_servers>", expansion.globalPlaceholders());
 
         assertEquals(expected, actual);
     }
@@ -92,7 +91,7 @@ public class PlaceholderTest {
     @DisplayName("Registered Placeholders")
     void instancePlaceholdersTest(){
         Expansion.builder("instance")
-            .globalPlaceholder("hello", Component.text("hello", NamedTextColor.RED))
+            .globalPlaceholder(GlobalPlaceholder.create("hello", Tag.selfClosingInserting(Component.text("hello", NamedTextColor.RED))))
             .build()
             .register();
 
@@ -106,7 +105,7 @@ public class PlaceholderTest {
     @DisplayName("Filtered Expansion")
     void filteredExpansion(){
         Expansion expansion = Expansion.builder("filter")
-            .audiencePlaceholder(AudiencePlaceholder.create("name", (aud) -> Component.text(((Player)aud).getUsername())))
+            .audiencePlaceholder(AudiencePlaceholder.create("name", (aud) -> Tag.selfClosingInserting(Component.text(((Player)aud).getUsername()))))
             .filter(Player.class)
             .build();
 

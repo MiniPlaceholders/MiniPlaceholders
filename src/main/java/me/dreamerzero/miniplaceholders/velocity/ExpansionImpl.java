@@ -11,22 +11,23 @@ import org.jetbrains.annotations.Nullable;
 import me.dreamerzero.miniplaceholders.velocity.placeholder.AudiencePlaceholder;
 import me.dreamerzero.miniplaceholders.velocity.placeholder.GlobalPlaceholder;
 import me.dreamerzero.miniplaceholders.velocity.placeholder.RelationalPlaceholder;
-import me.dreamerzero.miniplaceholders.velocity.tag.PlaceholderTag;
+import me.dreamerzero.miniplaceholders.velocity.tag.GlobalTag;
+import me.dreamerzero.miniplaceholders.velocity.tag.RelationalTag;
+import me.dreamerzero.miniplaceholders.velocity.tag.SingleTag;
 import net.kyori.adventure.audience.Audience;
-import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 
 final class ExpansionImpl implements Expansion {
     private final String name;
-    private final Set<PlaceholderTag.Single> audiencePlaceholders;
-    private final Set<PlaceholderTag.Relational> relationalPlaceholders;
+    private final Set<SingleTag> audiencePlaceholders;
+    private final Set<RelationalTag> relationalPlaceholders;
     private final TagResolver globalPlaceholders;
     private final Class<? extends Audience> filterClass;
 
     ExpansionImpl(
         @NotNull String expansionName,
-        @NotNull Set<PlaceholderTag.Single> audiencePlaceholders,
-        @NotNull Set<PlaceholderTag.Relational> relationalPlaceholders,
+        @NotNull Set<SingleTag> audiencePlaceholders,
+        @NotNull Set<RelationalTag> relationalPlaceholders,
         @NotNull TagResolver globalPlaceholders,
         @Nullable Class<? extends Audience> filterClass){
             this.name = expansionName+"-";
@@ -80,8 +81,8 @@ final class ExpansionImpl implements Expansion {
 
     static class Builder implements Expansion.Builder {
         private final String expansionName;
-        private final Set<PlaceholderTag.Single> audiencePlaceholders;
-        private final Set<PlaceholderTag.Relational> relationalPlaceholders;
+        private final Set<SingleTag> audiencePlaceholders;
+        private final Set<RelationalTag> relationalPlaceholders;
         private final TagResolver.Builder globalPlaceholders;
         private Class<? extends Audience> filterClass;
 
@@ -96,7 +97,7 @@ final class ExpansionImpl implements Expansion {
         public Builder audiencePlaceholder(@NotNull AudiencePlaceholder audiencePlaceholder){
             Objects.requireNonNull(audiencePlaceholder, () -> "the audience placeholder cannot be null");
 
-            audiencePlaceholders.add(PlaceholderTag.Single.create(expansionName+audiencePlaceholder.name(), audiencePlaceholder.get()));
+            audiencePlaceholders.add(SingleTag.create(expansionName+audiencePlaceholder.name(), audiencePlaceholder.get()));
             return this;
         }
 
@@ -104,16 +105,7 @@ final class ExpansionImpl implements Expansion {
         public Builder relationalPlaceholder(@NotNull RelationalPlaceholder relationalPlaceholder){
             Objects.requireNonNull(relationalPlaceholder, () -> "the relational placeholder cannot be null");
 
-            relationalPlaceholders.add(PlaceholderTag.Relational.create(expansionName+"rel_"+relationalPlaceholder.name(), relationalPlaceholder.get()));
-            return this;
-        }
-
-        @Override
-        public Builder globalPlaceholder(@NotNull String name, @NotNull Tag placeholder){
-            Objects.requireNonNull(name, () -> "the placeholder name cannot be null");
-            Objects.requireNonNull(placeholder, () -> "the Tag cannot be null");
-
-            globalPlaceholders.tag(expansionName+name, placeholder);
+            relationalPlaceholders.add(RelationalTag.create(expansionName+"rel_"+relationalPlaceholder.name(), relationalPlaceholder.get()));
             return this;
         }
 
@@ -121,7 +113,7 @@ final class ExpansionImpl implements Expansion {
         public Builder globalPlaceholder(@NotNull GlobalPlaceholder globalPlaceholder){
             Objects.requireNonNull(globalPlaceholder, () -> "the global placeholder cannot be null");
 
-            globalPlaceholders.resolver(PlaceholderTag.Global.create(expansionName+globalPlaceholder.name(), globalPlaceholder.get()));
+            globalPlaceholders.resolver(GlobalTag.create(expansionName+globalPlaceholder.name(), globalPlaceholder.get()));
             return this;
         }
 

@@ -1,17 +1,19 @@
 package me.dreamerzero.miniplaceholders.velocity.placeholder;
 
-abstract class ExpansionPlaceholder<M> {
+import org.jetbrains.annotations.NotNull;
+
+abstract class ExpansionPlaceholder<F> {
     private String name;
-    private M function;
-    protected ExpansionPlaceholder(String name, M function){
+    private F function;
+    protected ExpansionPlaceholder(String name, F function){
         this.name = name;
         this.function = function;
     }
-    public String name() {
+    public @NotNull String name() {
         return this.name;
     }
 
-    public M get() {
+    public @NotNull F get() {
         return this.function;
     }
 }

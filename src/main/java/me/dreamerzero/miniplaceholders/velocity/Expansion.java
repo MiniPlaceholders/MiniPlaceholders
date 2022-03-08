@@ -7,8 +7,6 @@ import me.dreamerzero.miniplaceholders.velocity.placeholder.AudiencePlaceholder;
 import me.dreamerzero.miniplaceholders.velocity.placeholder.GlobalPlaceholder;
 import me.dreamerzero.miniplaceholders.velocity.placeholder.RelationalPlaceholder;
 import net.kyori.adventure.audience.Audience;
-import net.kyori.adventure.text.ComponentLike;
-import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 
 /**
@@ -18,7 +16,7 @@ import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
  * <pre>
  *  Player player = event.getPlayer();
  *  Expansion.Builder builder = Expansion.builder("player")
- *      .audiencePlaceholder(AudiencePlaceholder.create("name", (p) -> Component.text(((Player)p).getUsername()))
+ *      .audiencePlaceholder(AudiencePlaceholder.create("name", p -> Tag.selfClosingInserting(Component.text(((Player)p).getUsername())))
  *      .build();
  *  Expansion expansion = builder.build();
  *  // You can also call the {@link Expansion#register} method to register
@@ -86,7 +84,7 @@ public interface Expansion {
      *  builder
      *      // Thanks to this filter, a cast can be performed without the probability of a ClassCastException
      *      .filter(Player.class)
-     *      .audiencePlaceholder("name", audience -> Component.text(((Player)audience).getUsername()));
+     *      .audiencePlaceholder(AudiencePlaceholder.create("name", audience -> Tag.selfClosingInserting(Component.text(((Player)audience).getUsername()))));
      *  Expansion expansion = builder.build();
      * </pre>
      *
@@ -132,36 +130,12 @@ public interface Expansion {
         /**
          * Adds a global placeholder
          *
-         * <p>This type of Placeholder does not depend on any value and can be called at any time</p>
-         *
-         * <p>The content of this Placeholder can be cached and can mutate
-         * depending on when it is invoked depending on how the Tag is created</p>
-         * @param name the placeholder name
-         * @param tag the tag to be returned in case the name is matched
-         * @return the {@link Builder} itself
-         */
-        Builder globalPlaceholder(@NotNull String name, @NotNull Tag tag);
-
-        /**
-         * Adds a global placeholder
-         *
          * <p>The content of this Placeholder is cached
          * and can mutate depending on when it is invoked</p>
          * @param globalPlaceholder the global placeholder
          * @return the {@link Builder} itself
          */
         Builder globalPlaceholder(@NotNull GlobalPlaceholder globalPlaceholder);
-
-        /**
-         * Adds a global component placeholder.
-         * <p><b>This placeholder is not cached</p>
-         * @param name the placeholder name
-         * @param component the component to return
-         * @return the {@link Builder} itself
-         */
-        default Builder globalPlaceholder(@NotNull String name, @NotNull ComponentLike component) {
-            return this.globalPlaceholder(name, Tag.selfClosingInserting(component));
-        }
 
         /**
          * Filter the type of Audiences that this expansion can receive

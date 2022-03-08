@@ -19,6 +19,7 @@ import org.openjdk.jmh.annotations.State;
 import me.dreamerzero.miniplaceholders.velocity.Expansion;
 import me.dreamerzero.miniplaceholders.velocity.MiniPlaceholders;
 import me.dreamerzero.miniplaceholders.velocity.placeholder.AudiencePlaceholder;
+import me.dreamerzero.miniplaceholders.velocity.placeholder.GlobalPlaceholder;
 
 @State(Scope.Benchmark)
 public class PlaceholderBenchmark {
@@ -31,19 +32,19 @@ public class PlaceholderBenchmark {
         when(player.getPlayerListFooter()).thenReturn(Component.text("b"));
         Expansion.Builder expansion = Expansion.builder("benchmark")
             .audiencePlaceholder(AudiencePlaceholder.create(
-                "name", p -> Component.text(((Player)p).getUsername())
+                "name", p -> Tag.selfClosingInserting(Component.text(((Player)p).getUsername()))
             ))
             .audiencePlaceholder(AudiencePlaceholder.create(
-                "uuid", p->Component.text(((Player)p).getUniqueId().toString())
+                "uuid", p -> Tag.selfClosingInserting(Component.text(((Player)p).getUniqueId().toString()))
             ))
             .audiencePlaceholder(AudiencePlaceholder.create(
-                "tablist", p -> ((Player)p).getPlayerListHeader()
+                "tablist", p -> Tag.selfClosingInserting(((Player)p).getPlayerListHeader())
             ))
             .audiencePlaceholder(AudiencePlaceholder.create(
-                "aea", p -> Component.text("aea")
+                "aea", p -> Tag.selfClosingInserting(Component.text("aea"))
             ))
             .audiencePlaceholder(AudiencePlaceholder.create(
-                "tablistfooter", p -> Component.text("footer")
+                "tablistfooter", p ->Tag.selfClosingInserting(Component.text("footer"))
             ));
 
         Expansion expansionBuilded = expansion.build();
@@ -56,7 +57,7 @@ public class PlaceholderBenchmark {
     @Benchmark
     public void singleBench(){
         Expansion.builder("single")
-            .globalPlaceholder("servername", Tag.selfClosingInserting(Component.text("Peruviankkit")))
+            .globalPlaceholder(GlobalPlaceholder.create("servername", Tag.selfClosingInserting(Component.text("Peruviankkit"))))
             .build()
             .register();
 

@@ -1,16 +1,21 @@
 package me.dreamerzero.miniplaceholders.velocity.placeholder;
 
+import java.util.Objects;
 import java.util.function.BiFunction;
 
-import net.kyori.adventure.audience.Audience;
-import net.kyori.adventure.text.Component;
+import org.jetbrains.annotations.NotNull;
 
-public class RelationalPlaceholder extends ExpansionPlaceholder<BiFunction<Audience, Audience, Component>> {
-    private RelationalPlaceholder(String name, BiFunction<Audience, Audience, Component> function) {
+import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.text.minimessage.tag.Tag;
+
+public class RelationalPlaceholder extends ExpansionPlaceholder<BiFunction<Audience, Audience, Tag>> {
+    private RelationalPlaceholder(String name, BiFunction<Audience, Audience, Tag> function) {
         super(name, function);
     }
 
-    public static RelationalPlaceholder create(String name, BiFunction<Audience, Audience, Component> function){
-        return new RelationalPlaceholder(name, function);
+    public static RelationalPlaceholder create(@NotNull final String name, @NotNull final BiFunction<Audience, Audience, Tag> function){
+        return new RelationalPlaceholder(
+            Objects.requireNonNull(name, () -> "the name cannot be null"),
+            Objects.requireNonNull(function, () -> "the function cannot be null"));
     }
 }
