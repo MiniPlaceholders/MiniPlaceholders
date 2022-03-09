@@ -4,10 +4,8 @@ plugins {
 }
 
 dependencies {
-    //TODO: Resolve Paper 1.18.2 dependency
-    compileOnly("net.kyori:adventure-api:4.10.1")
-    compileOnly("net.kyori:adventure-text-minimessage:4.10.1")
-    compileOnly("com.destroystokyo.paper:paper-api:1.16.5-R0.1-SNAPSHOT")
+    compileOnly(project(":common"))
+    compileOnly("io.papermc.paper:paper-api:1.18.2-R0.1-SNAPSHOT")
 }
 
 bukkit {
@@ -18,5 +16,5 @@ bukkit {
     version = "1.0.0"
 }
 
-java.sourceCompatibility = JavaVersion.VERSION_11
-java.targetCompatibility = JavaVersion.VERSION_11
+java.toolchain.languageVersion.set(JavaLanguageVersion.of(17))
+

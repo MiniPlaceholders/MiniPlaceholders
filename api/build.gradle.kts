@@ -17,8 +17,8 @@ tasks {
     test {
         useJUnitPlatform()
         testLogging {
-		    events("passed", "skipped", "failed")
-	    }
+            events("passed", "failed")
+        }
     }
 }
 
@@ -28,5 +28,5 @@ jmh {
     fork.set(2)
 }
 
-java.sourceCompatibility = JavaVersion.VERSION_11
-java.targetCompatibility = JavaVersion.VERSION_11
+java.sourceCompatibility = JavaVersion.VERSION_17
+java.targetCompatibility = JavaVersion.VERSION_17

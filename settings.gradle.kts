@@ -1,9 +1,13 @@
-rootProject.name = "miniplaceholders-parent"
+rootProject.name = "miniplaceholders"
 
 
-include("api", "paper", "velocity", "distribution")
+include("api")
+include("common")
+include("paper")
+include("velocity")
+
 
 project(":api").projectDir = file("api")
-project(":paper").projectDir = file("paper")
+project(":common").projectDir = file("common")
 project(":velocity").projectDir = file("velocity")
-project(":distribution").projectDir = file("distribution")
+project(":paper").projectDir = file("paper")

@@ -7,13 +7,15 @@ import com.velocitypowered.api.plugin.Plugin;
 
 import org.slf4j.Logger;
 
+import me.dreamerzero.miniplaceholders.common.PlaceholdersPlugin;
+
 @Plugin(
     name = "MiniPlaceholders",
     id = "miniplaceholders",
     version = "1.0.0",
     authors = {"4drian3d"}
 )
-public class VelocityPlugin {
+public class VelocityPlugin implements PlaceholdersPlugin {
     private final Logger logger;
     @Inject
     public VelocityPlugin(Logger logger) {
@@ -23,5 +25,10 @@ public class VelocityPlugin {
     @Subscribe
     public void onProxyInitialize(ProxyInitializeEvent event) {
         logger.info("Starting MiniPlaceholders Velocity");
+    }
+
+    @Override
+    public void loadDefaultExpansions(){
+        
     }
 }
