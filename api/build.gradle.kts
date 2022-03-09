@@ -8,9 +8,9 @@ dependencies {
     compileOnly("net.kyori:adventure-text-minimessage:4.10.1")
     testImplementation(platform("org.junit:junit-bom:5.8.1"))
     testImplementation("org.junit.jupiter:junit-jupiter")
-    testImplementation("org.mockito:mockito-core:4.1.0")
     testImplementation("net.kyori:adventure-api:4.10.1")
     testImplementation("net.kyori:adventure-text-minimessage:4.10.1")
+    testImplementation("net.kyori:adventure-text-serializer-plain:4.10.1")
 }
 
 tasks {

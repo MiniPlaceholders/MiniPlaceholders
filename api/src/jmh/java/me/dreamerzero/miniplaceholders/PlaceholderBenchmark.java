@@ -1,10 +1,5 @@
 package me.dreamerzero.miniplaceholders;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import java.util.UUID;
-
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.Tag;
@@ -21,25 +16,15 @@ import me.dreamerzero.miniplaceholders.api.placeholder.GlobalPlaceholder;
 
 @State(Scope.Benchmark)
 public class PlaceholderBenchmark {
-    /*@Benchmark
+    @Benchmark
     public void placeholderBench(){
-        Player player = mock(Player.class);
-        when(player.getUsername()).thenReturn("4drian3d");
-        when(player.getUniqueId()).thenReturn(UUID.randomUUID());
-        when(player.getPlayerListHeader()).thenReturn(Component.text("a"));
-        when(player.getPlayerListFooter()).thenReturn(Component.text("b"));
+        BenchAudience player = new BenchAudience("4drian3d");
         Expansion.Builder expansion = Expansion.builder("benchmark")
             .audiencePlaceholder(AudiencePlaceholder.create(
-                "name", p -> Tag.selfClosingInserting(Component.text(((Player)p).getUsername()))
+                "name", p -> Tag.selfClosingInserting(Component.text(((BenchAudience)p).getName()))
             ))
             .audiencePlaceholder(AudiencePlaceholder.create(
-                "uuid", p -> Tag.selfClosingInserting(Component.text(((Player)p).getUniqueId().toString()))
-            ))
-            .audiencePlaceholder(AudiencePlaceholder.create(
-                "tablist", p -> Tag.selfClosingInserting(((Player)p).getPlayerListHeader())
-            ))
-            .audiencePlaceholder(AudiencePlaceholder.create(
-                "aea", p -> Tag.selfClosingInserting(Component.text("aea"))
+                "uuid", p -> Tag.selfClosingInserting(Component.text(((BenchAudience)p).getUUID().toString()))
             ))
             .audiencePlaceholder(AudiencePlaceholder.create(
                 "tablistfooter", p ->Tag.selfClosingInserting(Component.text("footer"))
@@ -50,7 +35,7 @@ public class PlaceholderBenchmark {
         final TagResolver resolvers = MiniPlaceholders.getAudiencePlaceholders(player);
 
         MiniMessage.miniMessage().deserialize("Player Name: <benchmark-name>", resolvers);
-    }*/
+    }
 
     @Benchmark
     public void singleBench(){
