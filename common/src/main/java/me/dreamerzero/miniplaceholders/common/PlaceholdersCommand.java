@@ -18,26 +18,32 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 
-public class PlaceholdersCommand<A extends Audience> {
+public class PlaceholdersCommand<A> {
     private final @NotNull Supplier<@NotNull Collection<@NotNull String>> playersSuggestions;
     private final @NotNull Function<@NotNull String, @Nullable Audience> toAudience;
+    private Function<A, Audience> fromAToAudience = null;
 
     public PlaceholdersCommand(Supplier<Collection<String>> playersSuggestions, Function<@NotNull String, @Nullable Audience> toAudience){
         this.playersSuggestions = playersSuggestions;
         this.toAudience = toAudience;
     }
 
+    public PlaceholdersCommand(Supplier<Collection<String>> playersSuggestions, Function<@NotNull String, @Nullable Audience> toAudience, Function<A, Audience> fromAToAudience){
+        this(playersSuggestions, toAudience);
+        this.fromAToAudience = fromAToAudience;
+    }
+
     public LiteralCommandNode<A> placeholderTestCommand(String commandName){
         return LiteralArgumentBuilder.<A>literal(commandName)
             .executes(cmd -> {
                 //TODO: Add main command info
-                cmd.getSource().sendMessage(MiniMessage.miniMessage().deserialize("<rainbow>Main Command"));
+                getAudience(cmd.getSource()).sendMessage(MiniMessage.miniMessage().deserialize("<rainbow>Main Command"));
                 return 1;
             })
             .then(LiteralArgumentBuilder.<A>literal("help")
                 .executes(cmd -> {
                     //TODO: Add help
-                    cmd.getSource().sendMessage(MiniMessage.miniMessage().deserialize("<rainbow>Hello"));
+                    getAudience(cmd.getSource()).sendMessage(MiniMessage.miniMessage().deserialize("<rainbow>Hello"));
                     return 1;
                 })
             )
@@ -47,8 +53,8 @@ public class PlaceholdersCommand<A extends Audience> {
                         .executes(cmd -> {
                             String stringToParse = cmd.getArgument("selfStringToParse", String.class);
 
-                            Component parsed = this.parseGlobal(stringToParse, cmd.getSource());
-                            cmd.getSource().sendMessage(parsed);
+                            Component parsed = this.parseGlobal(stringToParse, getAudience(cmd.getSource()));
+                            getAudience(cmd.getSource()).sendMessage(parsed);
                             return 1;
                         })
                     )
@@ -63,13 +69,13 @@ public class PlaceholdersCommand<A extends Audience> {
                             .executes(cmd -> {
                                 Audience objetive = toAudience.apply(cmd.getArgument("source", String.class));
                                 if(objetive == null){
-                                    cmd.getSource().sendMessage(Component.text("You must specify a valid player"));
+                                    getAudience(cmd.getSource()).sendMessage(Component.text("You must specify a valid player"));
                                     return 1;
                                 }
                                 String stringToParse = cmd.getArgument("playerStringToParse", String.class);
 
                                 Component parsed = this.parseGlobal(stringToParse, objetive);
-                                cmd.getSource().sendMessage(parsed);
+                                getAudience(cmd.getSource()).sendMessage(parsed);
                                 return 1;
                             })
                         )
@@ -87,5 +93,13 @@ public class PlaceholdersCommand<A extends Audience> {
                 MiniPlaceholders.getAudiencePlaceholders(audience)
             )
         );
+    }
+
+    private Audience getAudience(A possibleAudience){
+        if(fromAToAudience == null){
+            return (Audience)possibleAudience;
+        }
+        Audience audience = fromAToAudience.apply(possibleAudience);
+        return audience != null ? audience : Audience.empty();
     }
 }
