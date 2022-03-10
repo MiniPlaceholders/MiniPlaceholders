@@ -7,6 +7,7 @@ import java.util.Set;
 
 import org.jetbrains.annotations.NotNull;
 
+import me.dreamerzero.miniplaceholders.api.enums.Platform;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 
@@ -24,6 +25,11 @@ import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 public final class MiniPlaceholders {
     private MiniPlaceholders(){}
     protected static final Set<Expansion> expansions = Collections.synchronizedSet(new HashSet<>());
+    private static Platform placeholdersPlatform;
+
+    public static Platform getPlatform(){
+        return placeholdersPlatform;
+    }
 
     /**
      * Get the global placeholders
@@ -53,7 +59,7 @@ public final class MiniPlaceholders {
      * @param audience the audience
      * @return {@link TagResolver} with placeholders based on an audience
      */
-    public static TagResolver getAudiencePlaceholders(@NotNull Audience audience) {
+    public static @NotNull TagResolver getAudiencePlaceholders(@NotNull Audience audience) {
         if(expansions.isEmpty()) return TagResolver.empty();
 
         Objects.requireNonNull(audience, () -> "audience cannot be null");
@@ -74,7 +80,7 @@ public final class MiniPlaceholders {
      * @param otherAudience another audience
      * @return placeholders based on two audiences
      */
-    public static TagResolver getRelationalPlaceholders(@NotNull Audience audience, @NotNull Audience otherAudience) {
+    public static @NotNull TagResolver getRelationalPlaceholders(@NotNull Audience audience, @NotNull Audience otherAudience) {
         if(expansions.isEmpty()) return TagResolver.empty();
 
         Objects.requireNonNull(audience, () -> "audience cannot be null");
@@ -84,5 +90,10 @@ public final class MiniPlaceholders {
         expansions.forEach(exp -> resolvers.resolver(exp.relationalPlaceholders(audience, otherAudience)));
 
         return resolvers.build();
+    }
+
+    public static void setPlatform(Platform platform){
+        if(placeholdersPlatform != null) throw new RuntimeException("Cannot set platform twice");
+        placeholdersPlatform = platform;
     }
 }

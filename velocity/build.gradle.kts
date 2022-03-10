@@ -1,11 +1,7 @@
-plugins {
-    java
-}
-
 dependencies {
     compileOnly("com.velocitypowered:velocity-api:3.1.2-SNAPSHOT")
     annotationProcessor("com.velocitypowered:velocity-api:3.1.2-SNAPSHOT")
+    compileOnly(project(":common"))
 }
 
-java.sourceCompatibility = JavaVersion.VERSION_11
-java.targetCompatibility = JavaVersion.VERSION_11
+java.toolchain.languageVersion.set(JavaLanguageVersion.of(17))

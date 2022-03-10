@@ -8,6 +8,8 @@ import java.util.Set;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.function.Predicate;
+
 import me.dreamerzero.miniplaceholders.api.placeholder.AudiencePlaceholder;
 import me.dreamerzero.miniplaceholders.api.placeholder.GlobalPlaceholder;
 import me.dreamerzero.miniplaceholders.api.placeholder.RelationalPlaceholder;
@@ -20,18 +22,21 @@ final class ExpansionImpl implements Expansion {
     private final Set<Tags.Relational> relationalPlaceholders;
     private final TagResolver globalPlaceholders;
     private final Class<? extends Audience> filterClass;
+    private final Predicate<Audience> predicateFilter;
 
     ExpansionImpl(
         @NotNull String expansionName,
         @NotNull Set<Tags.Single> audiencePlaceholders,
         @NotNull Set<Tags.Relational> relationalPlaceholders,
         @NotNull TagResolver globalPlaceholders,
-        @Nullable Class<? extends Audience> filterClass){
+        @Nullable Class<? extends Audience> filterClass,
+        @Nullable Predicate<Audience> predicateFilter){
             this.name = expansionName+"-";
             this.audiencePlaceholders = audiencePlaceholders;
             this.relationalPlaceholders = relationalPlaceholders;
             this.globalPlaceholders = globalPlaceholders;
             this.filterClass = filterClass;
+            this.predicateFilter = predicateFilter;
     }
 
     @Override
@@ -45,11 +50,16 @@ final class ExpansionImpl implements Expansion {
 
         Objects.requireNonNull(audience, () -> "the audience cannot be null");
 
-        if(filterClass != null && !filterClass.isInstance(audience)) return TagResolver.empty();
+        if(this.singleFilter(audience)) return TagResolver.empty();
 
         TagResolver.Builder placeholders = TagResolver.builder();
         audiencePlaceholders.forEach(pl -> placeholders.resolver(pl.of(audience)));
         return placeholders.build();
+    }
+
+    private boolean singleFilter(Audience audience){
+        return filterClass != null && !filterClass.isInstance(audience)
+            || predicateFilter != null && predicateFilter.test(audience);
     }
 
     @Override
@@ -59,11 +69,16 @@ final class ExpansionImpl implements Expansion {
         Objects.requireNonNull(audience, () -> "the audience cannot be null");
         Objects.requireNonNull(otherAudience, () -> "the other audience cannot be null");
 
-        if(filterClass != null && (!filterClass.isInstance(audience) || !filterClass.isInstance(otherAudience))) return TagResolver.empty();
+        if(this.relationalFilter(audience, otherAudience)) return TagResolver.empty();
 
         TagResolver.Builder placeholders = TagResolver.builder();
         relationalPlaceholders.forEach(pl -> placeholders.resolver(pl.of(audience, otherAudience)));
         return placeholders.build();
+    }
+
+    private boolean relationalFilter(Audience audience, Audience otherAudience){
+        return (filterClass != null && (!filterClass.isInstance(audience) || !filterClass.isInstance(otherAudience)))
+            || (predicateFilter != null && (!predicateFilter.test(audience) || !predicateFilter.test(otherAudience)));
     }
 
     @Override
@@ -82,6 +97,7 @@ final class ExpansionImpl implements Expansion {
         private final Set<Tags.Relational> relationalPlaceholders;
         private final TagResolver.Builder globalPlaceholders;
         private Class<? extends Audience> filterClass;
+        private Predicate<Audience> predicateFilter;
 
         Builder(@NotNull String name){
             this.expansionName = name.toLowerCase(Locale.ROOT).concat("_");
@@ -121,8 +137,21 @@ final class ExpansionImpl implements Expansion {
         }
 
         @Override
+        public Builder filter(Predicate<Audience> predicate){
+            this.predicateFilter = predicate;
+            return this;
+        }
+
+        @Override
         public @NotNull Expansion build(){
-            return new ExpansionImpl(expansionName, audiencePlaceholders, relationalPlaceholders, globalPlaceholders.build(), filterClass);
+            return new ExpansionImpl(
+                expansionName,
+                audiencePlaceholders,
+                relationalPlaceholders,
+                globalPlaceholders.build(),
+                filterClass,
+                predicateFilter
+            );
         }
     }
 
