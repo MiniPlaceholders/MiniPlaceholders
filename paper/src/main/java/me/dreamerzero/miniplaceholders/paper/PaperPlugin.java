@@ -8,10 +8,6 @@ public class PaperPlugin extends JavaPlugin implements PlaceholdersPlugin {
     @Override
     public void onEnable(){
         this.getSLF4JLogger().info("Starting MiniPlaceholders Paper");
-    }
-
-    @Override
-    public void loadDefaultExpansions(){
-        
+        this.setPlatform("paper");
     }
 }

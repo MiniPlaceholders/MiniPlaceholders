@@ -1,5 +1,10 @@
 package me.dreamerzero.miniplaceholders.common;
 
+import me.dreamerzero.miniplaceholders.api.MiniPlaceholders;
+import me.dreamerzero.miniplaceholders.api.enums.Platform;
+
 public interface PlaceholdersPlugin {
-    void loadDefaultExpansions();
+    default void setPlatform(String string){
+        MiniPlaceholders.setPlatform("velocity".equals(string) ? Platform.VELOCITY : Platform.PAPER);
+    }
 }

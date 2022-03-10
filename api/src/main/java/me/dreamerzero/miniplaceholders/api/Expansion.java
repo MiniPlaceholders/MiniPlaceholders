@@ -3,6 +3,8 @@ package me.dreamerzero.miniplaceholders.api;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.function.Predicate;
+
 import me.dreamerzero.miniplaceholders.api.placeholder.AudiencePlaceholder;
 import me.dreamerzero.miniplaceholders.api.placeholder.GlobalPlaceholder;
 import me.dreamerzero.miniplaceholders.api.placeholder.RelationalPlaceholder;
@@ -150,6 +152,19 @@ public interface Expansion {
          * @return the {@link Builder} itself
          */
         Builder filter(@Nullable Class<? extends Audience> clazz);
+
+        /**
+         * Filters the audiences that this expansion can receive through a Predicate
+         * <p>Example:</p>
+         * <pre>
+         *  Expansion.builder("example").filter(Player.class).filter(aud -> isInProtectedServer((Player)aud))
+         *      .audiencePlaceholder(AudiencePlaceholder.create("hello", aud -> Tag.selfInsertingClosing(Component.text("you are in protected server"))))
+         *      .build();
+         * </pre>
+         * @param predicate the check to realize
+         * @return the {@link Builder} itself
+         */
+        Builder filter(@NotNull Predicate<Audience> predicate);
 
         /**
          * Build the Expansion
