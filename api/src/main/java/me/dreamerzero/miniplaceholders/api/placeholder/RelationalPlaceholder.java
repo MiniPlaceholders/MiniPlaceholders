@@ -1,21 +1,19 @@
 package me.dreamerzero.miniplaceholders.api.placeholder;
 
-import java.util.Objects;
-import java.util.function.BiFunction;
-
-import org.jetbrains.annotations.NotNull;
-
 import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.text.minimessage.Context;
 import net.kyori.adventure.text.minimessage.tag.Tag;
+import net.kyori.adventure.text.minimessage.tag.resolver.ArgumentQueue;
 
-public class RelationalPlaceholder extends ExpansionPlaceholder<BiFunction<Audience, Audience, Tag>> {
-    private RelationalPlaceholder(String name, BiFunction<Audience, Audience, Tag> function) {
-        super(name, function);
-    }
-
-    public static RelationalPlaceholder create(@NotNull final String name, @NotNull final BiFunction<Audience, Audience, Tag> function){
-        return new RelationalPlaceholder(
-            Objects.requireNonNull(name, () -> "the name cannot be null"),
-            Objects.requireNonNull(function, () -> "the function cannot be null"));
-    }
+/**Relational Placeholder based on two Audiences*/
+public interface RelationalPlaceholder {
+    /**
+     * A Tag based on two audiences
+     * @param audience the principal audience
+     * @param otherAudience the another audience
+     * @param queue the argument queue
+     * @param ctx the context
+     * @return a tag
+     */
+    Tag tag(Audience audience, Audience otherAudience, ArgumentQueue queue, Context ctx);
 }

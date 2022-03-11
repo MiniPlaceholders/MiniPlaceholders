@@ -7,9 +7,17 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
+/**
+ * Legacy utils
+ */
 public final class LegacyUtils {
     private LegacyUtils(){}
 
+    /**
+     * Parse a string with possible legacy symbols
+     * @param string the string
+     * @return a parsed string
+     */
     public static @NotNull Component parsePossibleLegacy(@Nullable String string) {
         if(string == null || string.isBlank()) return Component.empty();
         if(string.indexOf('&') != 0){

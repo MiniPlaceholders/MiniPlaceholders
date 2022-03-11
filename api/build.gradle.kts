@@ -1,5 +1,6 @@
 plugins {
     id("me.champeau.jmh") version "0.6.6"
+    `maven-publish`
 }
 
 dependencies {
@@ -27,6 +28,30 @@ jmh {
     iterations.set(2)
     fork.set(2)
 }
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+    withSourcesJar()
+    withJavadocJar()
+}
 
-java.sourceCompatibility = JavaVersion.VERSION_17
-java.targetCompatibility = JavaVersion.VERSION_17
+val projectGroup = project.group as String
+val projectVersion = project.version as String
+
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            groupId = projectGroup
+            artifactId = project.name
+            version = projectVersion
+            from(components["java"])
+        }
+    }
+}
+
+tasks.withType<Javadoc> {
+    (options as StandardJavadocDocletOptions).links(
+        "https://jd.adventure.kyori.net/api/4.10.1/",
+        "https://jd.adventure.kyori.net/text-minimessage/4.10.1/"
+    )
+}

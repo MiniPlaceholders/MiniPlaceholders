@@ -11,8 +11,6 @@ import org.openjdk.jmh.annotations.State;
 
 import me.dreamerzero.miniplaceholders.api.Expansion;
 import me.dreamerzero.miniplaceholders.api.MiniPlaceholders;
-import me.dreamerzero.miniplaceholders.api.placeholder.AudiencePlaceholder;
-import me.dreamerzero.miniplaceholders.api.placeholder.GlobalPlaceholder;
 
 @State(Scope.Benchmark)
 public class PlaceholderBenchmark {
@@ -20,15 +18,15 @@ public class PlaceholderBenchmark {
     public void placeholderBench(){
         BenchAudience player = new BenchAudience("4drian3d");
         Expansion.Builder expansion = Expansion.builder("benchmark")
-            .audiencePlaceholder(AudiencePlaceholder.create(
-                "name", p -> Tag.selfClosingInserting(Component.text(((BenchAudience)p).getName()))
-            ))
-            .audiencePlaceholder(AudiencePlaceholder.create(
-                "uuid", p -> Tag.selfClosingInserting(Component.text(((BenchAudience)p).getUUID().toString()))
-            ))
-            .audiencePlaceholder(AudiencePlaceholder.create(
-                "tablistfooter", p ->Tag.selfClosingInserting(Component.text("footer"))
-            ));
+            .audiencePlaceholder(
+                "name", (aud, queue, ctx) -> Tag.selfClosingInserting(Component.text(((BenchAudience)aud).getName()))
+            )
+            .audiencePlaceholder(
+                "uuid", (aud, queue, ctx) -> Tag.selfClosingInserting(Component.text(((BenchAudience)aud).getUUID().toString()))
+            )
+            .audiencePlaceholder(
+                "tablistfooter", (aud, queue, ctx) ->Tag.selfClosingInserting(Component.text("footer"))
+            );
 
         Expansion expansionBuilded = expansion.build();
         expansionBuilded.audiencePlaceholders(player);
@@ -40,7 +38,7 @@ public class PlaceholderBenchmark {
     @Benchmark
     public void singleBench(){
         Expansion.builder("single")
-            .globalPlaceholder(GlobalPlaceholder.create("servername", Tag.selfClosingInserting(Component.text("Peruviankkit"))))
+            .globalPlaceholder("servername", (queue, ctx) -> Tag.selfClosingInserting(Component.text("Peruviankkit")))
             .build()
             .register();
 

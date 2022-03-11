@@ -1,5 +1,9 @@
 package me.dreamerzero.miniplaceholders.api.enums;
 
+/**Platforms */
 public enum Platform {
-    PAPER, VELOCITY
+    /**Paper Platform */
+    PAPER,
+    /**Velocity Platform */
+    VELOCITY
 }

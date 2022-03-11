@@ -3,12 +3,15 @@ package me.dreamerzero.miniplaceholders.api;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.function.BiFunction;
 import java.util.function.Predicate;
 
 import me.dreamerzero.miniplaceholders.api.placeholder.AudiencePlaceholder;
-import me.dreamerzero.miniplaceholders.api.placeholder.GlobalPlaceholder;
 import me.dreamerzero.miniplaceholders.api.placeholder.RelationalPlaceholder;
 import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.text.minimessage.Context;
+import net.kyori.adventure.text.minimessage.tag.Tag;
+import net.kyori.adventure.text.minimessage.tag.resolver.ArgumentQueue;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 
 /**
@@ -18,14 +21,14 @@ import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
  * <pre>
  *  Player player = event.getPlayer();
  *  Expansion.Builder builder = Expansion.builder("player")
- *      .audiencePlaceholder(AudiencePlaceholder.create("name", p -> Tag.selfClosingInserting(Component.text(((Player)p).getUsername())))
+ *      .audiencePlaceholder("name", (p, queue, ctx) -> Tag.selfClosingInserting(Component.text(((Player)p).getUsername()))
  *      .build();
  *  Expansion expansion = builder.build();
  *  // You can also call the {@link Expansion#register} method to register
- *  // the {@link Extension} in the {@link MiniPlaceholders} global Extensions and
+ *  // the {@link Expansion} in the {@link MiniPlaceholders} global Extensions and
  *  // use it in {@link MiniPlaceholders#getAudiencePlaceholders(Audience)} e.g.
  *  TagResolver resolver = expansion.audiencePlaceholder(player);
- *  player.sendMessage(MiniMessage.miniMessage().deserialize("Hello <luckperms_prefix> <player_name>", resolver));
+ *  player.sendMessage(MiniMessage.miniMessage().deserialize("Hello {@literal <luckperms_prefix> <player_name>}", resolver));
  * </pre>
  */
 public interface Expansion {
@@ -37,9 +40,9 @@ public interface Expansion {
 
     /**
      * Get the {@link TagResolver} of the desired {@link Audience}
-     * @param audience
+     * @param audience the audience
      * @since 1.0.0
-     * @return
+     * @return A TagResolver with variable placeholders of an Audience
      */
     @NotNull TagResolver audiencePlaceholders(@NotNull Audience audience);
 
@@ -86,7 +89,7 @@ public interface Expansion {
      *  builder
      *      // Thanks to this filter, a cast can be performed without the probability of a ClassCastException
      *      .filter(Player.class)
-     *      .audiencePlaceholder(AudiencePlaceholder.create("name", audience -> Tag.selfClosingInserting(Component.text(((Player)audience).getUsername()))));
+     *      .audiencePlaceholder("name", (audience, queue, ctx) -> Tag.selfClosingInserting(Component.text(((Player)audience).getUsername())));
      *  Expansion expansion = builder.build();
      * </pre>
      *
@@ -106,11 +109,12 @@ public interface Expansion {
          *
          * <p>The content of this Placeholder is cached
          * and can mutate depending on when it is invoked</p>
+         * @param key the placeholder key
          * @param audiencePlaceholder the single placeholder
          * @since 1.0.0
          * @return the {@link Builder} itself
          */
-        Builder audiencePlaceholder(@NotNull AudiencePlaceholder audiencePlaceholder);
+        Builder audiencePlaceholder(@NotNull String key, @NotNull AudiencePlaceholder audiencePlaceholder);
 
         /**
          * Adds an Relational Placeholder based on two audiences
@@ -123,21 +127,23 @@ public interface Expansion {
          *
          * <p>The content of this Placeholder is cached
          * and can mutate depending on when it is invoked</p>
-         * @param relationalPlaceholder the relation placeholder
+         * @param key the placeholder key
+         * @param relationalPlaceholder the relational placeholder
          * @since 1.0.0
          * @return the {@link Builder} itself
          */
-        Builder relationalPlaceholder(@NotNull RelationalPlaceholder relationalPlaceholder);
+        Builder relationalPlaceholder(@NotNull String key, @NotNull RelationalPlaceholder relationalPlaceholder);
 
         /**
          * Adds a global placeholder
          *
          * <p>The content of this Placeholder is cached
          * and can mutate depending on when it is invoked</p>
-         * @param globalPlaceholder the global placeholder
+         * @param key the placeholder key
+         * @param function the function
          * @return the {@link Builder} itself
          */
-        Builder globalPlaceholder(@NotNull GlobalPlaceholder globalPlaceholder);
+        Builder globalPlaceholder(@NotNull String key, BiFunction<ArgumentQueue, Context, Tag> function);
 
         /**
          * Filter the type of Audiences that this expansion can receive
@@ -158,7 +164,7 @@ public interface Expansion {
          * <p>Example:</p>
          * <pre>
          *  Expansion.builder("example").filter(Player.class).filter(aud -> isInProtectedServer((Player)aud))
-         *      .audiencePlaceholder(AudiencePlaceholder.create("hello", aud -> Tag.selfInsertingClosing(Component.text("you are in protected server"))))
+         *      .audiencePlaceholder("hello", (aud, queue, ctx) -> Tag.selfInsertingClosing(Component.text("you are in protected server")))
          *      .build();
          * </pre>
          * @param predicate the check to realize

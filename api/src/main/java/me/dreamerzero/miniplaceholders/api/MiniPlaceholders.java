@@ -24,9 +24,13 @@ import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
  */
 public final class MiniPlaceholders {
     private MiniPlaceholders(){}
-    protected static final Set<Expansion> expansions = Collections.synchronizedSet(new HashSet<>());
+    static final Set<Expansion> expansions = Collections.synchronizedSet(new HashSet<>());
     private static Platform placeholdersPlatform;
 
+    /**
+     * Get the platform
+     * @return the platform
+     */
     public static Platform getPlatform(){
         return placeholdersPlatform;
     }
@@ -92,6 +96,13 @@ public final class MiniPlaceholders {
         return resolvers.build();
     }
 
+    /**
+     * Set the platform
+     * @param platform the platform
+     * @deprecated dont use this, INTERNAL
+     */
+    @Deprecated
+    @org.jetbrains.annotations.ApiStatus.Internal
     public static void setPlatform(Platform platform){
         if(placeholdersPlatform != null) throw new RuntimeException("Cannot set platform twice");
         placeholdersPlatform = platform;

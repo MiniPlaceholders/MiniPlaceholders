@@ -8,12 +8,15 @@ import java.util.Set;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.function.BiFunction;
 import java.util.function.Predicate;
 
 import me.dreamerzero.miniplaceholders.api.placeholder.AudiencePlaceholder;
-import me.dreamerzero.miniplaceholders.api.placeholder.GlobalPlaceholder;
 import me.dreamerzero.miniplaceholders.api.placeholder.RelationalPlaceholder;
 import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.text.minimessage.Context;
+import net.kyori.adventure.text.minimessage.tag.Tag;
+import net.kyori.adventure.text.minimessage.tag.resolver.ArgumentQueue;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 
 final class ExpansionImpl implements Expansion {
@@ -107,26 +110,27 @@ final class ExpansionImpl implements Expansion {
         }
 
         @Override
-        public Builder audiencePlaceholder(@NotNull AudiencePlaceholder audiencePlaceholder){
+        public Builder audiencePlaceholder(@NotNull String key, @NotNull AudiencePlaceholder audiencePlaceholder){
             Objects.requireNonNull(audiencePlaceholder, () -> "the audience placeholder cannot be null");
 
-            audiencePlaceholders.add(Tags.single(expansionName+audiencePlaceholder.name(), audiencePlaceholder.get()));
+            audiencePlaceholders.add(Tags.single(expansionName+key, audiencePlaceholder));
             return this;
         }
 
         @Override
-        public Builder relationalPlaceholder(@NotNull RelationalPlaceholder relationalPlaceholder){
+        public Builder relationalPlaceholder(String key, @NotNull RelationalPlaceholder relationalPlaceholder){
             Objects.requireNonNull(relationalPlaceholder, () -> "the relational placeholder cannot be null");
 
-            relationalPlaceholders.add(Tags.relational(expansionName+"rel_"+relationalPlaceholder.name(), relationalPlaceholder.get()));
+            relationalPlaceholders.add(Tags.relational(expansionName+"rel_"+key, relationalPlaceholder));
             return this;
         }
 
         @Override
-        public Builder globalPlaceholder(@NotNull GlobalPlaceholder globalPlaceholder){
-            Objects.requireNonNull(globalPlaceholder, () -> "the global placeholder cannot be null");
+        public Builder globalPlaceholder(@NotNull String key,
+                BiFunction<ArgumentQueue, Context, Tag> function){
+            Objects.requireNonNull(function, () -> "the global placeholder cannot be null");
 
-            globalPlaceholders.resolver(Tags.global(expansionName+globalPlaceholder.name(), globalPlaceholder.get()));
+            globalPlaceholders.tag(expansionName+key, function);
             return this;
         }
 

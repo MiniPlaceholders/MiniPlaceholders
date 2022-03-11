@@ -7,9 +7,6 @@ import org.junit.jupiter.api.DisplayName;
 
 import me.dreamerzero.miniplaceholders.api.Expansion;
 import me.dreamerzero.miniplaceholders.api.MiniPlaceholders;
-import me.dreamerzero.miniplaceholders.api.placeholder.AudiencePlaceholder;
-import me.dreamerzero.miniplaceholders.api.placeholder.GlobalPlaceholder;
-import me.dreamerzero.miniplaceholders.api.placeholder.RelationalPlaceholder;
 import me.dreamerzero.miniplaceholders.testobjects.TestAudience;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
@@ -26,9 +23,7 @@ public class PlaceholderTest {
         TestAudience player = new TestAudience("4drian3d");
 
         Expansion expansion = Expansion.builder("example")
-            .audiencePlaceholder(AudiencePlaceholder.create(
-                "name", p -> Tag.selfClosingInserting(Component.text(((TestAudience)p).getName()))
-            )).build();
+            .audiencePlaceholder("name", (aud, queue, ctx) -> Tag.selfClosingInserting(Component.text(((TestAudience)aud).getName()))).build();
 
         final Component expected = Component.text("Player Name: 4drian3d");
         final Component result = MiniMessage.miniMessage().deserialize("Player Name: <example_name>", expansion.audiencePlaceholders(player));
@@ -43,8 +38,11 @@ public class PlaceholderTest {
         Audience p2 = new TestAudience("PlayerTwo");
 
         Expansion expansion = Expansion.builder("relational")
-            .relationalPlaceholder(RelationalPlaceholder.create(
-                "enemy", (p, o) -> Tag.selfClosingInserting(this.isEnemy(((TestAudience)p),((TestAudience)o)) ? Component.text("Enemy", NamedTextColor.RED) : Component.text("Neutral", NamedTextColor.GREEN))))
+            .relationalPlaceholder("enemy",
+                (aud, otheraud, queue, ctx) -> Tag.selfClosingInserting(this.isEnemy(((TestAudience)aud),((TestAudience)otheraud))
+                    ? Component.text("Enemy", NamedTextColor.RED)
+                    : Component.text("Neutral", NamedTextColor.GREEN)
+                ))
             .build();
 
         assertEquals(MiniMessage.miniMessage().deserialize("You are <red>Enemy"), MiniMessage.miniMessage().deserialize("You are <relational_rel_enemy>", expansion.relationalPlaceholders(p1, p2)));
@@ -54,8 +52,8 @@ public class PlaceholderTest {
     @DisplayName("Global Placeholder Test")
     void globalExpansionPlaceholderTest(){
         Expansion expansion = Expansion.builder("global")
-            .globalPlaceholder(GlobalPlaceholder.create("players", Tag.selfClosingInserting(Component.text(1305))))
-            .globalPlaceholder(GlobalPlaceholder.create("servers", Tag.selfClosingInserting(Component.text(7))))
+            .globalPlaceholder("players", (queue, ctx) -> Tag.selfClosingInserting(Component.text(1305)))
+            .globalPlaceholder("servers", (queue, ctx) -> Tag.selfClosingInserting(Component.text(7)))
             .build();
 
         final Component expected = Component.text("Online players: 1305 | Servers: 7");
@@ -68,7 +66,7 @@ public class PlaceholderTest {
     @DisplayName("Registered Placeholders")
     void instancePlaceholdersTest(){
         Expansion.builder("instance")
-            .globalPlaceholder(GlobalPlaceholder.create("hello", Tag.selfClosingInserting(Component.text("hello", NamedTextColor.RED))))
+            .globalPlaceholder("hello", (queue, ctx) -> Tag.selfClosingInserting(Component.text("hello", NamedTextColor.RED)))
             .build()
             .register();
 
@@ -82,7 +80,7 @@ public class PlaceholderTest {
     @DisplayName("Filtered Expansion")
     void filteredExpansion(){
         Expansion expansion = Expansion.builder("filter")
-            .audiencePlaceholder(AudiencePlaceholder.create("name", (aud) -> Tag.selfClosingInserting(Component.text(((TestAudience)aud).getName()))))
+            .audiencePlaceholder("name", (aud, queue, ctx) -> Tag.selfClosingInserting(Component.text(((TestAudience)aud).getName())))
             .filter(TestAudience.class)
             .build();
 
