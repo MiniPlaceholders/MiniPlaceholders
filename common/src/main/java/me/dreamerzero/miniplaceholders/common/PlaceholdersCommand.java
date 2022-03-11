@@ -12,16 +12,24 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import me.dreamerzero.miniplaceholders.api.Expansion;
 import me.dreamerzero.miniplaceholders.api.MiniPlaceholders;
 import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.permission.PermissionChecker;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+
+import static net.kyori.adventure.text.minimessage.MiniMessage.miniMessage;
 
 public class PlaceholdersCommand<A> {
     private final @NotNull Supplier<@NotNull Collection<@NotNull String>> playersSuggestions;
     private final @NotNull Function<@NotNull String, @Nullable Audience> toAudience;
-    private Function<A, Audience> fromAToAudience = null;
+    private Function<A, Audience> fromAToAudience = a -> Audience.empty();
+    private final Expansion commandExpansion = Expansion.builder("placeholders")
+        .globalPlaceholder("count", (queue, ctx) -> Tag.selfClosingInserting(Component.text(MiniPlaceholders.getExpansionCount())))
+        .globalPlaceholder("version", (queue, ctx) -> Tag.selfClosingInserting(Component.text(PluginConstants.VERSION)))
+        .build();
 
     public PlaceholdersCommand(Supplier<Collection<String>> playersSuggestions, Function<@NotNull String, @Nullable Audience> toAudience){
         this.playersSuggestions = playersSuggestions;
@@ -33,17 +41,44 @@ public class PlaceholdersCommand<A> {
         this.fromAToAudience = fromAToAudience;
     }
 
+    private static final Component HEADER = miniMessage().deserialize("<gradient:aqua:white:aqua>---------- <gradient:#4d8bff:#a4ff96>MiniPlaceholders</gradient> -----------</gradient>");
+    private static final Component FOOTER = miniMessage().deserialize("<gradient:aqua:white:aqua> ---------------       ---------------</gradient>");
+
     public LiteralCommandNode<A> placeholderTestCommand(String commandName){
         return LiteralArgumentBuilder.<A>literal(commandName)
+            .requires(a -> getAudience(a).pointers().supports(PermissionChecker.POINTER))
             .executes(cmd -> {
-                //TODO: Add main command info
-                getAudience(cmd.getSource()).sendMessage(MiniMessage.miniMessage().deserialize("<rainbow>Main Command"));
+                Audience source = getAudience(cmd.getSource());
+                if(source.pointers().get(PermissionChecker.POINTER).orElse(null).test("miniplaceholders.command")){
+                    source.sendMessage(
+                        Component.text()
+                            .append(HEADER).append(Component.newline())
+                            .append(miniMessage().deserialize("<gradient:aqua:#918fff>Placeholders Available:</gradient> <aqua><placeholders_count></aqua>", commandExpansion.globalPlaceholders())).append(Component.newline())
+                            .append(FOOTER)
+                        .build()
+                    );
+                } else {
+                    source.sendMessage(
+                        Component.text()
+                            .append(HEADER).append(Component.newline())
+                            .append(miniMessage().deserialize("<gradient:red:dark_red>Version: <placeholders_version>")).append(Component.newline())
+                            .append(FOOTER)
+                        .build()
+                    );
+                }
                 return 1;
             })
             .then(LiteralArgumentBuilder.<A>literal("help")
                 .executes(cmd -> {
-                    //TODO: Add help
-                    getAudience(cmd.getSource()).sendMessage(MiniMessage.miniMessage().deserialize("<rainbow>Hello"));
+                    getAudience(cmd.getSource()).sendMessage(
+                        Component.text()
+                            .append(HEADER).append(Component.newline())
+                            .append(miniMessage().deserialize("<gradient:#9694ff:#5269ff>Commands:</gradient>")).append(Component.newline())
+                            .append(miniMessage().deserialize("<gradient:aqua:#94d1ff>/miniplaceholders</gradient> <aqua>help</aqua>")).append(Component.newline())
+                            .append(miniMessage().deserialize("<gradient:aqua:#94d1ff>/miniplaceholders</gradient> <aqua>parse</aqua> <color:#8fadff><player:me></color> <color:#99ffb6><player></color>")).append(Component.newline())
+                            .append(FOOTER)
+                        .build()
+                    );
                     return 1;
                 })
             )
@@ -52,7 +87,6 @@ public class PlaceholdersCommand<A> {
                     .then(RequiredArgumentBuilder.<A, String>argument("selfStringToParse", StringArgumentType.string())
                         .executes(cmd -> {
                             String stringToParse = cmd.getArgument("selfStringToParse", String.class);
-
                             Component parsed = this.parseGlobal(stringToParse, getAudience(cmd.getSource()));
                             getAudience(cmd.getSource()).sendMessage(parsed);
                             return 1;
@@ -86,7 +120,7 @@ public class PlaceholdersCommand<A> {
     }
 
     private Component parseGlobal(String string, Audience audience){
-        return MiniMessage.miniMessage().deserialize(
+        return miniMessage().deserialize(
             string,
             TagResolver.resolver(
                 MiniPlaceholders.getGlobalPlaceholders(),
@@ -96,8 +130,8 @@ public class PlaceholdersCommand<A> {
     }
 
     private Audience getAudience(A possibleAudience){
-        if(fromAToAudience == null){
-            return (Audience)possibleAudience;
+        if(possibleAudience instanceof Audience audience){
+            return audience;
         }
         Audience audience = fromAToAudience.apply(possibleAudience);
         return audience != null ? audience : Audience.empty();

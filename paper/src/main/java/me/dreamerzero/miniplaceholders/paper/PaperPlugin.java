@@ -12,7 +12,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import me.dreamerzero.miniplaceholders.common.PlaceholdersCommand;
 import me.dreamerzero.miniplaceholders.common.PlaceholdersPlugin;
 
-public class PaperPlugin extends JavaPlugin implements PlaceholdersPlugin, Listener {
+public final class PaperPlugin extends JavaPlugin implements PlaceholdersPlugin, Listener {
     private final CommandNode<BukkitBrigadierCommandSource> command = new PlaceholdersCommand<>(
             () -> this.getServer().getOnlinePlayers().stream().map(Player::getName).toList(),
             (String st) -> this.getServer().getPlayer(st),

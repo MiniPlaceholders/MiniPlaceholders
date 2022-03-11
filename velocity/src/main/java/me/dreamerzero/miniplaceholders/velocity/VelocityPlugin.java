@@ -21,7 +21,7 @@ import me.dreamerzero.miniplaceholders.common.PluginConstants;
     version = PluginConstants.VERSION,
     authors = {"4drian3d"}
 )
-public class VelocityPlugin implements PlaceholdersPlugin {
+public final class VelocityPlugin implements PlaceholdersPlugin {
     private final Logger logger;
     private final ProxyServer proxy;
     @Inject
