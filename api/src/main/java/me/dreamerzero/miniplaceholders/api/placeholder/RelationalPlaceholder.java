@@ -6,6 +6,7 @@ import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.ArgumentQueue;
 
 /**Relational Placeholder based on two Audiences*/
+@FunctionalInterface
 public interface RelationalPlaceholder {
     /**
      * A Tag based on two audiences

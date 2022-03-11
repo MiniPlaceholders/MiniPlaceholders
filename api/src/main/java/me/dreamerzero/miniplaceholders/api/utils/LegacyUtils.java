@@ -21,11 +21,15 @@ public final class LegacyUtils {
     public static @NotNull Component parsePossibleLegacy(@Nullable String string) {
         if(string == null || string.isBlank()) return Component.empty();
         if(string.indexOf('&') != 0){
-            return LegacyComponentSerializer.builder()
-                .character('&')
-                .hexColors()
-                .build()
-                .deserialize(string);
+            return MiniMessage.miniMessage().deserialize(
+                MiniMessage.miniMessage()
+                .serialize(LegacyComponentSerializer.builder()
+                    .character('&')
+                    .hexColors()
+                    .build()
+                    .deserialize(string)
+                )
+            );
         } else {
             return MiniMessage.miniMessage()
                 .deserialize(string);

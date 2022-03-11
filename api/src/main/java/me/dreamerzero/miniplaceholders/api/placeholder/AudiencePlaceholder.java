@@ -6,6 +6,7 @@ import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.ArgumentQueue;
 
 /**Audience Placeholder based on an Audience */
+@FunctionalInterface
 public interface AudiencePlaceholder {
     /**
      * A Tag based on an Audience
