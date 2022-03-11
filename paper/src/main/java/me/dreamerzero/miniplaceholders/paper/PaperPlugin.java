@@ -16,7 +16,7 @@ public class PaperPlugin extends JavaPlugin implements PlaceholdersPlugin, Liste
     private final CommandNode<BukkitBrigadierCommandSource> command = new PlaceholdersCommand<>(
             () -> this.getServer().getOnlinePlayers().stream().map(Player::getName).toList(),
             (String st) -> this.getServer().getPlayer(st),
-            BukkitBrigadierCommandSource::getBukkitEntity
+            BukkitBrigadierCommandSource::getBukkitSender
         ).placeholderTestCommand("miniplaceholders");
 
     @Override
