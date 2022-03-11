@@ -97,6 +97,14 @@ public final class MiniPlaceholders {
     }
 
     /**
+     * Get the ammount of expansion registered
+     * @return the ammount of expansions registered
+     */
+    public static int getExpansionCount(){
+        return expansions.size();
+    }
+
+    /**
      * Set the platform
      * @param platform the platform
      * @deprecated dont use this, INTERNAL
