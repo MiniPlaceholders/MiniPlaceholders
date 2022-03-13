@@ -21,10 +21,14 @@ import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.minecraft.commands.CommandSourceStack;
 
 public final class PaperPlugin extends JavaPlugin implements PlaceholdersPlugin, Listener {
-    private final NumberFormat numberFormat = NumberFormat.getInstance();
+    private final NumberFormat tpsFormat = NumberFormat.getInstance();
+    private final NumberFormat msptFormat = NumberFormat.getInstance();
     {
-        numberFormat.setRoundingMode(RoundingMode.DOWN);
-        numberFormat.setMaximumFractionDigits(2);
+        tpsFormat.setRoundingMode(RoundingMode.DOWN);
+        tpsFormat.setMaximumFractionDigits(2);
+
+        msptFormat.setRoundingMode(RoundingMode.DOWN);
+        msptFormat.setMaximumFractionDigits(3);
     }
 
     @Override
@@ -46,9 +50,9 @@ public final class PaperPlugin extends JavaPlugin implements PlaceholdersPlugin,
             .globalPlaceholder("version", (queue, ctx) -> Tag.selfClosingInserting(Component.text(this.getServer().getVersion())))
             .globalPlaceholder("max_players", (queue, ctx) -> Tag.selfClosingInserting(Component.text(this.getServer().getMaxPlayers())))
             .globalPlaceholder("unique_joins", (queue, ctx) -> Tag.selfClosingInserting(Component.text(this.getServer().getOfflinePlayers().length)))
-            .globalPlaceholder("tps_1", (queue, ctx) -> Tag.selfClosingInserting(Component.text(numberFormat.format(this.getCraftServer().getHandle().getServer().recentTps[0]))))
-            .globalPlaceholder("tps_5", (queue, ctx) -> Tag.selfClosingInserting(Component.text(numberFormat.format(this.getCraftServer().getHandle().getServer().recentTps[1]))))
-            .globalPlaceholder("tps_15", (queue, ctx) -> Tag.selfClosingInserting(Component.text(numberFormat.format(this.getCraftServer().getHandle().getServer().recentTps[2]))))
+            .globalPlaceholder("tps_1", (queue, ctx) -> Tag.selfClosingInserting(Component.text(tpsFormat.format(this.getCraftServer().getHandle().getServer().recentTps[0]))))
+            .globalPlaceholder("tps_5", (queue, ctx) -> Tag.selfClosingInserting(Component.text(tpsFormat.format(this.getCraftServer().getHandle().getServer().recentTps[1]))))
+            .globalPlaceholder("tps_15", (queue, ctx) -> Tag.selfClosingInserting(Component.text(tpsFormat.format(this.getCraftServer().getHandle().getServer().recentTps[2]))))
             .globalPlaceholder("has_whitelist", (queue, ctx) -> Tag.selfClosingInserting(Component.text(this.getServer().hasWhitelist())))
             .globalPlaceholder("total_chunks", (queue, ctx) -> {
                 int chunkCount = 0;
@@ -64,7 +68,7 @@ public final class PaperPlugin extends JavaPlugin implements PlaceholdersPlugin,
                 }
                 return Tag.selfClosingInserting(Component.text(entityCount));
             })
-            .globalPlaceholder("mspt", (queue, ctx) -> Tag.selfClosingInserting(Component.text(numberFormat.format(this.getServer().getAverageTickTime()))))
+            .globalPlaceholder("mspt", (queue, ctx) -> Tag.selfClosingInserting(Component.text(msptFormat.format(this.getServer().getAverageTickTime()))))
             .globalPlaceholder("datapack_list", (queue, ctx) -> {
                 TextComponent.Builder builder = Component.text();
                 for(Datapack datapack : this.getServer().getDatapackManager().getEnabledPacks()){
