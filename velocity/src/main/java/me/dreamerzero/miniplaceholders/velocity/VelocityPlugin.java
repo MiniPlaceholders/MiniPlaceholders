@@ -12,6 +12,8 @@ import com.velocitypowered.api.proxy.ProxyServer;
 import org.slf4j.Logger;
 
 import me.dreamerzero.miniplaceholders.api.Expansion;
+import me.dreamerzero.miniplaceholders.api.MiniPlaceholders;
+import me.dreamerzero.miniplaceholders.api.enums.Platform;
 import me.dreamerzero.miniplaceholders.common.PlaceholdersCommand;
 import me.dreamerzero.miniplaceholders.common.PlaceholdersPlugin;
 import me.dreamerzero.miniplaceholders.common.PluginConstants;
@@ -34,15 +36,23 @@ public final class VelocityPlugin implements PlaceholdersPlugin {
     }
 
     @Subscribe
+    @SuppressWarnings("deprecation")
     public void onProxyInitialize(ProxyInitializeEvent event) {
         logger.info("Starting MiniPlaceholders Velocity");
-        this.setPlatform("velocity");
+
+        MiniPlaceholders.setPlatform(Platform.VELOCITY);
+
         PlaceholdersCommand<CommandSource> command = new PlaceholdersCommand<>(
             () -> proxy.getAllPlayers().stream().map(Player::getUsername).toList(),
             (String st) -> proxy.getPlayer(st).orElse(null));
         BrigadierCommand brigadierCMD = new BrigadierCommand(command.placeholderTestCommand("vminiplaceholders"));
         proxy.getCommandManager().register(brigadierCMD);
 
+        this.loadDefaultExpansions();
+    }
+
+    @Override
+    public void loadDefaultExpansions() {
         Expansion.builder("proxy")
             .globalPlaceholder("online_players", (queue, ctx) -> {
                 if(queue.hasNext()){

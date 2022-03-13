@@ -15,6 +15,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import io.papermc.paper.datapack.Datapack;
 import me.dreamerzero.miniplaceholders.api.Expansion;
+import me.dreamerzero.miniplaceholders.api.MiniPlaceholders;
+import me.dreamerzero.miniplaceholders.api.enums.Platform;
 import me.dreamerzero.miniplaceholders.common.PlaceholdersCommand;
 import me.dreamerzero.miniplaceholders.common.PlaceholdersPlugin;
 import net.kyori.adventure.text.Component;
@@ -30,13 +32,25 @@ public final class PaperPlugin extends JavaPlugin implements PlaceholdersPlugin,
     private static final NumberFormat numberFormat = NumberFormat.getInstance();
 
     @Override
+    @SuppressWarnings("deprecation")
     public void onEnable(){
         this.getSLF4JLogger().info("Starting MiniPlaceholders Paper");
-        this.setPlatform("paper");
+        MiniPlaceholders.setPlatform(Platform.PAPER);
         this.getServer().getPluginManager().registerEvents(this, this);
         numberFormat.setRoundingMode(RoundingMode.DOWN);
         numberFormat.setMaximumFractionDigits(2);
 
+        this.loadDefaultExpansions();
+    }
+
+    @SuppressWarnings({"deprecation"})
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onCommandRegister(com.destroystokyo.paper.event.brigadier.AsyncPlayerSendCommandsEvent<BukkitBrigadierCommandSource> event){
+        event.getCommandNode().addChild(command);
+    }
+
+    @Override
+    public void loadDefaultExpansions() {
         Expansion.builder("server")
             .globalPlaceholder("name", (queue, ctx) -> Tag.selfClosingInserting(Component.text(this.getServer().getName())))
             .globalPlaceholder("online", (queue, ctx) -> Tag.selfClosingInserting(Component.text(this.getServer().getOnlinePlayers().size())))
@@ -72,11 +86,5 @@ public final class PaperPlugin extends JavaPlugin implements PlaceholdersPlugin,
             .globalPlaceholder("datapack_count", (queue, ctx) -> Tag.selfClosingInserting(Component.text(this.getServer().getDatapackManager().getEnabledPacks().size())))
         .build()
         .register();
-    }
-
-    @SuppressWarnings({"deprecation"})
-    @EventHandler(priority = EventPriority.LOWEST)
-    public void onCommandRegister(com.destroystokyo.paper.event.brigadier.AsyncPlayerSendCommandsEvent<BukkitBrigadierCommandSource> event){
-        event.getCommandNode().addChild(command);
     }
 }
