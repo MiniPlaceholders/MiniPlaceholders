@@ -8,9 +8,6 @@ dependencies {
     compileOnly(project(":miniplaceholders-common"))
     compileOnly(project(":miniplaceholders-api"))
     paperDevBundle("1.18.2-R0.1-SNAPSHOT")
-    
-    //compileOnly("io.papermc.paper:paper-api:1.18.2-R0.1-SNAPSHOT")
-    //compileOnly("io.papermc.paper:paper-mojangapi:1.18.2-R0.1-SNAPSHOT")
 }
 
 val pluginVersion = version
@@ -26,7 +23,9 @@ bukkit {
 java.toolchain.languageVersion.set(JavaLanguageVersion.of(17))
 
 tasks {
-
+    assemble {
+        dependsOn(reobfJar)
+    }
     compileJava {
         options.encoding = Charsets.UTF_8.name()
 

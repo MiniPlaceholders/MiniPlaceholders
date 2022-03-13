@@ -16,7 +16,7 @@ dependencies {
     shadow(project(":miniplaceholders-api"))
     shadow(project(":miniplaceholders-common"))
     shadow(project(":miniplaceholders-velocity"))
-    shadow(project(":miniplaceholders-paper"))
+    shadow(project(":miniplaceholders-paper", "reobf"))
 }
 
 subprojects {
