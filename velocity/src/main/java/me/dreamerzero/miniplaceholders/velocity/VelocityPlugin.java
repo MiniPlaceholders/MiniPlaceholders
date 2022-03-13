@@ -42,13 +42,8 @@ public final class VelocityPlugin implements PlaceholdersPlugin {
 
         MiniPlaceholders.setPlatform(Platform.VELOCITY);
 
-        PlaceholdersCommand<CommandSource> command = new PlaceholdersCommand<>(
-            () -> proxy.getAllPlayers().stream().map(Player::getUsername).toList(),
-            (String st) -> proxy.getPlayer(st).orElse(null));
-        BrigadierCommand brigadierCMD = new BrigadierCommand(command.placeholderTestCommand("vminiplaceholders"));
-        proxy.getCommandManager().register(brigadierCMD);
-
         this.loadDefaultExpansions();
+        this.registerPlatformCommand();
     }
 
     @Override
@@ -69,5 +64,16 @@ public final class VelocityPlugin implements PlaceholdersPlugin {
             .globalPlaceholder("version", (queue, ctx) -> Tag.selfClosingInserting(Component.text(proxy.getVersion().getVersion())))
         .build()
         .register();
+    }
+
+    @Override
+    public void registerPlatformCommand() {
+        BrigadierCommand brigadierCMD = new BrigadierCommand(
+            new PlaceholdersCommand<CommandSource>(
+                () -> proxy.getAllPlayers().stream().map(Player::getUsername).toList(),
+                (String st) -> proxy.getPlayer(st).orElse(null))
+            .placeholderTestCommand("vminiplaceholders"));
+
+        proxy.getCommandManager().register(brigadierCMD);
     }
 }

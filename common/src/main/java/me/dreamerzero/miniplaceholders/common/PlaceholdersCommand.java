@@ -62,7 +62,7 @@ public class PlaceholdersCommand<A> {
                     source.sendMessage(
                         Component.text()
                             .append(HEADER).append(Component.newline())
-                            .append(miniMessage().deserialize("<gradient:red:dark_red>Version: <placeholders_version>")).append(Component.newline())
+                            .append(miniMessage().deserialize("<gradient:red:dark_red>Version: <placeholders_version>", commandExpansion.globalPlaceholders())).append(Component.newline())
                             .append(FOOTER)
                         .build()
                     );

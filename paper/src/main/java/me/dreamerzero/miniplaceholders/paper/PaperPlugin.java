@@ -3,8 +3,6 @@ package me.dreamerzero.miniplaceholders.paper;
 import java.math.RoundingMode;
 import java.text.NumberFormat;
 
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-
 import org.bukkit.World;
 import org.bukkit.craftbukkit.v1_18_R2.CraftServer;
 import org.bukkit.entity.Player;
@@ -23,31 +21,22 @@ import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.minecraft.commands.CommandSourceStack;
 
 public final class PaperPlugin extends JavaPlugin implements PlaceholdersPlugin, Listener {
-    private final LiteralArgumentBuilder<CommandSourceStack> command = new PlaceholdersCommand<>(
-            () -> this.getServer().getOnlinePlayers().stream().map(Player::getName).toList(),
-            (String st) -> this.getServer().getPlayer(st),
-            CommandSourceStack::getBukkitSender
-        ).placeholderTestBuilder("miniplaceholders");
-    private static final NumberFormat numberFormat = NumberFormat.getInstance();
+    private final NumberFormat numberFormat = NumberFormat.getInstance();
+    {
+        numberFormat.setRoundingMode(RoundingMode.DOWN);
+        numberFormat.setMaximumFractionDigits(2);
+    }
 
     @Override
-    @SuppressWarnings({"deprecation", "resource leak"})
+    @SuppressWarnings("deprecation")
     public void onEnable(){
         this.getSLF4JLogger().info("Starting MiniPlaceholders Paper");
         MiniPlaceholders.setPlatform(Platform.PAPER);
         this.getServer().getPluginManager().registerEvents(this, this);
-        numberFormat.setRoundingMode(RoundingMode.DOWN);
-        numberFormat.setMaximumFractionDigits(2);
 
         this.loadDefaultExpansions();
-        ((CraftServer)this.getServer()).getServer().vanillaCommandDispatcher.getDispatcher().register(command);
+        this.registerPlatformCommand();
     }
-
-    /*@SuppressWarnings({"deprecation"})
-    @EventHandler(priority = EventPriority.LOWEST)
-    public void onCommandRegister(com.destroystokyo.paper.event.brigadier.AsyncPlayerSendCommandsEvent<BukkitBrigadierCommandSource> event){
-        event.getCommandNode().addChild(command);
-    }*/
 
     @Override
     public void loadDefaultExpansions() {
@@ -57,9 +46,9 @@ public final class PaperPlugin extends JavaPlugin implements PlaceholdersPlugin,
             .globalPlaceholder("version", (queue, ctx) -> Tag.selfClosingInserting(Component.text(this.getServer().getVersion())))
             .globalPlaceholder("max_players", (queue, ctx) -> Tag.selfClosingInserting(Component.text(this.getServer().getMaxPlayers())))
             .globalPlaceholder("unique_joins", (queue, ctx) -> Tag.selfClosingInserting(Component.text(this.getServer().getOfflinePlayers().length)))
-            .globalPlaceholder("tps_1", (queue, ctx) -> Tag.selfClosingInserting(Component.text(this.getServer().getTPS()[0])))
-            .globalPlaceholder("tps_5", (queue, ctx) -> Tag.selfClosingInserting(Component.text(this.getServer().getTPS()[1])))
-            .globalPlaceholder("tps_15", (queue, ctx) -> Tag.selfClosingInserting(Component.text(this.getServer().getTPS()[2])))
+            .globalPlaceholder("tps_1", (queue, ctx) -> Tag.selfClosingInserting(Component.text(numberFormat.format(this.getCraftServer().getHandle().getServer().recentTps[0]))))
+            .globalPlaceholder("tps_5", (queue, ctx) -> Tag.selfClosingInserting(Component.text(numberFormat.format(this.getCraftServer().getHandle().getServer().recentTps[1]))))
+            .globalPlaceholder("tps_15", (queue, ctx) -> Tag.selfClosingInserting(Component.text(numberFormat.format(this.getCraftServer().getHandle().getServer().recentTps[2]))))
             .globalPlaceholder("has_whitelist", (queue, ctx) -> Tag.selfClosingInserting(Component.text(this.getServer().hasWhitelist())))
             .globalPlaceholder("total_chunks", (queue, ctx) -> {
                 int chunkCount = 0;
@@ -86,5 +75,23 @@ public final class PaperPlugin extends JavaPlugin implements PlaceholdersPlugin,
             .globalPlaceholder("datapack_count", (queue, ctx) -> Tag.selfClosingInserting(Component.text(this.getServer().getDatapackManager().getEnabledPacks().size())))
         .build()
         .register();
+    }
+
+    @Override
+    @SuppressWarnings("all")
+    public void registerPlatformCommand() {
+        this.getCraftServer().getServer()
+            .vanillaCommandDispatcher
+            .getDispatcher()
+            .register(new PlaceholdersCommand<>(
+                    () -> this.getServer().getOnlinePlayers().stream().map(Player::getName).toList(),
+                    (String st) -> this.getServer().getPlayer(st),
+                    CommandSourceStack::getBukkitSender
+                ).placeholderTestBuilder("miniplaceholders")
+            );
+    }
+
+    private CraftServer getCraftServer(){
+        return (CraftServer)this.getServer();
     }
 }
