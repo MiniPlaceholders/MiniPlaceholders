@@ -18,8 +18,14 @@ jobs:
         cache: 'gradle'
 
     - name: Build with Gradle
-      uses: nick-invision/retry@v2.4.1
+      uses: nick-invision/retry@v2
       with:
         timeout_minutes: 4
         max_attempts: 2
         command: gradle build
+
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: MiniPlaceholders
+        path: build/libs/MiniPlaceholders.jar

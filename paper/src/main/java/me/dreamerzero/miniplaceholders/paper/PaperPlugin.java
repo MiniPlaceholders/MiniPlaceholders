@@ -3,13 +3,11 @@ package me.dreamerzero.miniplaceholders.paper;
 import java.math.RoundingMode;
 import java.text.NumberFormat;
 
-import com.destroystokyo.paper.brigadier.BukkitBrigadierCommandSource;
-import com.mojang.brigadier.tree.CommandNode;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 
 import org.bukkit.World;
+import org.bukkit.craftbukkit.v1_18_R2.CraftServer;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -22,17 +20,18 @@ import me.dreamerzero.miniplaceholders.common.PlaceholdersPlugin;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.minimessage.tag.Tag;
+import net.minecraft.commands.CommandSourceStack;
 
 public final class PaperPlugin extends JavaPlugin implements PlaceholdersPlugin, Listener {
-    private final CommandNode<BukkitBrigadierCommandSource> command = new PlaceholdersCommand<>(
+    private final LiteralArgumentBuilder<CommandSourceStack> command = new PlaceholdersCommand<>(
             () -> this.getServer().getOnlinePlayers().stream().map(Player::getName).toList(),
             (String st) -> this.getServer().getPlayer(st),
-            BukkitBrigadierCommandSource::getBukkitSender
-        ).placeholderTestCommand("miniplaceholders");
+            CommandSourceStack::getBukkitSender
+        ).placeholderTestBuilder("miniplaceholders");
     private static final NumberFormat numberFormat = NumberFormat.getInstance();
 
     @Override
-    @SuppressWarnings("deprecation")
+    @SuppressWarnings({"deprecation", "resource leak"})
     public void onEnable(){
         this.getSLF4JLogger().info("Starting MiniPlaceholders Paper");
         MiniPlaceholders.setPlatform(Platform.PAPER);
@@ -41,13 +40,14 @@ public final class PaperPlugin extends JavaPlugin implements PlaceholdersPlugin,
         numberFormat.setMaximumFractionDigits(2);
 
         this.loadDefaultExpansions();
+        ((CraftServer)this.getServer()).getServer().vanillaCommandDispatcher.getDispatcher().register(command);
     }
 
-    @SuppressWarnings({"deprecation"})
+    /*@SuppressWarnings({"deprecation"})
     @EventHandler(priority = EventPriority.LOWEST)
     public void onCommandRegister(com.destroystokyo.paper.event.brigadier.AsyncPlayerSendCommandsEvent<BukkitBrigadierCommandSource> event){
         event.getCommandNode().addChild(command);
-    }
+    }*/
 
     @Override
     public void loadDefaultExpansions() {

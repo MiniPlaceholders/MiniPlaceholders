@@ -45,7 +45,7 @@ public class PlaceholdersCommand<A> {
     private static final Component HEADER = miniMessage().deserialize("<gradient:aqua:white:aqua>---------- <gradient:#4d8bff:#a4ff96>MiniPlaceholders</gradient> -----------</gradient>");
     private static final Component FOOTER = miniMessage().deserialize("<gradient:aqua:white:aqua> ---------------       ---------------</gradient>");
 
-    public LiteralCommandNode<A> placeholderTestCommand(String commandName){
+    public LiteralArgumentBuilder<A> placeholderTestBuilder(String commandName){
         return LiteralArgumentBuilder.<A>literal(commandName)
             .requires(a -> getAudience(a).pointers().supports(PermissionChecker.POINTER))
             .executes(cmd -> {
@@ -116,8 +116,11 @@ public class PlaceholdersCommand<A> {
                         )
                     )
                 )
-            )
-        .build();
+            );
+    }
+
+    public LiteralCommandNode<A> placeholderTestCommand(String command){
+        return this.placeholderTestBuilder(command).build();
     }
 
     private Component parseGlobal(String string, Audience audience){
