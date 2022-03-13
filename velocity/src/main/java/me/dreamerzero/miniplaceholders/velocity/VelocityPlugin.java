@@ -11,9 +11,12 @@ import com.velocitypowered.api.proxy.ProxyServer;
 
 import org.slf4j.Logger;
 
+import me.dreamerzero.miniplaceholders.api.Expansion;
 import me.dreamerzero.miniplaceholders.common.PlaceholdersCommand;
 import me.dreamerzero.miniplaceholders.common.PlaceholdersPlugin;
 import me.dreamerzero.miniplaceholders.common.PluginConstants;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.tag.Tag;
 
 @Plugin(
     name = "MiniPlaceholders",
@@ -39,5 +42,22 @@ public final class VelocityPlugin implements PlaceholdersPlugin {
             (String st) -> proxy.getPlayer(st).orElse(null));
         BrigadierCommand brigadierCMD = new BrigadierCommand(command.placeholderTestCommand("vminiplaceholders"));
         proxy.getCommandManager().register(brigadierCMD);
+
+        Expansion.builder("proxy")
+            .globalPlaceholder("online_players", (queue, ctx) -> {
+                if(queue.hasNext()){
+                    String server = queue.pop().toString();
+                    return Tag.selfClosingInserting(Component.text(proxy.getServer(server).map(sv -> sv.getPlayersConnected().size()).orElse(0)));
+                }
+                return Tag.selfClosingInserting(Component.text(proxy.getPlayerCount()));
+            })
+            .globalPlaceholder("server_count", (queue, ctx) -> Tag.selfClosingInserting(Component.text(proxy.getAllServers().size())))
+            .globalPlaceholder("is_player_online", (queue, ctx) -> {
+                String playerName = queue.popOr(() -> "you need to introduce an argument").toString();
+                return Tag.selfClosingInserting(Component.text(proxy.getPlayer(playerName).isPresent()));
+            })
+            .globalPlaceholder("version", (queue, ctx) -> Tag.selfClosingInserting(Component.text(proxy.getVersion().getVersion())))
+        .build()
+        .register();
     }
 }

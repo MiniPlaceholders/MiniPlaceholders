@@ -17,6 +17,7 @@ import me.dreamerzero.miniplaceholders.api.MiniPlaceholders;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.permission.PermissionChecker;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 
@@ -103,7 +104,7 @@ public class PlaceholdersCommand<A> {
                             .executes(cmd -> {
                                 Audience objetive = toAudience.apply(cmd.getArgument("source", String.class));
                                 if(objetive == null){
-                                    getAudience(cmd.getSource()).sendMessage(Component.text("You must specify a valid player"));
+                                    getAudience(cmd.getSource()).sendMessage(Component.text("You must specify a valid player", NamedTextColor.RED));
                                     return 1;
                                 }
                                 String stringToParse = cmd.getArgument("playerStringToParse", String.class);
