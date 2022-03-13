@@ -45,7 +45,7 @@ public class PlaceholdersCommand<A> {
     private static final Component HEADER = miniMessage().deserialize("<gradient:aqua:white:aqua>---------- <gradient:#4d8bff:#a4ff96>MiniPlaceholders</gradient> -----------</gradient>");
     private static final Component FOOTER = miniMessage().deserialize("<gradient:aqua:white:aqua> ---------------       ---------------</gradient>");
 
-    public LiteralCommandNode<A> placeholderTestCommand(String commandName){
+    public LiteralArgumentBuilder<A> placeholderTestBuilder(String commandName){
         return LiteralArgumentBuilder.<A>literal(commandName)
             .requires(a -> getAudience(a).pointers().supports(PermissionChecker.POINTER))
             .executes(cmd -> {
@@ -62,7 +62,7 @@ public class PlaceholdersCommand<A> {
                     source.sendMessage(
                         Component.text()
                             .append(HEADER).append(Component.newline())
-                            .append(miniMessage().deserialize("<gradient:red:dark_red>Version: <placeholders_version>")).append(Component.newline())
+                            .append(miniMessage().deserialize("<gradient:red:dark_red>Version: <placeholders_version>", commandExpansion.globalPlaceholders())).append(Component.newline())
                             .append(FOOTER)
                         .build()
                     );
@@ -116,8 +116,11 @@ public class PlaceholdersCommand<A> {
                         )
                     )
                 )
-            )
-        .build();
+            );
+    }
+
+    public LiteralCommandNode<A> placeholderTestCommand(String command){
+        return this.placeholderTestBuilder(command).build();
     }
 
     private Component parseGlobal(String string, Audience audience){
