@@ -23,13 +23,6 @@ import net.minecraft.commands.CommandSourceStack;
 public final class PaperPlugin extends JavaPlugin implements PlaceholdersPlugin, Listener {
     private final NumberFormat tpsFormat = NumberFormat.getInstance();
     private final NumberFormat msptFormat = NumberFormat.getInstance();
-    {
-        tpsFormat.setRoundingMode(RoundingMode.DOWN);
-        tpsFormat.setMaximumFractionDigits(2);
-
-        msptFormat.setRoundingMode(RoundingMode.DOWN);
-        msptFormat.setMaximumFractionDigits(3);
-    }
 
     @Override
     @SuppressWarnings("deprecation")
@@ -38,6 +31,12 @@ public final class PaperPlugin extends JavaPlugin implements PlaceholdersPlugin,
         MiniPlaceholders.setPlatform(Platform.PAPER);
         this.getServer().getPluginManager().registerEvents(this, this);
 
+        tpsFormat.setRoundingMode(RoundingMode.DOWN);
+        tpsFormat.setMaximumFractionDigits(2);
+
+        msptFormat.setRoundingMode(RoundingMode.DOWN);
+        msptFormat.setMaximumFractionDigits(3);
+        
         this.loadDefaultExpansions();
         this.registerPlatformCommand();
     }

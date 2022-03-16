@@ -31,7 +31,7 @@ final class ExpansionImpl implements Expansion {
         @NotNull String expansionName,
         @Nullable Set<Tags.Single> audiencePlaceholders,
         @Nullable Set<Tags.Relational> relationalPlaceholders,
-        @NotNull TagResolver globalPlaceholders,
+        @Nullable TagResolver globalPlaceholders,
         @Nullable Class<? extends Audience> filterClass,
         @Nullable Predicate<Audience> predicateFilter){
             this.name = expansionName+"-";
@@ -113,6 +113,7 @@ final class ExpansionImpl implements Expansion {
 
         @Override
         public Builder audiencePlaceholder(@NotNull String key, @NotNull AudiencePlaceholder audiencePlaceholder){
+            Objects.requireNonNull(key, () -> "the placeholder key cannot be null");
             Objects.requireNonNull(audiencePlaceholder, () -> "the audience placeholder cannot be null");
 
             if(this.audiencePlaceholders == null) this.audiencePlaceholders = new HashSet<>(5);
@@ -122,7 +123,8 @@ final class ExpansionImpl implements Expansion {
         }
 
         @Override
-        public Builder relationalPlaceholder(String key, @NotNull RelationalPlaceholder relationalPlaceholder){
+        public Builder relationalPlaceholder(@NotNull String key, @NotNull RelationalPlaceholder relationalPlaceholder){
+            Objects.requireNonNull(key, () -> "the placeholder key cannot be null");
             Objects.requireNonNull(relationalPlaceholder, () -> "the relational placeholder cannot be null");
 
             if(this.relationalPlaceholders == null) this.relationalPlaceholders = new HashSet<>(4);
@@ -134,6 +136,7 @@ final class ExpansionImpl implements Expansion {
         @Override
         public Builder globalPlaceholder(@NotNull String key,
                 BiFunction<ArgumentQueue, Context, Tag> function){
+            Objects.requireNonNull(key, () -> "the placeholder key cannot be null");
             Objects.requireNonNull(function, () -> "the global placeholder cannot be null");
 
             if(this.globalPlaceholders == null) this.globalPlaceholders = TagResolver.builder();
@@ -157,12 +160,12 @@ final class ExpansionImpl implements Expansion {
         @Override
         public @NotNull Expansion build(){
             return new ExpansionImpl(
-                expansionName,
-                audiencePlaceholders,
-                relationalPlaceholders,
-                globalPlaceholders.build(),
-                filterClass,
-                predicateFilter
+                this.expansionName,
+                this.audiencePlaceholders,
+                this.relationalPlaceholders,
+                this.globalPlaceholders != null ? this.globalPlaceholders.build() : null,
+                this.filterClass,
+                this.predicateFilter
             );
         }
     }
