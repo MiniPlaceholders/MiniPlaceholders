@@ -77,7 +77,7 @@ public interface Expansion {
      * @param name the expansion name
      * @return a new expansion builder
      */
-    public static Expansion.Builder builder(@NotNull String name){
+    public static @NotNull Expansion.Builder builder(@NotNull String name){
         return new ExpansionImpl.Builder(name);
     }
 

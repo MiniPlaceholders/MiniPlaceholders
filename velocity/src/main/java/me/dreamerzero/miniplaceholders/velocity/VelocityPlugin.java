@@ -51,14 +51,14 @@ public final class VelocityPlugin implements PlaceholdersPlugin {
         Expansion.builder("proxy")
             .globalPlaceholder("online_players", (queue, ctx) -> {
                 if(queue.hasNext()){
-                    String server = queue.pop().toString();
+                    String server = queue.pop().value();
                     return Tag.selfClosingInserting(Component.text(proxy.getServer(server).map(sv -> sv.getPlayersConnected().size()).orElse(0)));
                 }
                 return Tag.selfClosingInserting(Component.text(proxy.getPlayerCount()));
             })
             .globalPlaceholder("server_count", (queue, ctx) -> Tag.selfClosingInserting(Component.text(proxy.getAllServers().size())))
             .globalPlaceholder("is_player_online", (queue, ctx) -> {
-                String playerName = queue.popOr(() -> "you need to introduce an argument").toString();
+                String playerName = queue.popOr(() -> "you need to introduce an argument").value();
                 return Tag.selfClosingInserting(Component.text(proxy.getPlayer(playerName).isPresent()));
             })
             .globalPlaceholder("version", (queue, ctx) -> Tag.selfClosingInserting(Component.text(proxy.getVersion().getVersion())))
