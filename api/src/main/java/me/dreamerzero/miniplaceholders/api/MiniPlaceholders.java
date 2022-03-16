@@ -21,6 +21,7 @@ import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
  * @author 4drian3d
  * @see TagResolver
  * @see Expansion
+ * @since 1.0.0
  */
 public final class MiniPlaceholders {
     private MiniPlaceholders(){}
@@ -30,6 +31,7 @@ public final class MiniPlaceholders {
     /**
      * Get the platform
      * @return the platform
+     * @since 1.0.0
      */
     public static Platform getPlatform(){
         return placeholdersPlatform;
@@ -43,6 +45,7 @@ public final class MiniPlaceholders {
      *
      * @return global placeholders independient of any audience
      * @see TagResolver
+     * @since 1.0.0
      */
     public static @NotNull TagResolver getGlobalPlaceholders() {
         if(expansions.isEmpty()) return TagResolver.empty();
@@ -59,9 +62,9 @@ public final class MiniPlaceholders {
      * <pre>TagResolver resolver = MiniPlaceholders.getAudiencePlaceholders({@link Audience});
      * Component messageParsed = MiniMessage.miniMessage().deserialize({@link String}, resolver);</pre>
      *
-     * @since 1.0.0
      * @param audience the audience
      * @return {@link TagResolver} with placeholders based on an audience
+     * @since 1.0.0
      */
     public static @NotNull TagResolver getAudiencePlaceholders(@NotNull Audience audience) {
         if(expansions.isEmpty()) return TagResolver.empty();
@@ -83,6 +86,7 @@ public final class MiniPlaceholders {
      * @param audience an audience
      * @param otherAudience another audience
      * @return placeholders based on two audiences
+     * @since 1.0.0
      */
     public static @NotNull TagResolver getRelationalPlaceholders(@NotNull Audience audience, @NotNull Audience otherAudience) {
         if(expansions.isEmpty()) return TagResolver.empty();
@@ -99,6 +103,7 @@ public final class MiniPlaceholders {
     /**
      * Get the ammount of expansion registered
      * @return the ammount of expansions registered
+     * @since 1.0.0
      */
     public static int getExpansionCount(){
         return expansions.size();
@@ -108,8 +113,9 @@ public final class MiniPlaceholders {
      * Set the platform
      * @param platform the platform
      * @deprecated dont use this, INTERNAL
+     * @since 1.0.0
      */
-    @Deprecated
+    @Deprecated(forRemoval = false)
     @org.jetbrains.annotations.ApiStatus.Internal
     public static void setPlatform(Platform platform){
         if(placeholdersPlatform != null) throw new RuntimeException("Cannot set platform twice");

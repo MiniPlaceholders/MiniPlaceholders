@@ -11,6 +11,7 @@ public final class Conditions {
      * @param string the string
      * @param name the name supplier
      * @return the string if it is not null or empty
+     * @since 1.0.0
      */
     public static String nonNullOrEmptyString(String string, Supplier<String> name){
         if(string == null)
@@ -25,6 +26,7 @@ public final class Conditions {
      * @param string the string
      * @param reason the reason supplier
      * @return the string if it not empty
+     * @since 1.0.0
      */
     public static String nonEmptyString(String string, Supplier<String> reason){
         if(string.isBlank())

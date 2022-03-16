@@ -15,6 +15,7 @@ public interface RelationalPlaceholder {
      * @param queue the argument queue
      * @param ctx the context
      * @return a tag
+     * @since 1.0.0
      */
     Tag tag(Audience audience, Audience otherAudience, ArgumentQueue queue, Context ctx);
 }

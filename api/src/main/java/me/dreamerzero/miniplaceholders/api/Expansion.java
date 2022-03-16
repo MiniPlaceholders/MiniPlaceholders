@@ -30,19 +30,22 @@ import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
  *  TagResolver resolver = expansion.audiencePlaceholder(player);
  *  player.sendMessage(MiniMessage.miniMessage().deserialize("Hello {@literal <luckperms_prefix> <player_name>}", resolver));
  * </pre>
+ * 
+ * @since 1.0.0
  */
 public interface Expansion {
     /**
      * Get the expansion name
      * @return the expansion name
+     * @since 1.0.0
      */
     @NotNull String name();
 
     /**
      * Get the {@link TagResolver} of the desired {@link Audience}
      * @param audience the audience
-     * @since 1.0.0
      * @return A TagResolver with variable placeholders of an Audience
+     * @since 1.0.0
      */
     @NotNull TagResolver audiencePlaceholders(@NotNull Audience audience);
 
@@ -54,15 +57,15 @@ public interface Expansion {
      * at any time will retrieve the required values</p>
      * @param audience the main audience
      * @param otherAudience the secondary audience
+     * @return A TagResolver with variable placeholders between 2 {@link Audience}s
      * @since 1.0.0
-     * @return A TagResolver with variable placeholders between 2 Audiences
      */
     @NotNull TagResolver relationalPlaceholders(@NotNull Audience audience, @NotNull Audience otherAudience);
 
     /**
      * Get global placeholders
-     * @since 1.0.0
      * @return the global placeholders
+     * @since 1.0.0
      */
     @NotNull TagResolver globalPlaceholders();
 
@@ -76,6 +79,7 @@ public interface Expansion {
      * Creates a new Expansion Builder
      * @param name the expansion name
      * @return a new expansion builder
+     * @since 1.0.0
      */
     public static @NotNull Expansion.Builder builder(@NotNull String name){
         return new ExpansionImpl.Builder(name);
@@ -100,6 +104,8 @@ public interface Expansion {
      *  TagResolver resolver = expansion.audiencePlaceholder(player);
      *  Component messageReplaced = MiniMessage.deserialize({@link String}, resolver);
      * </pre>
+     * 
+     * @since 1.0.0
      */
     public static interface Builder {
         /**
@@ -111,8 +117,8 @@ public interface Expansion {
          * and can mutate depending on when it is invoked</p>
          * @param key the placeholder key, cannot be an empty or black string
          * @param audiencePlaceholder the single placeholder
-         * @since 1.0.0
          * @return the {@link Builder} itself
+         * @since 1.0.0
          */
         Builder audiencePlaceholder(@NotNull String key, @NotNull AudiencePlaceholder audiencePlaceholder);
 
@@ -129,8 +135,8 @@ public interface Expansion {
          * and can mutate depending on when it is invoked</p>
          * @param key the placeholder key, cannot be an empty or black string
          * @param relationalPlaceholder the relational placeholder
-         * @since 1.0.0
          * @return the {@link Builder} itself
+         * @since 1.0.0
          */
         Builder relationalPlaceholder(@NotNull String key, @NotNull RelationalPlaceholder relationalPlaceholder);
 
@@ -142,6 +148,7 @@ public interface Expansion {
          * @param key the placeholder key, cannot be an empty or black string
          * @param function the function
          * @return the {@link Builder} itself
+         * @since 1.0.0
          */
         Builder globalPlaceholder(@NotNull String key, BiFunction<ArgumentQueue, Context, Tag> function);
 
@@ -156,6 +163,7 @@ public interface Expansion {
          * <pre>if(!(audience instanceof Player)) return TagResolver.empty();</pre>
          * @param clazz the class to filter
          * @return the {@link Builder} itself
+         * @since 1.0.0
          */
         Builder filter(@Nullable Class<? extends Audience> clazz);
 
@@ -169,12 +177,14 @@ public interface Expansion {
          * </pre>
          * @param predicate the check to realize
          * @return the {@link Builder} itself
+         * @since 1.0.0
          */
         Builder filter(@NotNull Predicate<Audience> predicate);
 
         /**
          * Build the Expansion
          * @return a new {@link Expansion}
+         * @since 1.0.0
          */
         @NotNull Expansion build();
     }

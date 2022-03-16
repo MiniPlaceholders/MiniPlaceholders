@@ -14,6 +14,7 @@ public interface AudiencePlaceholder {
      * @param queue the argument queue
      * @param ctx the context
      * @return a Tag
+     * @since 1.0.0
      */
     Tag tag(Audience audience, ArgumentQueue queue, Context ctx);
 }

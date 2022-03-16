@@ -17,6 +17,7 @@ public final class LegacyUtils {
      * Parse a string with possible legacy symbols
      * @param string the string
      * @return a parsed string
+     * @since 1.0.0
      */
     public static @NotNull Component parsePossibleLegacy(@Nullable String string) {
         if(string == null || string.isBlank()) return Component.empty();
