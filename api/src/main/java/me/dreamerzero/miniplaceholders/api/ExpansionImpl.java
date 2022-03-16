@@ -13,6 +13,7 @@ import java.util.function.Predicate;
 
 import me.dreamerzero.miniplaceholders.api.placeholder.AudiencePlaceholder;
 import me.dreamerzero.miniplaceholders.api.placeholder.RelationalPlaceholder;
+import me.dreamerzero.miniplaceholders.api.utils.Conditions;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.minimessage.Context;
 import net.kyori.adventure.text.minimessage.tag.Tag;
@@ -107,13 +108,13 @@ final class ExpansionImpl implements Expansion {
         private Predicate<Audience> predicateFilter;
 
         Builder(@NotNull String name){
-            this.expansionName = Objects.requireNonNull(name, () -> "the placeholder name cannot be null")
+            this.expansionName = Conditions.nonNullOrEmptyString(name, () -> "expansion name")
                 .toLowerCase(Locale.ROOT).concat("_");
         }
 
         @Override
         public Builder audiencePlaceholder(@NotNull String key, @NotNull AudiencePlaceholder audiencePlaceholder){
-            Objects.requireNonNull(key, () -> "the placeholder key cannot be null");
+            Conditions.nonNullOrEmptyString(key, () -> "placeholder key");
             Objects.requireNonNull(audiencePlaceholder, () -> "the audience placeholder cannot be null");
 
             if(this.audiencePlaceholders == null) this.audiencePlaceholders = new HashSet<>(5);
@@ -124,7 +125,7 @@ final class ExpansionImpl implements Expansion {
 
         @Override
         public Builder relationalPlaceholder(@NotNull String key, @NotNull RelationalPlaceholder relationalPlaceholder){
-            Objects.requireNonNull(key, () -> "the placeholder key cannot be null");
+            Conditions.nonNullOrEmptyString(key, () -> "placeholder key");
             Objects.requireNonNull(relationalPlaceholder, () -> "the relational placeholder cannot be null");
 
             if(this.relationalPlaceholders == null) this.relationalPlaceholders = new HashSet<>(4);
@@ -136,7 +137,7 @@ final class ExpansionImpl implements Expansion {
         @Override
         public Builder globalPlaceholder(@NotNull String key,
                 BiFunction<ArgumentQueue, Context, Tag> function){
-            Objects.requireNonNull(key, () -> "the placeholder key cannot be null");
+            Conditions.nonNullOrEmptyString(key, () -> "placeholder key");
             Objects.requireNonNull(function, () -> "the global placeholder cannot be null");
 
             if(this.globalPlaceholders == null) this.globalPlaceholders = TagResolver.builder();

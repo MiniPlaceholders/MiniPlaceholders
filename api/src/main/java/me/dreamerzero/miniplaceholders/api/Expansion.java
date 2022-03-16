@@ -109,7 +109,7 @@ public interface Expansion {
          *
          * <p>The content of this Placeholder is cached
          * and can mutate depending on when it is invoked</p>
-         * @param key the placeholder key
+         * @param key the placeholder key, cannot be an empty or black string
          * @param audiencePlaceholder the single placeholder
          * @since 1.0.0
          * @return the {@link Builder} itself
@@ -127,7 +127,7 @@ public interface Expansion {
          *
          * <p>The content of this Placeholder is cached
          * and can mutate depending on when it is invoked</p>
-         * @param key the placeholder key
+         * @param key the placeholder key, cannot be an empty or black string
          * @param relationalPlaceholder the relational placeholder
          * @since 1.0.0
          * @return the {@link Builder} itself
@@ -139,7 +139,7 @@ public interface Expansion {
          *
          * <p>The content of this Placeholder is cached
          * and can mutate depending on when it is invoked</p>
-         * @param key the placeholder key
+         * @param key the placeholder key, cannot be an empty or black string
          * @param function the function
          * @return the {@link Builder} itself
          */
