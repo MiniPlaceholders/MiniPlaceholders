@@ -29,14 +29,12 @@ jmh {
     fork.set(2)
 }
 java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
     withSourcesJar()
     withJavadocJar()
 }
 
-val projectGroup = project.group as String
-val projectVersion = project.version as String
+val projectGroup: String = project.group as String
+val projectVersion: String = project.version as String
 
 publishing {
     publications {
@@ -54,4 +52,20 @@ tasks.withType<Javadoc> {
         "https://jd.adventure.kyori.net/api/4.10.1/",
         "https://jd.adventure.kyori.net/text-minimessage/4.10.1/"
     )
+}
+
+java.toolchain.languageVersion.set(JavaLanguageVersion.of(17))
+
+tasks {
+    compileJava {
+        options.encoding = Charsets.UTF_8.name()
+
+        options.release.set(11)
+    }
+    javadoc {
+        options.encoding = Charsets.UTF_8.name()
+    }
+    processResources {
+        filteringCharset = Charsets.UTF_8.name()
+    }
 }
