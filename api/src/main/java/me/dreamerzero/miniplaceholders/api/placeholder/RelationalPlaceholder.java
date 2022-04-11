@@ -1,5 +1,7 @@
 package me.dreamerzero.miniplaceholders.api.placeholder;
 
+import org.jetbrains.annotations.NotNull;
+
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.minimessage.Context;
 import net.kyori.adventure.text.minimessage.tag.Tag;
@@ -17,5 +19,10 @@ public interface RelationalPlaceholder {
      * @return a tag
      * @since 1.0.0
      */
-    Tag tag(Audience audience, Audience otherAudience, ArgumentQueue queue, Context ctx);
+    Tag tag(
+        @NotNull final Audience audience,
+        @NotNull final Audience otherAudience,
+        @NotNull final ArgumentQueue queue,
+        @NotNull final Context ctx
+    );
 }

@@ -7,6 +7,10 @@ import net.kyori.adventure.text.minimessage.tag.Tag;
 public final class TagsUtils {
     private TagsUtils(){}
 
-    /**Empty Tag */
+    /**
+     * Empty Tag
+     * @since 1.0.0
+     */
     public static final Tag EMPTY_TAG = Tag.selfClosingInserting(Component.empty());
+
 }
