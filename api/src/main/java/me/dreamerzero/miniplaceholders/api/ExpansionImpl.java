@@ -1,5 +1,6 @@
 package me.dreamerzero.miniplaceholders.api;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Objects;
@@ -22,23 +23,29 @@ import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 
 final class ExpansionImpl implements Expansion {
     private final String name;
-    private final Set<Tags.Single> audiencePlaceholders;
-    private final Set<Tags.Relational> relationalPlaceholders;
+    private final Tags.Single[] audiencePlaceholders;
+    private final Tags.Relational[] relationalPlaceholders;
     private final TagResolver globalPlaceholders;
     private final Class<? extends Audience> filterClass;
     private final Predicate<Audience> predicateFilter;
 
     ExpansionImpl(
-        @NotNull String expansionName,
-        @Nullable Set<Tags.Single> audiencePlaceholders,
-        @Nullable Set<Tags.Relational> relationalPlaceholders,
-        @Nullable TagResolver globalPlaceholders,
-        @Nullable Class<? extends Audience> filterClass,
-        @Nullable Predicate<Audience> predicateFilter){
+        @NotNull final String expansionName,
+        @Nullable final Collection<Tags.Single> audiencePlaceholders,
+        @Nullable final Collection<Tags.Relational> relationalPlaceholders,
+        @Nullable final TagResolver globalPlaceholders,
+        @Nullable final Class<? extends Audience> filterClass,
+        @Nullable final Predicate<Audience> predicateFilter){
             this.name = expansionName+"-";
-            this.audiencePlaceholders = audiencePlaceholders;
-            this.relationalPlaceholders = relationalPlaceholders;
-            this.globalPlaceholders = globalPlaceholders;
+            this.audiencePlaceholders = audiencePlaceholders != null
+                ? audiencePlaceholders.toArray(Tags.Single[]::new)
+                : new Tags.Single[0];
+            this.relationalPlaceholders = relationalPlaceholders != null
+                ? relationalPlaceholders.toArray(Tags.Relational[]::new)
+                : new Tags.Relational[0];
+            this.globalPlaceholders = globalPlaceholders == null
+                ? TagResolver.empty()
+                : globalPlaceholders;
             this.filterClass = filterClass;
             this.predicateFilter = predicateFilter;
     }
@@ -49,49 +56,49 @@ final class ExpansionImpl implements Expansion {
     }
 
     @Override
-    public @NotNull TagResolver audiencePlaceholders(@NotNull Audience audience){
-        if(audiencePlaceholders == null) return TagResolver.empty();
+    public @NotNull TagResolver audiencePlaceholders(@NotNull final Audience audience){
+        if(audiencePlaceholders.length == 0) return TagResolver.empty();
 
         Objects.requireNonNull(audience, () -> "the audience cannot be null");
 
         if(this.singleFilter(audience)) return TagResolver.empty();
 
-        TagResolver.Builder placeholders = TagResolver.builder();
-        for(Tags.Single pl : this.audiencePlaceholders){
+        final TagResolver.Builder placeholders = TagResolver.builder();
+        for(final Tags.Single pl : this.audiencePlaceholders){
             placeholders.resolver(pl.of(audience));
         }
         return placeholders.build();
     }
 
-    private boolean singleFilter(Audience audience){
+    private boolean singleFilter(final Audience audience){
         return filterClass != null && !filterClass.isInstance(audience)
             || predicateFilter != null && predicateFilter.test(audience);
     }
 
     @Override
-    public @NotNull TagResolver relationalPlaceholders(@NotNull Audience audience, @NotNull Audience otherAudience){
-        if(relationalPlaceholders == null) return TagResolver.empty();
+    public @NotNull TagResolver relationalPlaceholders(@NotNull final Audience audience, @NotNull final Audience otherAudience){
+        if(relationalPlaceholders.length == 0) return TagResolver.empty();
 
         Objects.requireNonNull(audience, () -> "the audience cannot be null");
         Objects.requireNonNull(otherAudience, () -> "the other audience cannot be null");
 
         if(this.relationalFilter(audience, otherAudience)) return TagResolver.empty();
 
-        TagResolver.Builder placeholders = TagResolver.builder();
-        for(Tags.Relational pl : this.relationalPlaceholders){
+        final TagResolver.Builder placeholders = TagResolver.builder();
+        for(final Tags.Relational pl : this.relationalPlaceholders){
             placeholders.resolver(pl.of(audience, otherAudience));
         }
         return placeholders.build();
     }
 
-    private boolean relationalFilter(Audience audience, Audience otherAudience){
+    private boolean relationalFilter(final Audience audience, final Audience otherAudience){
         return filterClass != null && (!filterClass.isInstance(audience) || !filterClass.isInstance(otherAudience))
             || predicateFilter != null && (!predicateFilter.test(audience) || !predicateFilter.test(otherAudience));
     }
 
     @Override
     public @NotNull TagResolver globalPlaceholders(){
-        return this.globalPlaceholders != null ? this.globalPlaceholders : TagResolver.empty();
+        return this.globalPlaceholders;
     }
 
     @Override
@@ -99,7 +106,7 @@ final class ExpansionImpl implements Expansion {
         MiniPlaceholders.expansions.add(this);
     }
 
-    static class Builder implements Expansion.Builder {
+    static final class Builder implements Expansion.Builder {
         private final String expansionName;
         private Set<Tags.Single> audiencePlaceholders;
         private Set<Tags.Relational> relationalPlaceholders;
@@ -107,13 +114,13 @@ final class ExpansionImpl implements Expansion {
         private Class<? extends Audience> filterClass;
         private Predicate<Audience> predicateFilter;
 
-        Builder(@NotNull String name){
+        Builder(@NotNull final String name){
             this.expansionName = Conditions.nonNullOrEmptyString(name, () -> "expansion name")
                 .toLowerCase(Locale.ROOT).concat("_");
         }
 
         @Override
-        public Builder audiencePlaceholder(@NotNull String key, @NotNull AudiencePlaceholder audiencePlaceholder){
+        public Builder audiencePlaceholder(@NotNull final String key, @NotNull final AudiencePlaceholder audiencePlaceholder){
             Conditions.nonNullOrEmptyString(key, () -> "placeholder key");
             Objects.requireNonNull(audiencePlaceholder, () -> "the audience placeholder cannot be null");
 
@@ -124,7 +131,7 @@ final class ExpansionImpl implements Expansion {
         }
 
         @Override
-        public Builder relationalPlaceholder(@NotNull String key, @NotNull RelationalPlaceholder relationalPlaceholder){
+        public Builder relationalPlaceholder(@NotNull final String key, @NotNull final RelationalPlaceholder relationalPlaceholder){
             Conditions.nonNullOrEmptyString(key, () -> "placeholder key");
             Objects.requireNonNull(relationalPlaceholder, () -> "the relational placeholder cannot be null");
 
@@ -135,8 +142,7 @@ final class ExpansionImpl implements Expansion {
         }
 
         @Override
-        public Builder globalPlaceholder(@NotNull String key,
-                BiFunction<ArgumentQueue, Context, Tag> function){
+        public Builder globalPlaceholder(@NotNull final String key, @NotNull final BiFunction<ArgumentQueue, Context, Tag> function){
             Conditions.nonNullOrEmptyString(key, () -> "placeholder key");
             Objects.requireNonNull(function, () -> "the global placeholder cannot be null");
 
@@ -147,13 +153,13 @@ final class ExpansionImpl implements Expansion {
         }
 
         @Override
-        public Builder filter(Class<? extends Audience> clazz) {
+        public Builder filter(@Nullable final Class<? extends Audience> clazz) {
             this.filterClass = clazz;
             return this;
         }
 
         @Override
-        public Builder filter(Predicate<Audience> predicate){
+        public Builder filter(@NotNull final Predicate<Audience> predicate){
             this.predicateFilter = predicate;
             return this;
         }

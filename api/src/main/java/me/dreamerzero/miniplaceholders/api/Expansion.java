@@ -9,6 +9,7 @@ import java.util.function.Predicate;
 import me.dreamerzero.miniplaceholders.api.placeholder.AudiencePlaceholder;
 import me.dreamerzero.miniplaceholders.api.placeholder.RelationalPlaceholder;
 import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.builder.AbstractBuilder;
 import net.kyori.adventure.text.minimessage.Context;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.ArgumentQueue;
@@ -47,7 +48,7 @@ public interface Expansion {
      * @return A TagResolver with variable placeholders of an Audience
      * @since 1.0.0
      */
-    @NotNull TagResolver audiencePlaceholders(@NotNull Audience audience);
+    @NotNull TagResolver audiencePlaceholders(@NotNull final Audience audience);
 
     /**
      * Get the relational placeholders based on two audiences
@@ -60,7 +61,7 @@ public interface Expansion {
      * @return A TagResolver with variable placeholders between 2 {@link Audience}s
      * @since 1.0.0
      */
-    @NotNull TagResolver relationalPlaceholders(@NotNull Audience audience, @NotNull Audience otherAudience);
+    @NotNull TagResolver relationalPlaceholders(@NotNull final Audience audience, @NotNull final Audience otherAudience);
 
     /**
      * Get global placeholders
@@ -81,7 +82,7 @@ public interface Expansion {
      * @return a new expansion builder
      * @since 1.0.0
      */
-    public static @NotNull Expansion.Builder builder(@NotNull String name){
+    public static @NotNull Expansion.Builder builder(@NotNull final String name){
         return new ExpansionImpl.Builder(name);
     }
 
@@ -107,7 +108,7 @@ public interface Expansion {
      * 
      * @since 1.0.0
      */
-    public static interface Builder {
+    public static interface Builder extends AbstractBuilder<Expansion> {
         /**
          * Adds an audience placeholder
          *
@@ -120,7 +121,7 @@ public interface Expansion {
          * @return the {@link Builder} itself
          * @since 1.0.0
          */
-        Builder audiencePlaceholder(@NotNull String key, @NotNull AudiencePlaceholder audiencePlaceholder);
+        @NotNull Builder audiencePlaceholder(@NotNull final String key, @NotNull final AudiencePlaceholder audiencePlaceholder);
 
         /**
          * Adds an Relational Placeholder based on two audiences
@@ -138,7 +139,7 @@ public interface Expansion {
          * @return the {@link Builder} itself
          * @since 1.0.0
          */
-        Builder relationalPlaceholder(@NotNull String key, @NotNull RelationalPlaceholder relationalPlaceholder);
+        @NotNull Builder relationalPlaceholder(@NotNull final String key, @NotNull final RelationalPlaceholder relationalPlaceholder);
 
         /**
          * Adds a global placeholder
@@ -150,7 +151,7 @@ public interface Expansion {
          * @return the {@link Builder} itself
          * @since 1.0.0
          */
-        Builder globalPlaceholder(@NotNull String key, BiFunction<ArgumentQueue, Context, Tag> function);
+        @NotNull Builder globalPlaceholder(@NotNull final String key, final BiFunction<ArgumentQueue, Context, Tag> function);
 
         /**
          * Filter the type of Audiences that this expansion can receive
@@ -165,7 +166,7 @@ public interface Expansion {
          * @return the {@link Builder} itself
          * @since 1.0.0
          */
-        Builder filter(@Nullable Class<? extends Audience> clazz);
+        @NotNull Builder filter(@Nullable final Class<? extends Audience> clazz);
 
         /**
          * Filters the audiences that this expansion can receive through a Predicate
@@ -179,13 +180,6 @@ public interface Expansion {
          * @return the {@link Builder} itself
          * @since 1.0.0
          */
-        Builder filter(@NotNull Predicate<Audience> predicate);
-
-        /**
-         * Build the Expansion
-         * @return a new {@link Expansion}
-         * @since 1.0.0
-         */
-        @NotNull Expansion build();
+        @NotNull Builder filter(@NotNull final Predicate<Audience> predicate);
     }
 }

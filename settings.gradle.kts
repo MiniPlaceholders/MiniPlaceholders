@@ -7,7 +7,6 @@ pluginManagement {
 
 rootProject.name = "miniplaceholders-parent"
 
-
 include("miniplaceholders-api")
 include("miniplaceholders-common")
 include("miniplaceholders-paper")
