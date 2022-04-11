@@ -13,6 +13,7 @@ dependencies {
 val pluginVersion: String = version as String
 
 bukkit {
+    name = "MiniPlaceholders"
     main = "me.dreamerzero.miniplaceholders.paper.PaperPlugin"
     apiVersion = "1.18"
     website = "https://github.com/4drian3d/MiniPlaceholders"
