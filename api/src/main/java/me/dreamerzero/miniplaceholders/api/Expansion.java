@@ -151,7 +151,7 @@ public interface Expansion {
          * @return the {@link Builder} itself
          * @since 1.0.0
          */
-        @NotNull Builder globalPlaceholder(@NotNull final String key, final BiFunction<ArgumentQueue, Context, Tag> function);
+        @NotNull Builder globalPlaceholder(@NotNull final String key, @NotNull final BiFunction<@NotNull ArgumentQueue, @NotNull Context, @Nullable Tag> function);
 
         /**
          * Adds a global placeholder
@@ -162,7 +162,7 @@ public interface Expansion {
          * @return the {@link Builder} itself
          * @since 1.1.0
          */
-        @NotNull Builder globalPlaceholder(@NotNull final String key, final Tag tag);
+        @NotNull Builder globalPlaceholder(@NotNull final String key, @NotNull final Tag tag);
 
         /**
          * Filter the type of Audiences that this expansion can receive
