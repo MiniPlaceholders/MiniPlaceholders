@@ -14,6 +14,8 @@ import org.slf4j.Logger;
 import me.dreamerzero.miniplaceholders.api.Expansion;
 import me.dreamerzero.miniplaceholders.api.MiniPlaceholders;
 import me.dreamerzero.miniplaceholders.api.enums.Platform;
+import me.dreamerzero.miniplaceholders.api.utils.Components;
+import me.dreamerzero.miniplaceholders.api.utils.TagsUtils;
 import me.dreamerzero.miniplaceholders.common.PlaceholdersCommand;
 import me.dreamerzero.miniplaceholders.common.PlaceholdersPlugin;
 import me.dreamerzero.miniplaceholders.common.PluginConstants;
@@ -59,9 +61,9 @@ public final class VelocityPlugin implements PlaceholdersPlugin {
             .globalPlaceholder("server_count", (queue, ctx) -> Tag.selfClosingInserting(Component.text(proxy.getAllServers().size())))
             .globalPlaceholder("is_player_online", (queue, ctx) -> {
                 String playerName = queue.popOr(() -> "you need to introduce an argument").value();
-                return Tag.selfClosingInserting(Component.text(proxy.getPlayer(playerName).isPresent()));
+                return TagsUtils.staticTag(proxy.getPlayer(playerName).isPresent() ? Components.YES_COMPONENT : Components.NO_COMPONENT);
             })
-            .globalPlaceholder("version", (queue, ctx) -> Tag.selfClosingInserting(Component.text(proxy.getVersion().getVersion())))
+            .globalPlaceholder("version", TagsUtils.staticTag(proxy.getVersion().getVersion()))
         .build()
         .register();
     }

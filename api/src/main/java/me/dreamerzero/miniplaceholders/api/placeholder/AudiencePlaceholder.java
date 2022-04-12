@@ -1,6 +1,7 @@
 package me.dreamerzero.miniplaceholders.api.placeholder;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.minimessage.Context;
@@ -18,7 +19,7 @@ public interface AudiencePlaceholder {
      * @return a Tag
      * @since 1.0.0
      */
-    Tag tag(
+    @Nullable Tag tag(
         @NotNull final Audience audience,
         @NotNull final ArgumentQueue queue,
         @NotNull final Context ctx
