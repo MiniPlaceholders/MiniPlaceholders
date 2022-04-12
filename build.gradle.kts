@@ -8,7 +8,7 @@ plugins {
 allprojects {
     apply(plugin = "java")
     group = "me.dreamerzero.miniplaceholders"
-    version = "1.0.2-SNAPSHOT"
+    version = "1.1.0-SNAPSHOT"
     description = "MiniPlaceholders"
 }
 

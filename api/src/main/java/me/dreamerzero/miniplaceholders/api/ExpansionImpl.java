@@ -153,6 +153,17 @@ final class ExpansionImpl implements Expansion {
         }
 
         @Override
+        public Builder globalPlaceholder(@NotNull final String key, @NotNull final Tag tag){
+            Conditions.nonNullOrEmptyString(key, () -> "placeholder key");
+            Objects.requireNonNull(tag, () -> "the tag cannot be null");
+
+            if(this.globalPlaceholders == null) this.globalPlaceholders = TagResolver.builder();
+
+            this.globalPlaceholders.tag(expansionName+key, tag);
+            return this;
+        }
+
+        @Override
         public Builder filter(@Nullable final Class<? extends Audience> clazz) {
             this.filterClass = clazz;
             return this;

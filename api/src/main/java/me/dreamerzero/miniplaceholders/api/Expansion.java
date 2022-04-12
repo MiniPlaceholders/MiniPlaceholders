@@ -154,6 +154,17 @@ public interface Expansion {
         @NotNull Builder globalPlaceholder(@NotNull final String key, final BiFunction<ArgumentQueue, Context, Tag> function);
 
         /**
+         * Adds a global placeholder
+         * 
+         * <p>This placeholder is not cached and is inmutable</p>
+         * @param key the placeholder key, cannot be an empty or black string
+         * @param tag the tag of this placeholder
+         * @return the {@link Builder} itself
+         * @since 1.1.0
+         */
+        @NotNull Builder globalPlaceholder(@NotNull final String key, final Tag tag);
+
+        /**
          * Filter the type of Audiences that this expansion can receive
          * <p>In case the {@link Expansion#audiencePlaceholders(Audience)} or
          * {@link Expansion#relationalPlaceholders(Audience, Audience)} method is called

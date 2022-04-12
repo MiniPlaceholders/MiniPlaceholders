@@ -3,12 +3,17 @@ package me.dreamerzero.miniplaceholders;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.function.BiFunction;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import me.dreamerzero.miniplaceholders.api.Expansion;
 import me.dreamerzero.miniplaceholders.api.MiniPlaceholders;
 import me.dreamerzero.miniplaceholders.api.utils.TagsUtils;
+import net.kyori.adventure.text.minimessage.Context;
+import net.kyori.adventure.text.minimessage.tag.Tag;
+import net.kyori.adventure.text.minimessage.tag.resolver.ArgumentQueue;
 
 public class ThrowableTest {
     @Test
@@ -19,7 +24,7 @@ public class ThrowableTest {
         Expansion.Builder expansionTest = assertDoesNotThrow(() -> Expansion.builder("throwable"));
 
         assertThrows(NullPointerException.class, () -> expansionTest.audiencePlaceholder(null, (aud, queue, ctx) -> TagsUtils.EMPTY_TAG));
-        assertThrows(NullPointerException.class, () -> expansionTest.globalPlaceholder("test", null));
+        assertThrows(NullPointerException.class, () -> expansionTest.globalPlaceholder("test", (BiFunction<ArgumentQueue, Context, Tag>)null));
 
         Expansion.builder("testThrows")
             .audiencePlaceholder("test", (aud, queue, ctx) -> TagsUtils.EMPTY_TAG)
