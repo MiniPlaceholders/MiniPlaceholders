@@ -48,9 +48,7 @@ public final class MiniPlaceholders {
      * @since 1.0.0
      */
     public static @NotNull TagResolver getGlobalPlaceholders() {
-        if(expansions.isEmpty()) return TagResolver.empty();
-
-        TagResolver.Builder resolvers = TagResolver.builder();
+        final TagResolver.Builder resolvers = TagResolver.builder();
         expansions.forEach(exp -> resolvers.resolver(exp.globalPlaceholders()));
 
         return resolvers.build();
@@ -66,12 +64,10 @@ public final class MiniPlaceholders {
      * @return {@link TagResolver} with placeholders based on an audience
      * @since 1.0.0
      */
-    public static @NotNull TagResolver getAudiencePlaceholders(@NotNull Audience audience) {
-        if(expansions.isEmpty()) return TagResolver.empty();
-
+    public static @NotNull TagResolver getAudiencePlaceholders(@NotNull final Audience audience) {
         Objects.requireNonNull(audience, () -> "audience cannot be null");
 
-        TagResolver.Builder resolvers = TagResolver.builder();
+        final TagResolver.Builder resolvers = TagResolver.builder();
         expansions.forEach(exp -> resolvers.resolver(exp.audiencePlaceholders(audience)));
 
         return resolvers.build();
@@ -88,16 +84,68 @@ public final class MiniPlaceholders {
      * @return placeholders based on two audiences
      * @since 1.0.0
      */
-    public static @NotNull TagResolver getRelationalPlaceholders(@NotNull Audience audience, @NotNull Audience otherAudience) {
-        if(expansions.isEmpty()) return TagResolver.empty();
-
+    public static @NotNull TagResolver getRelationalPlaceholders(@NotNull final Audience audience, @NotNull final Audience otherAudience) {
         Objects.requireNonNull(audience, () -> "audience cannot be null");
         Objects.requireNonNull(otherAudience, () -> "otherAudience cannot be null");
 
-        TagResolver.Builder resolvers = TagResolver.builder();
+        final TagResolver.Builder resolvers = TagResolver.builder();
         expansions.forEach(exp -> resolvers.resolver(exp.relationalPlaceholders(audience, otherAudience)));
 
         return resolvers.build();
+    }
+
+    /**
+     * Get the TagResolver based on an Audience and the global placeholders
+     *
+     * <pre>
+     * TagResolver resolver = MiniPlaceholders.getAudienceGlobalPlaceholders({@link Audience});
+     * TagResolver resolver2 = TagResolver.resolver(
+     *  MiniPlaceholders.getAudienceGlobalPlaceholders({@link Audience}),
+     *  MiniPlaceholders.getGlobalPlaceholders()
+     * );
+     * // This two resolvers returns the same TagResolver
+     * assertEquals(resolver, resolver2);
+     * Component messageParsed = MiniMessage.miniMessage().deserialize({@link String}, resolver);
+     * </pre>
+     *
+     * @param audience the audience
+     * @return {@link TagResolver} with placeholders based on an audience and the global placeholders
+     * @since 1.1.0
+     */
+    public static @NotNull TagResolver getAudienceGlobalPlaceholders(@NotNull final Audience audience) {
+        return TagResolver.resolver(
+            MiniPlaceholders.getAudiencePlaceholders(audience),
+            MiniPlaceholders.getGlobalPlaceholders()
+        );
+    }
+
+    /**
+     * Get the relationals placeholders based on two audiences, based on the first audience,
+     * and the global placeholders
+     *
+     * <pre>
+     * TagResolver resolver = MiniPlaceholders.getRelationalGlobalPlaceholders({@link Audience}, {@link Audience});
+     * TagResolver resolver2 = TagResolver.resolver(
+     *  MiniPlaceholders.getRelationalPlaceholders(audience1, audience2),
+     *  MiniPlaceholders.getAudiencePlaceholders(audience1),
+     *  MiniPlaceholders.getGlobalPlaceholders()
+     * );
+     * // This methods should return the same TagResolver
+     * assertEquals(resolver, resolver2);
+     * Component messageParsed = MiniMessage.miniMessage().deserialize({@link String}, resolver);
+     * </pre>
+     *
+     * @param audience an audience
+     * @param otherAudience another audience
+     * @return the placeholders based on two audiences, placeholders based on the first audience and the global placeholders
+     * @since 1.1.0
+     */
+    public static @NotNull TagResolver getRelationalGlobalPlaceholders(@NotNull final Audience audience, @NotNull final Audience otherAudience) {
+        return TagResolver.resolver(
+            MiniPlaceholders.getAudiencePlaceholders(audience),
+            MiniPlaceholders.getGlobalPlaceholders(),
+            MiniPlaceholders.getRelationalPlaceholders(audience, otherAudience)
+        );
     }
 
     /**
