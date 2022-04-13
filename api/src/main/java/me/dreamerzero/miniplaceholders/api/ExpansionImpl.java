@@ -170,7 +170,7 @@ final class ExpansionImpl implements Expansion {
         }
 
         @Override
-        public Builder filter(@NotNull final Predicate<Audience> predicate){
+        public Builder filter(@Nullable final Predicate<Audience> predicate){
             this.predicateFilter = predicate;
             return this;
         }

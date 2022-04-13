@@ -191,6 +191,6 @@ public interface Expansion {
          * @return the {@link Builder} itself
          * @since 1.0.0
          */
-        @NotNull Builder filter(@NotNull final Predicate<Audience> predicate);
+        @NotNull Builder filter(@Nullable final Predicate<Audience> predicate);
     }
 }
