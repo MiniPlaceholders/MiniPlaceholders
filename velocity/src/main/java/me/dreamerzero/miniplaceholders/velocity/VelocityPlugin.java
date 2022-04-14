@@ -12,13 +12,12 @@ import com.velocitypowered.api.proxy.ProxyServer;
 import org.slf4j.Logger;
 
 import me.dreamerzero.miniplaceholders.api.Expansion;
-import me.dreamerzero.miniplaceholders.api.MiniPlaceholders;
-import me.dreamerzero.miniplaceholders.api.enums.Platform;
 import me.dreamerzero.miniplaceholders.api.utils.Components;
 import me.dreamerzero.miniplaceholders.api.utils.TagsUtils;
 import me.dreamerzero.miniplaceholders.common.PlaceholdersCommand;
 import me.dreamerzero.miniplaceholders.common.PlaceholdersPlugin;
 import me.dreamerzero.miniplaceholders.common.PluginConstants;
+import me.dreamerzero.miniplaceholders.connect.InternalPlatform;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 
@@ -32,17 +31,16 @@ public final class VelocityPlugin implements PlaceholdersPlugin {
     private final Logger logger;
     private final ProxyServer proxy;
     @Inject
-    public VelocityPlugin(Logger logger, ProxyServer proxy) {
+    public VelocityPlugin(final Logger logger, final ProxyServer proxy) {
         this.logger = logger;
         this.proxy = proxy;
     }
 
     @Subscribe
-    @SuppressWarnings("deprecation")
-    public void onProxyInitialize(ProxyInitializeEvent event) {
+    public void onProxyInitialize(final ProxyInitializeEvent event) {
         logger.info("Starting MiniPlaceholders Velocity");
 
-        MiniPlaceholders.setPlatform(Platform.VELOCITY);
+        InternalPlatform.platform(InternalPlatform.VELOCITY);
 
         this.loadDefaultExpansions();
         this.registerPlatformCommand();
@@ -70,7 +68,7 @@ public final class VelocityPlugin implements PlaceholdersPlugin {
 
     @Override
     public void registerPlatformCommand() {
-        BrigadierCommand brigadierCMD = new BrigadierCommand(
+        final BrigadierCommand brigadierCMD = new BrigadierCommand(
             new PlaceholdersCommand<CommandSource>(
                 () -> proxy.getAllPlayers().stream().map(Player::getUsername).toList(),
                 (String st) -> proxy.getPlayer(st).orElse(null))

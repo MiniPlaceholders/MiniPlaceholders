@@ -7,6 +7,7 @@ plugins {
 dependencies {
     compileOnly(project(":miniplaceholders-common"))
     compileOnly(project(":miniplaceholders-api"))
+    compileOnly(project(":miniplaceholders-connect"))
     paperDevBundle("1.18.2-R0.1-SNAPSHOT")
 }
 

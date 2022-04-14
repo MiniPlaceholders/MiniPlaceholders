@@ -11,11 +11,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import io.papermc.paper.datapack.Datapack;
 import me.dreamerzero.miniplaceholders.api.Expansion;
-import me.dreamerzero.miniplaceholders.api.MiniPlaceholders;
-import me.dreamerzero.miniplaceholders.api.enums.Platform;
 import me.dreamerzero.miniplaceholders.api.utils.TagsUtils;
 import me.dreamerzero.miniplaceholders.common.PlaceholdersCommand;
 import me.dreamerzero.miniplaceholders.common.PlaceholdersPlugin;
+import me.dreamerzero.miniplaceholders.connect.InternalPlatform;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.minimessage.tag.Tag;
@@ -26,10 +25,9 @@ public final class PaperPlugin extends JavaPlugin implements PlaceholdersPlugin,
     private final NumberFormat msptFormat = NumberFormat.getInstance();
 
     @Override
-    @SuppressWarnings("deprecation")
     public void onEnable(){
         this.getSLF4JLogger().info("Starting MiniPlaceholders Paper");
-        MiniPlaceholders.setPlatform(Platform.PAPER);
+        InternalPlatform.platform(InternalPlatform.PAPER);
         this.getServer().getPluginManager().registerEvents(this, this);
 
         tpsFormat.setRoundingMode(RoundingMode.DOWN);

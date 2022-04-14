@@ -7,11 +7,13 @@ pluginManagement {
 
 rootProject.name = "miniplaceholders-parent"
 
+include("miniplaceholders-connect")
 include("miniplaceholders-api")
 include("miniplaceholders-common")
 include("miniplaceholders-paper")
 include("miniplaceholders-velocity")
 
+project(":miniplaceholders-connect").projectDir = file("connect")
 project(":miniplaceholders-api").projectDir = file("api")
 project(":miniplaceholders-common").projectDir = file("common")
 project(":miniplaceholders-velocity").projectDir = file("velocity")

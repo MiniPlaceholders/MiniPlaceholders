@@ -8,6 +8,7 @@ import java.util.Set;
 import org.jetbrains.annotations.NotNull;
 
 import me.dreamerzero.miniplaceholders.api.enums.Platform;
+import me.dreamerzero.miniplaceholders.connect.InternalPlatform;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 
@@ -26,7 +27,6 @@ import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 public final class MiniPlaceholders {
     private MiniPlaceholders(){}
     static final Set<Expansion> expansions = Collections.synchronizedSet(new HashSet<>());
-    private static Platform placeholdersPlatform;
 
     /**
      * Get the platform
@@ -34,7 +34,9 @@ public final class MiniPlaceholders {
      * @since 1.0.0
      */
     public static Platform getPlatform(){
-        return placeholdersPlatform;
+        return InternalPlatform.platform() == InternalPlatform.PAPER
+            ? Platform.PAPER
+            : Platform.VELOCITY;
     }
 
     /**
@@ -163,10 +165,9 @@ public final class MiniPlaceholders {
      * @deprecated dont use this, INTERNAL
      * @since 1.0.0
      */
-    @Deprecated(forRemoval = false)
+    @Deprecated(forRemoval = true, since = "1.1.0")
     @org.jetbrains.annotations.ApiStatus.Internal
     public static void setPlatform(Platform platform){
-        if(placeholdersPlatform != null) throw new RuntimeException("Cannot set platform twice");
-        placeholdersPlatform = platform;
+        throw new UnsupportedOperationException("Cannot set platform twice");
     }
 }
