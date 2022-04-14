@@ -98,7 +98,7 @@ public class PlaceholderTest {
 
     }
 
-    private void assertContentEquals(Component first, Component second){
+    void assertContentEquals(Component first, Component second){
         String firstSerialized = PlainTextComponentSerializer.plainText().serialize(first);
         String secondSerialized = PlainTextComponentSerializer.plainText().serialize(second);
 
