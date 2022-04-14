@@ -115,10 +115,15 @@ public final class MiniPlaceholders {
      * @since 1.1.0
      */
     public static @NotNull TagResolver getAudienceGlobalPlaceholders(@NotNull final Audience audience) {
-        return TagResolver.resolver(
-            MiniPlaceholders.getAudiencePlaceholders(audience),
-            MiniPlaceholders.getGlobalPlaceholders()
-        );
+        Objects.requireNonNull(audience, () -> "audience cannot be null");
+        final TagResolver.Builder builder = TagResolver.builder();
+
+        for(final Expansion expansion : expansions) {
+            builder.resolver(expansion.audiencePlaceholders(audience));
+            builder.resolver(expansion.globalPlaceholders());
+        }
+
+        return builder.build();
     }
 
     /**
@@ -143,11 +148,17 @@ public final class MiniPlaceholders {
      * @since 1.1.0
      */
     public static @NotNull TagResolver getRelationalGlobalPlaceholders(@NotNull final Audience audience, @NotNull final Audience otherAudience) {
-        return TagResolver.resolver(
-            MiniPlaceholders.getAudiencePlaceholders(audience),
-            MiniPlaceholders.getGlobalPlaceholders(),
-            MiniPlaceholders.getRelationalPlaceholders(audience, otherAudience)
-        );
+        Objects.requireNonNull(audience, () -> "audience cannot be null");
+        Objects.requireNonNull(otherAudience, () -> "otherAudience cannot be null");
+
+        final TagResolver.Builder builder = TagResolver.builder();
+        for(final Expansion expansion : expansions) {
+            builder.resolver(expansion.audiencePlaceholders(audience));
+            builder.resolver(expansion.relationalPlaceholders(audience, otherAudience));
+            builder.resolver(expansion.globalPlaceholders());
+        }
+
+        return builder.build();
     }
 
     /**
