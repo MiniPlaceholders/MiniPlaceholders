@@ -8,11 +8,12 @@ plugins {
 allprojects {
     apply(plugin = "java")
     group = "me.dreamerzero.miniplaceholders"
-    version = "1.1.0"
+    version = "1.1.1"
     description = "MiniPlaceholders"
 }
 
 dependencies {
+    shadow(project(":miniplaceholders-connect"))
     shadow(project(":miniplaceholders-api"))
     shadow(project(":miniplaceholders-common"))
     shadow(project(":miniplaceholders-velocity"))
