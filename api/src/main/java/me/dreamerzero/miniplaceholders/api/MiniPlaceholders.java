@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import me.dreamerzero.miniplaceholders.api.enums.Platform;
@@ -33,7 +34,7 @@ public final class MiniPlaceholders {
      * @return the platform
      * @since 1.0.0
      */
-    public static Platform getPlatform(){
+    public static @NotNull Platform getPlatform(){
         return InternalPlatform.platform() == InternalPlatform.PAPER
             ? Platform.PAPER
             : Platform.VELOCITY;
@@ -66,7 +67,8 @@ public final class MiniPlaceholders {
      * @return {@link TagResolver} with placeholders based on an audience
      * @since 1.0.0
      */
-    public static @NotNull TagResolver getAudiencePlaceholders(@NotNull final Audience audience) {
+    @Contract("null -> fail, !null -> !null")
+    public static @NotNull TagResolver getAudiencePlaceholders(final @NotNull Audience audience) {
         Objects.requireNonNull(audience, () -> "audience cannot be null");
 
         final TagResolver.Builder resolvers = TagResolver.builder();
@@ -86,7 +88,8 @@ public final class MiniPlaceholders {
      * @return placeholders based on two audiences
      * @since 1.0.0
      */
-    public static @NotNull TagResolver getRelationalPlaceholders(@NotNull final Audience audience, @NotNull final Audience otherAudience) {
+    @Contract("_, null -> fail; null, _ -> fail; !null, !null -> !null")
+    public static @NotNull TagResolver getRelationalPlaceholders(final @NotNull Audience audience, final @NotNull Audience otherAudience) {
         Objects.requireNonNull(audience, () -> "audience cannot be null");
         Objects.requireNonNull(otherAudience, () -> "otherAudience cannot be null");
 
@@ -114,7 +117,8 @@ public final class MiniPlaceholders {
      * @return {@link TagResolver} with placeholders based on an audience and the global placeholders
      * @since 1.1.0
      */
-    public static @NotNull TagResolver getAudienceGlobalPlaceholders(@NotNull final Audience audience) {
+    @Contract("_, null -> fail; null, _ -> fail; !null, !null -> !null")
+    public static @NotNull TagResolver getAudienceGlobalPlaceholders(final @NotNull Audience audience) {
         Objects.requireNonNull(audience, () -> "audience cannot be null");
         final TagResolver.Builder builder = TagResolver.builder();
 
@@ -147,7 +151,8 @@ public final class MiniPlaceholders {
      * @return the placeholders based on two audiences, placeholders based on the first audience and the global placeholders
      * @since 1.1.0
      */
-    public static @NotNull TagResolver getRelationalGlobalPlaceholders(@NotNull final Audience audience, @NotNull final Audience otherAudience) {
+    @Contract("_, null -> fail; null, _ -> fail; !null, !null -> !null")
+    public static @NotNull TagResolver getRelationalGlobalPlaceholders(final @NotNull Audience audience, final @NotNull Audience otherAudience) {
         Objects.requireNonNull(audience, () -> "audience cannot be null");
         Objects.requireNonNull(otherAudience, () -> "otherAudience cannot be null");
 

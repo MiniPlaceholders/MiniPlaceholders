@@ -1,5 +1,6 @@
 package me.dreamerzero.miniplaceholders.api;
 
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -48,7 +49,8 @@ public interface Expansion {
      * @return A TagResolver with variable placeholders of an Audience
      * @since 1.0.0
      */
-    @NotNull TagResolver audiencePlaceholders(@NotNull final Audience audience);
+    @Contract("null -> fail; !null -> !null")
+    @NotNull TagResolver audiencePlaceholders(final @NotNull Audience audience);
 
     /**
      * Get the relational placeholders based on two audiences
@@ -61,7 +63,8 @@ public interface Expansion {
      * @return A TagResolver with variable placeholders between 2 {@link Audience}s
      * @since 1.0.0
      */
-    @NotNull TagResolver relationalPlaceholders(@NotNull final Audience audience, @NotNull final Audience otherAudience);
+    @Contract("_, null -> fail, null, _ -> fail; !null, !null -> !null")
+    @NotNull TagResolver relationalPlaceholders(final @NotNull Audience audience, final @NotNull Audience otherAudience);
 
     /**
      * Get global placeholders
@@ -82,7 +85,7 @@ public interface Expansion {
      * @return a new expansion builder
      * @since 1.0.0
      */
-    public static @NotNull Expansion.Builder builder(@NotNull final String name){
+    public static @NotNull Expansion.Builder builder(final @NotNull String name){
         return new ExpansionImpl.Builder(name);
     }
 
@@ -121,7 +124,8 @@ public interface Expansion {
          * @return the {@link Builder} itself
          * @since 1.0.0
          */
-        @NotNull Builder audiencePlaceholder(@NotNull final String key, @NotNull final AudiencePlaceholder audiencePlaceholder);
+        @Contract("null, _ -> fail; _, null -> fail; !null, !null -> this")
+        @NotNull Builder audiencePlaceholder(final @NotNull String key, final @NotNull AudiencePlaceholder audiencePlaceholder);
 
         /**
          * Adds an Relational Placeholder based on two audiences
@@ -139,7 +143,8 @@ public interface Expansion {
          * @return the {@link Builder} itself
          * @since 1.0.0
          */
-        @NotNull Builder relationalPlaceholder(@NotNull final String key, @NotNull final RelationalPlaceholder relationalPlaceholder);
+        @Contract("null, _ -> fail; _, null -> fail; !null, !null -> this")
+        @NotNull Builder relationalPlaceholder(final @NotNull String key, final @NotNull RelationalPlaceholder relationalPlaceholder);
 
         /**
          * Adds a global placeholder
@@ -151,7 +156,8 @@ public interface Expansion {
          * @return the {@link Builder} itself
          * @since 1.0.0
          */
-        @NotNull Builder globalPlaceholder(@NotNull final String key, @NotNull final BiFunction<@NotNull ArgumentQueue, @NotNull Context, @Nullable Tag> function);
+        @Contract("null, _ -> fail; _, null -> fail; !null, !null -> this")
+        @NotNull Builder globalPlaceholder(final @NotNull String key, final @NotNull BiFunction<@NotNull ArgumentQueue, @NotNull Context, @Nullable Tag> function);
 
         /**
          * Adds a global placeholder
@@ -162,7 +168,8 @@ public interface Expansion {
          * @return the {@link Builder} itself
          * @since 1.1.0
          */
-        @NotNull Builder globalPlaceholder(@NotNull final String key, @NotNull final Tag tag);
+        @Contract("null, _ -> fail; _, null -> fail; !null, !null -> this")
+        @NotNull Builder globalPlaceholder(final @NotNull String key, final @NotNull Tag tag);
 
         /**
          * Filter the type of Audiences that this expansion can receive
@@ -177,7 +184,8 @@ public interface Expansion {
          * @return the {@link Builder} itself
          * @since 1.0.0
          */
-        @NotNull Builder filter(@Nullable final Class<? extends Audience> clazz);
+        @Contract("_ -> this")
+        @NotNull Builder filter(final @Nullable Class<? extends Audience> clazz);
 
         /**
          * Filters the audiences that this expansion can receive through a Predicate
@@ -191,6 +199,7 @@ public interface Expansion {
          * @return the {@link Builder} itself
          * @since 1.0.0
          */
-        @NotNull Builder filter(@Nullable final Predicate<Audience> predicate);
+        @Contract("_ -> this")
+        @NotNull Builder filter(final @Nullable Predicate<Audience> predicate);
     }
 }
