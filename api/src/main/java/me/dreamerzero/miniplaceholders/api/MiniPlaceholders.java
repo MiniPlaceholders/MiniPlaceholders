@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import me.dreamerzero.miniplaceholders.api.enums.Platform;
+import me.dreamerzero.miniplaceholders.api.utils.Resolvers;
 import me.dreamerzero.miniplaceholders.connect.InternalPlatform;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
@@ -34,7 +35,7 @@ public final class MiniPlaceholders {
      * @return the platform
      * @since 1.0.0
      */
-    public static @NotNull Platform getPlatform(){
+    public static @NotNull Platform getPlatform() {
         return InternalPlatform.platform() == InternalPlatform.PAPER
             ? Platform.PAPER
             : Platform.VELOCITY;
@@ -51,10 +52,13 @@ public final class MiniPlaceholders {
      * @since 1.0.0
      */
     public static @NotNull TagResolver getGlobalPlaceholders() {
-        final TagResolver.Builder resolvers = TagResolver.builder();
-        expansions.forEach(exp -> resolvers.resolver(exp.globalPlaceholders()));
-
-        return resolvers.build();
+        final TagResolver.Builder builder = TagResolver.builder();
+        for (final Expansion expansion : expansions) {
+            final TagResolver resolver = expansion.globalPlaceholders();
+            if (resolver != TagResolver.empty())
+                builder.resolver(resolver);
+        }
+        return builder.build();
     }
 
     /**
@@ -72,8 +76,11 @@ public final class MiniPlaceholders {
         Objects.requireNonNull(audience, () -> "audience cannot be null");
 
         final TagResolver.Builder resolvers = TagResolver.builder();
-        expansions.forEach(exp -> resolvers.resolver(exp.audiencePlaceholders(audience)));
-
+        for (Expansion expansion : expansions) {
+            final TagResolver resolver = expansion.audiencePlaceholders(audience);
+            if (resolver != TagResolver.empty())
+                resolvers.resolver(resolver);
+        }
         return resolvers.build();
     }
 
@@ -93,10 +100,15 @@ public final class MiniPlaceholders {
         Objects.requireNonNull(audience, () -> "audience cannot be null");
         Objects.requireNonNull(otherAudience, () -> "otherAudience cannot be null");
 
-        final TagResolver.Builder resolvers = TagResolver.builder();
-        expansions.forEach(exp -> resolvers.resolver(exp.relationalPlaceholders(audience, otherAudience)));
+        final TagResolver.Builder builder = TagResolver.builder();
+        for (final Expansion expansion : expansions) {
+            Resolvers.applyIfNotEmpty(
+                expansion.relationalPlaceholders(audience, otherAudience),
+                builder
+            );
+        }
 
-        return resolvers.build();
+        return builder.build();
     }
 
     /**
@@ -122,9 +134,9 @@ public final class MiniPlaceholders {
         Objects.requireNonNull(audience, () -> "audience cannot be null");
         final TagResolver.Builder builder = TagResolver.builder();
 
-        for(final Expansion expansion : expansions) {
-            builder.resolver(expansion.audiencePlaceholders(audience));
-            builder.resolver(expansion.globalPlaceholders());
+        for (final Expansion expansion : expansions) {
+            Resolvers.applyIfNotEmpty(expansion.audiencePlaceholders(audience), builder);
+            Resolvers.applyIfNotEmpty(expansion.globalPlaceholders(), builder);
         }
 
         return builder.build();
@@ -157,10 +169,10 @@ public final class MiniPlaceholders {
         Objects.requireNonNull(otherAudience, () -> "otherAudience cannot be null");
 
         final TagResolver.Builder builder = TagResolver.builder();
-        for(final Expansion expansion : expansions) {
-            builder.resolver(expansion.audiencePlaceholders(audience));
-            builder.resolver(expansion.relationalPlaceholders(audience, otherAudience));
-            builder.resolver(expansion.globalPlaceholders());
+        for (final Expansion expansion : expansions) {
+            Resolvers.applyIfNotEmpty(expansion.audiencePlaceholders(audience), builder);
+            Resolvers.applyIfNotEmpty(expansion.relationalPlaceholders(audience, otherAudience), builder);
+            Resolvers.applyIfNotEmpty(expansion.globalPlaceholders(), builder);
         }
 
         return builder.build();
