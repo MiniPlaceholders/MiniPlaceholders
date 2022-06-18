@@ -4,15 +4,15 @@ plugins {
 }
 
 dependencies {
-    compileOnly("net.kyori:adventure-api:4.10.1")
-    compileOnly("net.kyori:adventure-text-minimessage:4.10.1")
-    compileOnly("net.kyori:adventure-text-serializer-legacy:4.10.1")
+    compileOnly("net.kyori:adventure-api:4.11.0")
+    compileOnly("net.kyori:adventure-text-minimessage:4.11.0")
+    compileOnly("net.kyori:adventure-text-serializer-legacy:4.11.0")
     compileOnly(project(":miniplaceholders-connect"))
     testImplementation(platform("org.junit:junit-bom:5.8.1"))
     testImplementation("org.junit.jupiter:junit-jupiter")
-    testImplementation("net.kyori:adventure-api:4.10.1")
-    testImplementation("net.kyori:adventure-text-minimessage:4.10.1")
-    testImplementation("net.kyori:adventure-text-serializer-plain:4.10.1")
+    testImplementation("net.kyori:adventure-api:4.11.0")
+    testImplementation("net.kyori:adventure-text-minimessage:4.11.0")
+    testImplementation("net.kyori:adventure-text-serializer-plain:4.11.0")
 }
 
 tasks {
@@ -50,8 +50,8 @@ publishing {
 
 tasks.withType<Javadoc> {
     (options as StandardJavadocDocletOptions).links(
-        "https://jd.adventure.kyori.net/api/4.10.1/",
-        "https://jd.adventure.kyori.net/text-minimessage/4.10.1/"
+        "https://jd.adventure.kyori.net/api/4.10.0/",
+        "https://jd.adventure.kyori.net/text-minimessage/4.11.0/"
     )
 }
 

@@ -13,7 +13,7 @@ import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 
 public class MiniPlaceholdersTest {
     @Test
-    @Disabled("The tagresolvers implemented classes does not implement the equals method")
+    @Disabled("Cannot correctly calculate the equity of 2 TagResolvers obtained in different ways")
     void methodEquality(){
         Expansion.builder("equality")
             .audiencePlaceholder("audience", TagsUtils.NULL_AUDIENCE_PLACEHOLDER)
