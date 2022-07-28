@@ -1,7 +1,7 @@
 package me.dreamerzero.miniplaceholders.paper;
 
 import java.math.RoundingMode;
-import java.text.NumberFormat;
+import java.text.DecimalFormat;
 
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -21,8 +21,8 @@ import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.MinecraftServer;
 
 public final class PaperPlugin extends JavaPlugin implements PlaceholdersPlugin, Listener {
-    private final NumberFormat tpsFormat = NumberFormat.getInstance();
-    private final NumberFormat msptFormat = NumberFormat.getInstance();
+    private final DecimalFormat tpsFormat = new DecimalFormat("###.##");
+    private final DecimalFormat msptFormat = new DecimalFormat("###.###");
 
     @Override
     public void onEnable(){
@@ -30,11 +30,8 @@ public final class PaperPlugin extends JavaPlugin implements PlaceholdersPlugin,
         InternalPlatform.platform(InternalPlatform.PAPER);
         this.getServer().getPluginManager().registerEvents(this, this);
 
-        tpsFormat.setRoundingMode(RoundingMode.DOWN);
-        tpsFormat.setMaximumFractionDigits(2);
-
-        msptFormat.setRoundingMode(RoundingMode.DOWN);
-        msptFormat.setMaximumFractionDigits(3);
+        tpsFormat.setRoundingMode(RoundingMode.HALF_UP);
+        msptFormat.setRoundingMode(RoundingMode.HALF_UP);
         
         this.loadDefaultExpansions();
         this.registerPlatformCommand();
@@ -80,7 +77,7 @@ public final class PaperPlugin extends JavaPlugin implements PlaceholdersPlugin,
     }
 
     @Override
-    @SuppressWarnings("all")
+    @SuppressWarnings({"sonarlint(java:s1874)", "deprecation", /*TODO: replace with Java(536871800) */ "all"})
     public void registerPlatformCommand() {
         MinecraftServer.getServer()
             .vanillaCommandDispatcher

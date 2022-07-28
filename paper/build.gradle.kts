@@ -1,6 +1,6 @@
 plugins {
-    id("net.minecrell.plugin-yml.bukkit") version "0.5.1"
-    id("io.papermc.paperweight.userdev") version "1.3.5"
+    id("net.minecrell.plugin-yml.bukkit") version "0.5.2"
+    id("io.papermc.paperweight.userdev") version "1.3.8"
     id("xyz.jpenilla.run-paper") version "1.0.6"
 }
 
@@ -8,7 +8,7 @@ dependencies {
     compileOnly(project(":miniplaceholders-common"))
     compileOnly(project(":miniplaceholders-api"))
     compileOnly(project(":miniplaceholders-connect"))
-    paperDevBundle("1.18.2-R0.1-SNAPSHOT")
+    paperDevBundle("1.19.1-R0.1-SNAPSHOT")
 }
 
 val pluginVersion: String = version as String
@@ -32,6 +32,9 @@ tasks {
         options.encoding = Charsets.UTF_8.name()
 
         options.release.set(17)
+    }
+    runServer {
+        minecraftVersion("1.19.1")
     }
 }
 
