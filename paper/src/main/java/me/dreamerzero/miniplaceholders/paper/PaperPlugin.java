@@ -1,11 +1,10 @@
 package me.dreamerzero.miniplaceholders.paper;
 
-import java.lang.reflect.InvocationTargetException;
 import java.math.RoundingMode;
 import java.text.NumberFormat;
 
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.dedicated.DedicatedServer;
-import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -84,7 +83,7 @@ public final class PaperPlugin extends JavaPlugin implements PlaceholdersPlugin,
     @Override
     @SuppressWarnings("all")
     public void registerPlatformCommand() {
-        this.getNMSServer()
+        MinecraftServer.getServer()
             .vanillaCommandDispatcher
             .getDispatcher()
             .register(new PlaceholdersCommand<>(
@@ -93,14 +92,5 @@ public final class PaperPlugin extends JavaPlugin implements PlaceholdersPlugin,
                     CommandSourceStack::getBukkitSender
                 ).placeholderTestBuilder("miniplaceholders")
             );
-    }
-
-    private DedicatedServer getNMSServer(){
-        Server craftServer = this.getServer();
-        try {
-            return (DedicatedServer) craftServer.getClass().getDeclaredMethod("getServer").invoke(craftServer);
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException exception) {
-            throw new RuntimeException("Your Minecraft version is not supported by MiniPlaceholders", exception);
-        }
     }
 }
