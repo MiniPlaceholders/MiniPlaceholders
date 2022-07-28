@@ -50,9 +50,9 @@ public final class PaperPlugin extends JavaPlugin implements PlaceholdersPlugin,
             .globalPlaceholder("version", TagsUtils.staticTag(this.getServer().getVersion()))
             .globalPlaceholder("max_players", (queue, ctx) -> TagsUtils.staticTag(Component.text(this.getServer().getMaxPlayers())))
             .globalPlaceholder("unique_joins", (queue, ctx) -> TagsUtils.staticTag(Component.text(this.getServer().getOfflinePlayers().length)))
-            .globalPlaceholder("tps_1", (queue, ctx) -> TagsUtils.staticTag(tpsFormat.format(this.getNMSServer().recentTps[0])))
-            .globalPlaceholder("tps_5", (queue, ctx) -> TagsUtils.staticTag(tpsFormat.format(this.getNMSServer().recentTps[1])))
-            .globalPlaceholder("tps_15", (queue, ctx) -> TagsUtils.staticTag(tpsFormat.format(this.getNMSServer().recentTps[2])))
+            .globalPlaceholder("tps_1", (queue, ctx) -> TagsUtils.staticTag(tpsFormat.format(this.getServer().getTPS()[0])))
+            .globalPlaceholder("tps_5", (queue, ctx) -> TagsUtils.staticTag(tpsFormat.format(this.getServer().getTPS()[1])))
+            .globalPlaceholder("tps_15", (queue, ctx) -> TagsUtils.staticTag(tpsFormat.format(this.getServer().getTPS()[2])))
             .globalPlaceholder("has_whitelist", (queue, ctx) -> TagsUtils.staticTag(Component.text(this.getServer().hasWhitelist())))
             .globalPlaceholder("total_chunks", (queue, ctx) -> {
                 int chunkCount = 0;
