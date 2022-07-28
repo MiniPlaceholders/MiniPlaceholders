@@ -3,8 +3,6 @@ package me.dreamerzero.miniplaceholders.paper;
 import java.math.RoundingMode;
 import java.text.NumberFormat;
 
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.dedicated.DedicatedServer;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -20,6 +18,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.server.MinecraftServer;
 
 public final class PaperPlugin extends JavaPlugin implements PlaceholdersPlugin, Listener {
     private final NumberFormat tpsFormat = NumberFormat.getInstance();
