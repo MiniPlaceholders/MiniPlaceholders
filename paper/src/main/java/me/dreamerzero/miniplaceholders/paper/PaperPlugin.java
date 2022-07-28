@@ -4,7 +4,6 @@ import java.math.RoundingMode;
 import java.text.NumberFormat;
 
 import org.bukkit.World;
-import org.bukkit.craftbukkit.v1_18_R2.CraftServer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -19,6 +18,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.server.MinecraftServer;
 
 public final class PaperPlugin extends JavaPlugin implements PlaceholdersPlugin, Listener {
     private final NumberFormat tpsFormat = NumberFormat.getInstance();
@@ -48,9 +48,9 @@ public final class PaperPlugin extends JavaPlugin implements PlaceholdersPlugin,
             .globalPlaceholder("version", TagsUtils.staticTag(this.getServer().getVersion()))
             .globalPlaceholder("max_players", (queue, ctx) -> TagsUtils.staticTag(Component.text(this.getServer().getMaxPlayers())))
             .globalPlaceholder("unique_joins", (queue, ctx) -> TagsUtils.staticTag(Component.text(this.getServer().getOfflinePlayers().length)))
-            .globalPlaceholder("tps_1", (queue, ctx) -> TagsUtils.staticTag(tpsFormat.format(this.getCraftServer().getHandle().getServer().recentTps[0])))
-            .globalPlaceholder("tps_5", (queue, ctx) -> TagsUtils.staticTag(tpsFormat.format(this.getCraftServer().getHandle().getServer().recentTps[1])))
-            .globalPlaceholder("tps_15", (queue, ctx) -> TagsUtils.staticTag(tpsFormat.format(this.getCraftServer().getHandle().getServer().recentTps[2])))
+            .globalPlaceholder("tps_1", (queue, ctx) -> TagsUtils.staticTag(tpsFormat.format(this.getServer().getTPS()[0])))
+            .globalPlaceholder("tps_5", (queue, ctx) -> TagsUtils.staticTag(tpsFormat.format(this.getServer().getTPS()[1])))
+            .globalPlaceholder("tps_15", (queue, ctx) -> TagsUtils.staticTag(tpsFormat.format(this.getServer().getTPS()[2])))
             .globalPlaceholder("has_whitelist", (queue, ctx) -> TagsUtils.staticTag(Component.text(this.getServer().hasWhitelist())))
             .globalPlaceholder("total_chunks", (queue, ctx) -> {
                 int chunkCount = 0;
@@ -82,7 +82,7 @@ public final class PaperPlugin extends JavaPlugin implements PlaceholdersPlugin,
     @Override
     @SuppressWarnings("all")
     public void registerPlatformCommand() {
-        this.getCraftServer().getServer()
+        MinecraftServer.getServer()
             .vanillaCommandDispatcher
             .getDispatcher()
             .register(new PlaceholdersCommand<>(
@@ -91,9 +91,5 @@ public final class PaperPlugin extends JavaPlugin implements PlaceholdersPlugin,
                     CommandSourceStack::getBukkitSender
                 ).placeholderTestBuilder("miniplaceholders")
             );
-    }
-
-    private CraftServer getCraftServer(){
-        return (CraftServer)this.getServer();
     }
 }
