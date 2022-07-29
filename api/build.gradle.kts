@@ -29,9 +29,11 @@ jmh {
     iterations.set(2)
     fork.set(2)
 }
+
 java {
     withSourcesJar()
     withJavadocJar()
+    toolchain.languageVersion.set(JavaLanguageVersion.of(17))
 }
 
 val projectGroup: String = project.group as String
@@ -54,8 +56,6 @@ tasks.withType<Javadoc> {
         "https://jd.adventure.kyori.net/text-minimessage/4.11.0/"
     )
 }
-
-java.toolchain.languageVersion.set(JavaLanguageVersion.of(17))
 
 tasks {
     compileJava {
