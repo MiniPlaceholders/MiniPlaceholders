@@ -2,7 +2,7 @@ package me.dreamerzero.miniplaceholders.connect;
 
 public enum InternalPlatform {
 
-    PAPER, VELOCITY;
+    PAPER, VELOCITY, KRYPTON;
 
     private static InternalPlatform actualPlatform;
 
