@@ -22,12 +22,12 @@ import me.dreamerzero.miniplaceholders.common.PlaceholdersPlugin;
 import me.dreamerzero.miniplaceholders.common.PluginConstants;
 import me.dreamerzero.miniplaceholders.connect.InternalPlatform;
 
-@Plugin(
+/*@Plugin(
     name = "MiniPlaceholders",
     id = "miniplaceholders",
     version = PluginConstants.VERSION,
     authors = {"4drian3d"}
-)
+)*/
 public class KryptonPlugin implements PlaceholdersPlugin {
     private final Server server;
     private final Logger logger;
