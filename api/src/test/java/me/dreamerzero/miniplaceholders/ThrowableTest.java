@@ -15,7 +15,7 @@ import net.kyori.adventure.text.minimessage.Context;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.ArgumentQueue;
 
-public class ThrowableTest {
+class ThrowableTest {
     @Test
     @DisplayName("Nullable Exception")
     void throwOnNull(){

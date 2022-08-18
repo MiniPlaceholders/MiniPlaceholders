@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import me.dreamerzero.miniplaceholders.api.Expansion;
 import me.dreamerzero.miniplaceholders.api.utils.TagsUtils;
 
-public class ExpansionsTest {
+class ExpansionsTest {
     @Test
     @DisplayName("Expansion Equality")
     void equalsExpansions(){
