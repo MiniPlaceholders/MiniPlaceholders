@@ -11,15 +11,13 @@ dependencies {
     paperDevBundle("1.19.1-R0.1-SNAPSHOT")
 }
 
-val pluginVersion: String = version as String
-
 bukkit {
     name = "MiniPlaceholders"
     main = "me.dreamerzero.miniplaceholders.paper.PaperPlugin"
     apiVersion = "1.18"
     website = "https://github.com/4drian3d/MiniPlaceholders"
     authors = listOf("4drian3d")
-    version = pluginVersion
+    version = project.version as String
 }
 
 java.toolchain.languageVersion.set(JavaLanguageVersion.of(17))
@@ -35,6 +33,11 @@ tasks {
     }
     runServer {
         minecraftVersion("1.19.1")
+    }
+    jar {
+        manifest {
+            attributes("Automatic-Module-Name" to "me.dreamerzero.miniplaceholders.paper")
+        }
     }
 }
 

@@ -1,4 +1,5 @@
-module me.dreamerzero.miniplaceholders.api {
+/** MiniPlaceholdes API Module */
+open module me.dreamerzero.miniplaceholders.api {
     requires net.kyori.adventure;
     requires net.kyori.examination.api;
     requires net.kyori.adventure.text.minimessage;
