@@ -2,7 +2,6 @@ package me.dreamerzero.miniplaceholders.api;
 
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 import org.jetbrains.annotations.Contract;
@@ -13,6 +12,8 @@ import me.dreamerzero.miniplaceholders.api.utils.Resolvers;
 import me.dreamerzero.miniplaceholders.connect.InternalPlatform;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+
+import static java.util.Objects.requireNonNull;
 
 /**
  * MiniPlaceholders
@@ -36,9 +37,11 @@ public final class MiniPlaceholders {
      * @since 1.0.0
      */
     public static @NotNull Platform getPlatform() {
-        return InternalPlatform.platform() == InternalPlatform.PAPER
-            ? Platform.PAPER
-            : Platform.VELOCITY;
+        switch (InternalPlatform.platform()) {
+            case PAPER: return Platform.PAPER;
+            case VELOCITY: return Platform.VELOCITY;
+            default: return Platform.KRYPTON;
+        }
     }
 
     /**
@@ -73,7 +76,7 @@ public final class MiniPlaceholders {
      */
     @Contract("null -> fail, !null -> !null")
     public static @NotNull TagResolver getAudiencePlaceholders(final @NotNull Audience audience) {
-        Objects.requireNonNull(audience, () -> "audience cannot be null");
+        requireNonNull(audience, "audience cannot be null");
 
         final TagResolver.Builder resolvers = TagResolver.builder();
         for (Expansion expansion : expansions) {
@@ -97,8 +100,8 @@ public final class MiniPlaceholders {
      */
     @Contract("_, null -> fail; null, _ -> fail; !null, !null -> !null")
     public static @NotNull TagResolver getRelationalPlaceholders(final @NotNull Audience audience, final @NotNull Audience otherAudience) {
-        Objects.requireNonNull(audience, () -> "audience cannot be null");
-        Objects.requireNonNull(otherAudience, () -> "otherAudience cannot be null");
+        requireNonNull(audience, "audience cannot be null");
+        requireNonNull(otherAudience, "otherAudience cannot be null");
 
         final TagResolver.Builder builder = TagResolver.builder();
         for (final Expansion expansion : expansions) {
@@ -131,7 +134,7 @@ public final class MiniPlaceholders {
      */
     @Contract("_, null -> fail; null, _ -> fail; !null, !null -> !null")
     public static @NotNull TagResolver getAudienceGlobalPlaceholders(final @NotNull Audience audience) {
-        Objects.requireNonNull(audience, () -> "audience cannot be null");
+        requireNonNull(audience, "audience cannot be null");
         final TagResolver.Builder builder = TagResolver.builder();
 
         for (final Expansion expansion : expansions) {
@@ -165,8 +168,8 @@ public final class MiniPlaceholders {
      */
     @Contract("_, null -> fail; null, _ -> fail; !null, !null -> !null")
     public static @NotNull TagResolver getRelationalGlobalPlaceholders(final @NotNull Audience audience, final @NotNull Audience otherAudience) {
-        Objects.requireNonNull(audience, () -> "audience cannot be null");
-        Objects.requireNonNull(otherAudience, () -> "otherAudience cannot be null");
+        requireNonNull(audience, "audience cannot be null");
+        requireNonNull(otherAudience, "otherAudience cannot be null");
 
         final TagResolver.Builder builder = TagResolver.builder();
         for (final Expansion expansion : expansions) {

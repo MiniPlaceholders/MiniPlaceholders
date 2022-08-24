@@ -7,7 +7,7 @@ pluginManagement {
 
 rootProject.name = "miniplaceholders-parent"
 
-val modules = listOf("connect", "api", "common", "paper", "velocity")
+val modules = listOf("connect", "api", "common", "paper", "velocity", "krypton")
 
 modules.forEach {
     include("miniplaceholders-$it")
