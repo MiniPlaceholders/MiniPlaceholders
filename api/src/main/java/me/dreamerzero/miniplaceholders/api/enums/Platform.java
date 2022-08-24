@@ -5,5 +5,7 @@ public enum Platform {
     /**Paper Platform */
     PAPER,
     /**Velocity Platform */
-    VELOCITY
+    VELOCITY,
+    /**Krypton Platform */
+    KRYPTON;
 }

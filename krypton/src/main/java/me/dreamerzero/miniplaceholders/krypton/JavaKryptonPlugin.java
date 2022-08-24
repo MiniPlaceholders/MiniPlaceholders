@@ -8,7 +8,7 @@ import org.kryptonmc.api.entity.player.Player;
 import org.kryptonmc.api.event.Listener;
 import org.kryptonmc.api.event.server.ServerStartEvent;
 import org.kryptonmc.api.plugin.annotation.Plugin;
-//import org.kryptonmc.krypton.KryptonServer;
+import org.kryptonmc.krypton.KryptonServer;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
@@ -22,20 +22,20 @@ import me.dreamerzero.miniplaceholders.common.PlaceholdersPlugin;
 import me.dreamerzero.miniplaceholders.common.PluginConstants;
 import me.dreamerzero.miniplaceholders.connect.InternalPlatform;
 
-/*@Plugin(
+@Plugin(
     name = "MiniPlaceholders",
     id = "miniplaceholders",
     version = PluginConstants.VERSION,
     authors = {"4drian3d"}
-)*/
-public class KryptonPlugin implements PlaceholdersPlugin {
-    private final Server server;
+)
+public class JavaKryptonPlugin implements PlaceholdersPlugin {
+    private final KryptonServer server;
     private final Logger logger;
 
     @Inject
-    public KryptonPlugin(Server server, Logger logger) {
+    public JavaKryptonPlugin(Server server, Logger logger) {
         this.logger = logger;
-        this.server = server;
+        this.server = (KryptonServer)server;
     }
 
     @Listener
@@ -53,40 +53,41 @@ public class KryptonPlugin implements PlaceholdersPlugin {
         Expansion.builder("server")
             .globalPlaceholder("total_entities", (queue, ctx) -> {
                 int entityCount = 0;
-                for(var entry : server.worldManager().worlds().entrySet()) {
+                for (var entry : server.getWorldManager().getWorlds().entrySet()) {
                     entityCount += entry.getValue().entities().size();
                 }
                 return TagsUtils.staticTag(Component.text(entityCount));
             })
             .globalPlaceholder("total_chunks", (queque, ctx) -> {
                 int chunkCount = 0;
-                for(var entry : server.worldManager().worlds().entrySet()) {
+                for(var entry : server.getWorldManager().getWorlds().entrySet()) {
                     chunkCount += entry.getValue().chunks().size();
                 }
                 return TagsUtils.staticTag(Component.text(chunkCount));
             })
-            .globalPlaceholder("name", TagsUtils.staticTag(server.platform().name()))
-            
-            .globalPlaceholder("online", (queue, ctx) -> TagsUtils.staticTag(Component.text(server.players().size())))
-            .globalPlaceholder("max_players", TagsUtils.staticTag(Component.text(server.maxPlayers())))
-            //.globalPlaceholder("has_whitelist", (queue, ctx) -> TagsUtils.staticTag(Component.text(server.playerManager().whitelistEnabled())))
+            .globalPlaceholder("name", TagsUtils.staticTag(server.getPlatform().getName()))
+            .globalPlaceholder("online", (queue, ctx) -> TagsUtils.staticTag(Component.text(server.getPlayers().size())))
+            .globalPlaceholder("version", TagsUtils.staticTag(server.getPlatform().getVersion()))
+            .globalPlaceholder("max_players", TagsUtils.staticTag(Component.text(server.getMaxPlayers())))
+            .globalPlaceholder("has_whitelist", (queue, ctx) -> TagsUtils.staticTag(Component.text(server.getPlayerManager().getWhitelistEnabled())))
         .build()
         .register();
-        
+        //TODO: TPS and MSPT Placeholders
     }
 
     private static final PlainTextComponentSerializer SERIALIZER = PlainTextComponentSerializer.plainText();
 
     @Override
     public void registerPlatformCommand() {
-        final PlaceholdersCommand<Sender> command = new PlaceholdersCommand<Sender>(
-            () -> server.players()
+        final PlaceholdersCommand<Sender> command = new PlaceholdersCommand<>(
+            () -> server.getPlayers()
                 .stream()
-                .map(player -> SERIALIZER.serialize(player.name()))
+                .map(Player::name)
+                .map(SERIALIZER::serialize)
                 .toList(),
-            st -> server.player(st));
+            server::player);
         final BrigadierCommand brigadierCMD = BrigadierCommand.of(command.placeholderTestCommand("miniplaceholders"));
 
-        server.commandManager().register(brigadierCMD);
+        server.getCommandManager().register(brigadierCMD);
     }
 }
