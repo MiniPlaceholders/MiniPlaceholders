@@ -8,8 +8,16 @@ dependencies {
 
 java.toolchain.languageVersion.set(JavaLanguageVersion.of(17))
 
-tasks.compileJava {
-    options.encoding = Charsets.UTF_8.name()
+tasks {
+    compileJava {
+        options.encoding = Charsets.UTF_8.name()
 
-    options.release.set(17)
+        options.release.set(17)
+    }
+
+    jar {
+        manifest {
+            attributes("Automatic-Module-Name" to "me.dreamerzero.miniplaceholders.velocity")
+        }
+    }
 }

@@ -14,7 +14,7 @@ dependencies {
 }
 
 blossom{
-    replaceToken("{version}", version)
+    replaceToken("{version}", project.version)
     replaceTokenIn("src/main/java/me/dreamerzero/miniplaceholders/common/PluginConstants.java")
 }
 
@@ -23,5 +23,11 @@ tasks {
         options.encoding = Charsets.UTF_8.name()
 
         options.release.set(17)
+    }
+
+    jar {
+        manifest {
+            attributes("Automatic-Module-Name" to "me.dreamerzero.miniplaceholders.common")
+        }
     }
 }

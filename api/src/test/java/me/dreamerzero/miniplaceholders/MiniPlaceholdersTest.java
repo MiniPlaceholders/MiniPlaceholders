@@ -11,7 +11,7 @@ import me.dreamerzero.miniplaceholders.api.utils.TagsUtils;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 
-public class MiniPlaceholdersTest {
+class MiniPlaceholdersTest {
     @Test
     @Disabled("Cannot correctly calculate the equity of 2 TagResolvers obtained in different ways")
     void methodEquality(){

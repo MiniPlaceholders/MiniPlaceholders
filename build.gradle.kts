@@ -6,10 +6,7 @@ plugins {
 }
 
 allprojects {
-    apply(plugin = "java")
-    group = "me.dreamerzero.miniplaceholders"
-    version = "1.2.0"
-    description = "MiniPlaceholders"
+    apply<JavaPlugin>()
 }
 
 dependencies {
@@ -31,7 +28,7 @@ subprojects {
 
 tasks {
     shadowJar {
-        archiveFileName.set("MiniPlaceholders.jar")
+        archiveFileName.set("MiniPlaceholders-$version.jar")
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
         configurations = listOf(project.configurations.shadow.get())
     }
