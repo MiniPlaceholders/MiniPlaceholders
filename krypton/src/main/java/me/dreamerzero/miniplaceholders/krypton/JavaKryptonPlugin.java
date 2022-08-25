@@ -21,6 +21,7 @@ import me.dreamerzero.miniplaceholders.common.PlaceholdersCommand;
 import me.dreamerzero.miniplaceholders.common.PlaceholdersPlugin;
 import me.dreamerzero.miniplaceholders.common.PluginConstants;
 import me.dreamerzero.miniplaceholders.connect.InternalPlatform;
+import me.lucko.spark.api.statistic.StatisticWindow;
 
 @Plugin(
     name = "MiniPlaceholders",
@@ -70,9 +71,12 @@ public class JavaKryptonPlugin implements PlaceholdersPlugin {
             .globalPlaceholder("version", TagsUtils.staticTag(server.getPlatform().getVersion()))
             .globalPlaceholder("max_players", TagsUtils.staticTag(Component.text(server.getMaxPlayers())))
             .globalPlaceholder("has_whitelist", (queue, ctx) -> TagsUtils.staticTag(Component.text(server.getPlayerManager().getWhitelistEnabled())))
+            .globalPlaceholder("tps_1", (queue, ctx) -> TagsUtils.staticTag(Component.text(server.getSpark().tps().poll(StatisticWindow.TicksPerSecond.MINUTES_1))))
+            .globalPlaceholder("tps_5", (queue, ctx) -> TagsUtils.staticTag(Component.text(server.getSpark().tps().poll(StatisticWindow.TicksPerSecond.MINUTES_5))))
+            .globalPlaceholder("tps_15", (queue, ctx) -> TagsUtils.staticTag(Component.text(server.getSpark().tps().poll(StatisticWindow.TicksPerSecond.MINUTES_15))))
+            .globalPlaceholder("mspt", (queue, ctx) -> TagsUtils.staticTag(Component.text(server.getSpark().mspt().poll(StatisticWindow.MillisPerTick.SECONDS_10).mean())))
         .build()
         .register();
-        //TODO: TPS and MSPT Placeholders
     }
 
     private static final PlainTextComponentSerializer SERIALIZER = PlainTextComponentSerializer.plainText();
