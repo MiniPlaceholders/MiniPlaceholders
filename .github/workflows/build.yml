@@ -25,7 +25,7 @@ jobs:
         command: gradle build
 
     - name: Upload Artifacts
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: MiniPlaceholders
-        path: build/libs/MiniPlaceholders.jar
+        path: build/libs/MiniPlaceholders-*.jar

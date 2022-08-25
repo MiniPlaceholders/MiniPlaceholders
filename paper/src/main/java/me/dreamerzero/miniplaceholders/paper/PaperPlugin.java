@@ -5,7 +5,6 @@ import java.text.DecimalFormat;
 
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import io.papermc.paper.datapack.Datapack;
@@ -20,7 +19,7 @@ import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.MinecraftServer;
 
-public final class PaperPlugin extends JavaPlugin implements PlaceholdersPlugin, Listener {
+public final class PaperPlugin extends JavaPlugin implements PlaceholdersPlugin {
     private final DecimalFormat tpsFormat = new DecimalFormat("###.##");
     private final DecimalFormat msptFormat = new DecimalFormat("###.###");
 
@@ -28,7 +27,6 @@ public final class PaperPlugin extends JavaPlugin implements PlaceholdersPlugin,
     public void onEnable(){
         this.getSLF4JLogger().info("Starting MiniPlaceholders Paper");
         InternalPlatform.platform(InternalPlatform.PAPER);
-        this.getServer().getPluginManager().registerEvents(this, this);
 
         tpsFormat.setRoundingMode(RoundingMode.HALF_UP);
         msptFormat.setRoundingMode(RoundingMode.HALF_UP);
@@ -77,7 +75,7 @@ public final class PaperPlugin extends JavaPlugin implements PlaceholdersPlugin,
     }
 
     @Override
-    @SuppressWarnings({"sonarlint(java:s1874)", "deprecation", /*TODO: replace with Java(536871800) */ "all"})
+    @SuppressWarnings({"sonarlint(java:s1874)", /*TODO: replace with Java(536871800) */ "all"})
     public void registerPlatformCommand() {
         MinecraftServer.getServer()
             .vanillaCommandDispatcher
