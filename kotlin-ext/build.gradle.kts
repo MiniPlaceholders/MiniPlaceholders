@@ -35,6 +35,7 @@ publishing {
             groupId = project.group as String
             artifactId = "miniplaceholders-kotlin-ext"
             version = project.version as String
+            from(components["kotlin"])
         }
     }
 }
