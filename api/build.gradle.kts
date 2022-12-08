@@ -4,15 +4,15 @@ plugins {
 }
 
 dependencies {
-    compileOnly("net.kyori:adventure-api:4.11.0")
-    compileOnly("net.kyori:adventure-text-minimessage:4.11.0")
-    compileOnly("net.kyori:adventure-text-serializer-legacy:4.11.0")
+    compileOnly("net.kyori:adventure-api:4.12.0")
+    compileOnly("net.kyori:adventure-text-minimessage:4.12.0")
+    compileOnly("net.kyori:adventure-text-serializer-legacy:4.12.0")
     compileOnly(project(":miniplaceholders-connect"))
     testImplementation(platform("org.junit:junit-bom:5.8.1"))
     testImplementation("org.junit.jupiter:junit-jupiter")
-    testImplementation("net.kyori:adventure-api:4.11.0")
-    testImplementation("net.kyori:adventure-text-minimessage:4.11.0")
-    testImplementation("net.kyori:adventure-text-serializer-plain:4.11.0")
+    testImplementation("net.kyori:adventure-api:4.12.0")
+    testImplementation("net.kyori:adventure-text-minimessage:4.12.0")
+    testImplementation("net.kyori:adventure-text-serializer-plain:4.12.0")
 }
 
 tasks {
@@ -35,26 +35,21 @@ java {
     withJavadocJar()
     toolchain.languageVersion.set(JavaLanguageVersion.of(17))
 }
+repositories {
+    mavenCentral()
+}
 
-val projectGroup: String = project.group as String
-val projectVersion: String = project.version as String
+
 
 publishing {
     publications {
         create<MavenPublication>("maven") {
-            groupId = projectGroup
-            artifactId = project.name
-            version = projectVersion
+            groupId = project.group as String
+            artifactId = "miniplaceholders-api"
+            version = project.version as String
             from(components["java"])
         }
     }
-}
-
-tasks.withType<Javadoc> {
-    (options as StandardJavadocDocletOptions).links(
-        "https://jd.adventure.kyori.net/api/4.10.0/",
-        "https://jd.adventure.kyori.net/text-minimessage/4.11.0/"
-    )
 }
 
 tasks {
@@ -65,6 +60,10 @@ tasks {
     }
     javadoc {
         options.encoding = Charsets.UTF_8.name()
+        (options as StandardJavadocDocletOptions).links(
+            "https://jd.adventure.kyori.net/api/4.10.0/",
+            "https://jd.adventure.kyori.net/text-minimessage/4.11.0/"
+        )
     }
     processResources {
         filteringCharset = Charsets.UTF_8.name()

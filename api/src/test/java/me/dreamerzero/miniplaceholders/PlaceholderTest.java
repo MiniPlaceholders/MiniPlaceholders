@@ -23,7 +23,7 @@ class PlaceholderTest {
         TestAudience player = new TestAudience("4drian3d");
 
         Expansion expansion = Expansion.builder("example")
-            .audiencePlaceholder("name", (aud, queue, ctx) -> Tag.selfClosingInserting(Component.text(((TestAudience)aud).getName()))).build();
+            .audiencePlaceholder("name", (aud, queue, ctx) -> Tag.selfClosingInserting(Component.text(((TestAudience)aud).name()))).build();
 
         final Component expected = Component.text("Player Name: 4drian3d");
         final Component result = MiniMessage.miniMessage().deserialize("Player Name: <example_name>", expansion.audiencePlaceholders(player));
@@ -80,7 +80,7 @@ class PlaceholderTest {
     @DisplayName("Filtered Expansion")
     void filteredExpansion(){
         Expansion expansion = Expansion.builder("filter")
-            .audiencePlaceholder("name", (aud, queue, ctx) -> Tag.selfClosingInserting(Component.text(((TestAudience)aud).getName())))
+            .audiencePlaceholder("name", (aud, queue, ctx) -> Tag.selfClosingInserting(Component.text(((TestAudience)aud).name())))
             .filter(TestAudience.class)
             .build();
 
@@ -106,7 +106,7 @@ class PlaceholderTest {
     }
 
     private boolean isEnemy(TestAudience a1, TestAudience a2){
-        return a1.getName().equals("PlayerOne") && a2.getName().equals("PlayerTwo");
+        return a1.name().equals("PlayerOne") && a2.name().equals("PlayerTwo");
     }
 
 }

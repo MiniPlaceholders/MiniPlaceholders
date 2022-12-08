@@ -16,11 +16,11 @@ dependencies {
     compileOnly(project(":miniplaceholders-common"))
     compileOnly(project(":miniplaceholders-api"))
     compileOnly(project(":miniplaceholders-connect"))
+    compileOnly(project(":miniplaceholders-kotlin-ext"))
 }
 
 tasks {
     compileKotlin {
         kotlinOptions.jvmTarget = "17"
     }
-
 }

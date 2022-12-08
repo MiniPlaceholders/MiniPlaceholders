@@ -1,5 +1,3 @@
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-
 plugins {
     java
     id("com.github.johnrengelman.shadow") version "7.1.2"
@@ -12,6 +10,7 @@ allprojects {
 dependencies {
     shadow(project(":miniplaceholders-connect"))
     shadow(project(":miniplaceholders-api"))
+    shadow(project(":miniplaceholders-kotlin-ext"))
     shadow(project(":miniplaceholders-common"))
     shadow(project(":miniplaceholders-velocity"))
     shadow(project(":miniplaceholders-paper", "reobf"))
@@ -28,7 +27,7 @@ subprojects {
 
 tasks {
     shadowJar {
-        archiveFileName.set("MiniPlaceholders-$version.jar")
+        archiveFileName.set("MiniPlaceholders-${project.version}.jar")
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
         configurations = listOf(project.configurations.shadow.get())
     }

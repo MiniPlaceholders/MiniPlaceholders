@@ -49,7 +49,6 @@ public interface Expansion {
      * @return A TagResolver with variable placeholders of an Audience
      * @since 1.0.0
      */
-    @Contract("null -> fail; !null -> !null")
     @NotNull TagResolver audiencePlaceholders(final @NotNull Audience audience);
 
     /**
@@ -63,7 +62,6 @@ public interface Expansion {
      * @return A TagResolver with variable placeholders between 2 {@link Audience}s
      * @since 1.0.0
      */
-    @Contract("_, null -> fail, null, _ -> fail; !null, !null -> !null")
     @NotNull TagResolver relationalPlaceholders(final @NotNull Audience audience, final @NotNull Audience otherAudience);
 
     /**
@@ -124,7 +122,6 @@ public interface Expansion {
          * @return the {@link Builder} itself
          * @since 1.0.0
          */
-        @Contract("null, _ -> fail; _, null -> fail; !null, !null -> this")
         @NotNull Builder audiencePlaceholder(final @NotNull String key, final @NotNull AudiencePlaceholder audiencePlaceholder);
 
         /**
@@ -143,7 +140,6 @@ public interface Expansion {
          * @return the {@link Builder} itself
          * @since 1.0.0
          */
-        @Contract("null, _ -> fail; _, null -> fail; !null, !null -> this")
         @NotNull Builder relationalPlaceholder(final @NotNull String key, final @NotNull RelationalPlaceholder relationalPlaceholder);
 
         /**
@@ -156,7 +152,6 @@ public interface Expansion {
          * @return the {@link Builder} itself
          * @since 1.0.0
          */
-        @Contract("null, _ -> fail; _, null -> fail; !null, !null -> this")
         @NotNull Builder globalPlaceholder(final @NotNull String key, final @NotNull BiFunction<@NotNull ArgumentQueue, @NotNull Context, @Nullable Tag> function);
 
         /**
@@ -168,7 +163,6 @@ public interface Expansion {
          * @return the {@link Builder} itself
          * @since 1.1.0
          */
-        @Contract("null, _ -> fail; _, null -> fail; !null, !null -> this")
         @NotNull Builder globalPlaceholder(final @NotNull String key, final @NotNull Tag tag);
 
         /**
