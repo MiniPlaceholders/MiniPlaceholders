@@ -9,6 +9,7 @@ dependencies {
     compileOnly("net.kyori:adventure-api:4.12.0")
     compileOnly("net.kyori:adventure-text-minimessage:4.12.0")
     compileOnly(project(":miniplaceholders-api"))
+    dokkaHtmlPlugin("org.jetbrains.dokka:javadoc-plugin:1.7.20")
 }
 
 tasks {
@@ -17,16 +18,22 @@ tasks {
     }
 
     build {
-        dependsOn(dokkaHtml)
-    }
-
-    dokkaHtml {
-        outputDirectory.set(buildDir.resolve("docs").resolve("javadoc"))
+        dependsOn(javadocJar)
     }
 }
 
 kotlin {
     explicitApi()
+}
+
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
+// Credits to: https://github.com/Kotlin/dokka/issues/42#issuecomment-1055906110
+val javadocJar = tasks.named<Jar>("javadocJar") {
+    from(tasks.named("dokkaJavadoc"))
 }
 
 publishing {
@@ -35,7 +42,7 @@ publishing {
             groupId = project.group as String
             artifactId = "miniplaceholders-kotlin-ext"
             version = project.version as String
-            from(components["kotlin"])
+            from(components["java"])
         }
     }
 }

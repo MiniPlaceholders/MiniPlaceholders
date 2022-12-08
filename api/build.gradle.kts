@@ -39,8 +39,6 @@ repositories {
     mavenCentral()
 }
 
-
-
 publishing {
     publications {
         create<MavenPublication>("maven") {
