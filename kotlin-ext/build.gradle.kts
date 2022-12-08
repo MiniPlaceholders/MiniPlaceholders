@@ -15,6 +15,14 @@ tasks {
     javadoc {
         enabled = false
     }
+
+    build {
+        dependsOn(dokkaHtml)
+    }
+
+    dokkaHtml {
+        outputDirectory.set(buildDir.resolve("docs").resolve("javadoc"))
+    }
 }
 
 kotlin {
@@ -27,7 +35,6 @@ publishing {
             groupId = project.group as String
             artifactId = "miniplaceholders-kotlin-ext"
             version = project.version as String
-            from(components["java"])
         }
     }
 }
