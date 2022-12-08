@@ -9,7 +9,6 @@ dependencies {
     compileOnly("net.kyori:adventure-api:4.12.0")
     compileOnly("net.kyori:adventure-text-minimessage:4.12.0")
     compileOnly(project(":miniplaceholders-api"))
-    dokkaHtmlPlugin("org.jetbrains.dokka:javadoc-plugin:1.7.20")
 }
 
 tasks {
@@ -33,7 +32,7 @@ java {
 
 // Credits to: https://github.com/Kotlin/dokka/issues/42#issuecomment-1055906110
 val javadocJar = tasks.named<Jar>("javadocJar") {
-    from(tasks.named("dokkaJavadoc"))
+    from(tasks.named("dokkaHtml"))
 }
 
 publishing {
