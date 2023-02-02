@@ -12,10 +12,6 @@ dependencies {
 }
 
 tasks {
-    javadoc {
-        enabled = false
-    }
-
     build {
         dependsOn(dokkaHtmlJar)
     }
@@ -25,23 +21,13 @@ kotlin {
     explicitApi()
 }
 
-java {
-    withJavadocJar()
-    withSourcesJar()
-}
-
-// Credits to: https://github.com/Kotlin/dokka/issues/42#issuecomment-1055906110
-/*val javadocJar = tasks.named<Jar>("javadocJar") {
-    from(tasks.named("dokkaHtml"))
-}*/
-
 publishing {
     publications {
         create<MavenPublication>("maven") {
             groupId = project.group as String
             artifactId = "miniplaceholders-kotlin-ext"
             version = project.version as String
-            from(components["kotlin"])
+            from(components["java"])
         }
     }
 }
@@ -49,7 +35,7 @@ publishing {
 val dokkaHtmlJar = tasks.register<Jar>("dokkaHtmlJar") {
     dependsOn(tasks.dokkaHtml)
     from(tasks.dokkaHtml.flatMap { it.outputDirectory })
-    archiveClassifier.set("html-docs")
+    archiveClassifier.set("javadoc")
 }
 
 kotlin {
