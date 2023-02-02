@@ -82,10 +82,10 @@ final class ExpansionImpl implements Expansion {
         Objects.requireNonNull(audience, "the audience cannot be null");
         Objects.requireNonNull(otherAudience, "the other audience cannot be null");
 
-        if(this.relationalFilter(audience, otherAudience)) return TagResolver.empty();
+        if (this.relationalFilter(audience, otherAudience)) return TagResolver.empty();
 
         final TagResolver.Builder placeholders = TagResolver.builder();
-        for(final Tags.Relational pl : this.relationalPlaceholders){
+        for (final Tags.Relational pl : this.relationalPlaceholders){
             placeholders.resolver(pl.of(audience, otherAudience));
         }
         return placeholders.build();
@@ -124,7 +124,7 @@ final class ExpansionImpl implements Expansion {
             Conditions.nonNullOrEmptyString(key, () -> "placeholder key");
             Objects.requireNonNull(audiencePlaceholder, "the audience placeholder cannot be null");
 
-            if(this.audiencePlaceholders == null) this.audiencePlaceholders = new HashSet<>(5);
+            if (this.audiencePlaceholders == null) this.audiencePlaceholders = new HashSet<>(5);
 
             this.audiencePlaceholders.add(Tags.single(expansionName+key, audiencePlaceholder));
             return this;
@@ -135,7 +135,7 @@ final class ExpansionImpl implements Expansion {
             Conditions.nonNullOrEmptyString(key, () -> "placeholder key");
             Objects.requireNonNull(relationalPlaceholder, "the relational placeholder cannot be null");
 
-            if(this.relationalPlaceholders == null) this.relationalPlaceholders = new HashSet<>(4);
+            if (this.relationalPlaceholders == null) this.relationalPlaceholders = new HashSet<>(4);
 
             this.relationalPlaceholders.add(Tags.relational(expansionName+"rel_"+key, relationalPlaceholder));
             return this;
@@ -190,8 +190,8 @@ final class ExpansionImpl implements Expansion {
 
     @Override
     public boolean equals(Object o){
-        if(this==o) return true;
-        if(o == null || o.getClass() != ExpansionImpl.class) return false;
+        if (this==o) return true;
+        if (o == null || o.getClass() != ExpansionImpl.class) return false;
         return ((ExpansionImpl)o).name.equals(this.name);
     }
 

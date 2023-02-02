@@ -9,6 +9,8 @@ import me.dreamerzero.miniplaceholders.api.Expansion
  * @param builder a builder-like function to create an Expansion from a builder
  * @return a new expansion
  * @since 1.4.0
+ * @see Expansion.builder
+ * @see Expansion.Builder.build
  * */
 public fun expansion(name: String, builder: Expansion.Builder.() -> Expansion.Builder): Expansion
-    = builder.invoke(Expansion.builder(name)).build()
+    = builder(Expansion.builder(name)).build()
