@@ -7,7 +7,7 @@ dependencies {
     compileOnly("net.kyori:adventure-api:4.12.0")
     compileOnly("net.kyori:adventure-text-minimessage:4.12.0")
     compileOnly("net.kyori:adventure-text-serializer-legacy:4.12.0")
-    compileOnly(project(":miniplaceholders-connect"))
+    compileOnly(projects.miniplaceholdersConnect)
     testImplementation(platform("org.junit:junit-bom:5.8.1"))
     testImplementation("org.junit.jupiter:junit-jupiter")
     testImplementation("net.kyori:adventure-api:4.12.0")

@@ -6,8 +6,10 @@ import me.dreamerzero.miniplaceholders.common.PlaceholdersCommand
 import me.dreamerzero.miniplaceholders.common.PlaceholdersPlugin
 import me.dreamerzero.miniplaceholders.common.PluginConstants
 import me.dreamerzero.miniplaceholders.connect.InternalPlatform
+import me.dreamerzero.miniplaceholders.kotlin.asClosingTag
 import me.dreamerzero.miniplaceholders.kotlin.expansion
 import me.lucko.spark.api.statistic.StatisticWindow
+import net.kyori.adventure.key.Key
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText
 import org.apache.logging.log4j.Logger
@@ -48,24 +50,34 @@ class KotlinKryptonPlugin @Inject constructor(
                 for ((_, value) in server.worldManager.worlds) {
                     entityCount += value.entities.size
                 }
-                TagsUtils.staticTag(Component.text(entityCount))
+                Component.text(entityCount).asClosingTag()
             }
             globalPlaceholder("total_chunks") { _, _ ->
                 var chunkCount = 0
                 for ((_, value) in server.worldManager.worlds) {
                     chunkCount += value.chunks.size
                 }
-                TagsUtils.staticTag(Component.text(chunkCount))
+                Component.text(chunkCount).asClosingTag()
             }
             globalPlaceholder("name", TagsUtils.staticTag(server.platform.name))
-            globalPlaceholder("online") { _, _ -> TagsUtils.staticTag(Component.text(server.players.size)) }
+            globalPlaceholder("online") { queue, _ ->
+                if (queue.hasNext()) {
+                    val worldName = queue.pop().value()
+                    val players = server.worldManager[Key.key(worldName)]?.players?.size
+                    if (players != null) {
+                        return@globalPlaceholder Component.text(players).asClosingTag()
+                    }
+
+                }
+                Component.text(server.players.size).asClosingTag()
+            }
             globalPlaceholder("version", TagsUtils.staticTag(server.platform.version))
-            globalPlaceholder("max_players", TagsUtils.staticTag(Component.text(server.maxPlayers)))
-            globalPlaceholder("has_whitelist") { _, _ -> TagsUtils.staticTag(Component.text(server.playerManager.whitelistEnabled)) }
-            globalPlaceholder("tps_1") { _, _ -> TagsUtils.staticTag(Component.text(server.spark.tps()!!.poll(StatisticWindow.TicksPerSecond.MINUTES_1))) }
-            globalPlaceholder("tps_5") { _, _ -> TagsUtils.staticTag(Component.text(server.spark.tps()!!.poll(StatisticWindow.TicksPerSecond.MINUTES_5))) }
-            globalPlaceholder("tps_15") { _, _ -> TagsUtils.staticTag(Component.text(server.spark.tps()!!.poll(StatisticWindow.TicksPerSecond.MINUTES_15))) }
-            globalPlaceholder("mspt") { _, _ -> TagsUtils.staticTag(Component.text(server.spark.mspt()!!.poll(StatisticWindow.MillisPerTick.SECONDS_10).mean())) }
+            globalPlaceholder("max_players", Component.text(server.maxPlayers).asClosingTag())
+            globalPlaceholder("has_whitelist") { _, _ -> Component.text(server.playerManager.whitelistEnabled).asClosingTag() }
+            globalPlaceholder("tps_1") { _, _ -> Component.text(server.spark.tps()!!.poll(StatisticWindow.TicksPerSecond.MINUTES_1)).asClosingTag() }
+            globalPlaceholder("tps_5") { _, _ -> Component.text(server.spark.tps()!!.poll(StatisticWindow.TicksPerSecond.MINUTES_5)).asClosingTag() }
+            globalPlaceholder("tps_15") { _, _ -> Component.text(server.spark.tps()!!.poll(StatisticWindow.TicksPerSecond.MINUTES_15)).asClosingTag() }
+            globalPlaceholder("mspt") { _, _ -> Component.text(server.spark.mspt()!!.poll(StatisticWindow.MillisPerTick.SECONDS_10).mean()).asClosingTag() }
         }.register()
     }
 
@@ -74,7 +86,7 @@ class KotlinKryptonPlugin @Inject constructor(
             { server.players
                     .map { it.name }
                     .map { plainText().serialize(it) }
-            }, (server::player))
+            }, server::player)
         val brigadierCMD = BrigadierCommand.of(command.placeholderTestCommand("miniplaceholders"))
         server.commandManager.register(brigadierCMD)
     }

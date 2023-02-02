@@ -1,14 +1,14 @@
 plugins {
-    kotlin("jvm") version "1.7.21"
+    kotlin("jvm")
     id("org.jetbrains.dokka") version "1.7.20"
     `maven-publish`
 }
 
 dependencies {
-    compileOnly(kotlin("stdlib", "1.7.21"))
+    compileOnly(kotlin("stdlib", "1.8.10"))
     compileOnly("net.kyori:adventure-api:4.12.0")
     compileOnly("net.kyori:adventure-text-minimessage:4.12.0")
-    compileOnly(project(":miniplaceholders-api"))
+    compileOnly(projects.miniplaceholdersApi)
 }
 
 tasks {
@@ -17,7 +17,7 @@ tasks {
     }
 
     build {
-        dependsOn(javadocJar)
+        dependsOn(dokkaHtmlJar)
     }
 }
 
@@ -31,9 +31,9 @@ java {
 }
 
 // Credits to: https://github.com/Kotlin/dokka/issues/42#issuecomment-1055906110
-val javadocJar = tasks.named<Jar>("javadocJar") {
+/*val javadocJar = tasks.named<Jar>("javadocJar") {
     from(tasks.named("dokkaHtml"))
-}
+}*/
 
 publishing {
     publications {
@@ -41,7 +41,19 @@ publishing {
             groupId = project.group as String
             artifactId = "miniplaceholders-kotlin-ext"
             version = project.version as String
-            from(components["java"])
+            from(components["kotlin"])
         }
+    }
+}
+
+val dokkaHtmlJar = tasks.register<Jar>("dokkaHtmlJar") {
+    dependsOn(tasks.dokkaHtml)
+    from(tasks.dokkaHtml.flatMap { it.outputDirectory })
+    archiveClassifier.set("html-docs")
+}
+
+kotlin {
+    jvmToolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
     }
 }

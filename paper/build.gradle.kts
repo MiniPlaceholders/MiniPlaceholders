@@ -5,10 +5,10 @@ plugins {
 }
 
 dependencies {
-    compileOnly(project(":miniplaceholders-common"))
-    compileOnly(project(":miniplaceholders-api"))
-    compileOnly(project(":miniplaceholders-connect"))
-    paperDevBundle("1.19.1-R0.1-SNAPSHOT")
+    compileOnly(projects.miniplaceholdersCommon)
+    compileOnly(projects.miniplaceholdersApi)
+    compileOnly(projects.miniplaceholdersConnect)
+    paperDevBundle("1.19.3-R0.1-SNAPSHOT")
 }
 
 bukkit {
@@ -32,7 +32,7 @@ tasks {
         options.release.set(17)
     }
     runServer {
-        minecraftVersion("1.19.1")
+        minecraftVersion("1.19.3")
     }
     jar {
         manifest {

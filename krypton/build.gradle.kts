@@ -1,6 +1,6 @@
 plugins {
-    kotlin("jvm") version "1.7.21"
-    kotlin("kapt") version "1.7.21"
+    kotlin("jvm")
+    kotlin("kapt")
 }
 
 repositories {
@@ -11,12 +11,12 @@ repositories {
 
 dependencies {
     compileOnly("org.kryptonmc:krypton-server:0.66.3")
-    compileOnly(kotlin("stdlib", "1.7.21"))
+    compileOnly(kotlin("stdlib", "1.8.10"))
     kapt("org.kryptonmc:annotation-processor:0.66.2")
-    compileOnly(project(":miniplaceholders-common"))
-    compileOnly(project(":miniplaceholders-api"))
-    compileOnly(project(":miniplaceholders-connect"))
-    compileOnly(project(":miniplaceholders-kotlin-ext"))
+    compileOnly(projects.miniplaceholdersCommon)
+    compileOnly(projects.miniplaceholdersApi)
+    compileOnly(projects.miniplaceholdersConnect)
+    compileOnly(projects.miniplaceholdersKotlinExt)
 }
 
 tasks {
