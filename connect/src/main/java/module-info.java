@@ -1,3 +1,3 @@
-module me.dreamerzero.miniplaceholders.connect {
-    exports me.dreamerzero.miniplaceholders.connect;
+module io.github.miniplaceholders.connect {
+    exports io.github.miniplaceholders.connect;
 }

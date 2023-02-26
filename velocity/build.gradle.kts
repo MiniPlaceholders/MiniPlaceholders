@@ -21,7 +21,7 @@ tasks {
 
     jar {
         manifest {
-            attributes("Automatic-Module-Name" to "me.dreamerzero.miniplaceholders.velocity")
+            attributes("Automatic-Module-Name" to "io.github.miniplaceholders.velocity")
         }
     }
 

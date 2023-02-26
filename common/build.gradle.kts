@@ -20,7 +20,7 @@ dependencies {
 
 blossom{
     replaceToken("{version}", project.version)
-    replaceTokenIn("src/main/java/me/dreamerzero/miniplaceholders/common/PluginConstants.java")
+    replaceTokenIn("src/main/java/io/github/miniplaceholders/common/PluginConstants.java")
 }
 
 tasks {
@@ -31,7 +31,7 @@ tasks {
 
     jar {
         manifest {
-            attributes("Automatic-Module-Name" to "me.dreamerzero.miniplaceholders.common")
+            attributes("Automatic-Module-Name" to "io.github.miniplaceholders.common")
         }
     }
 }

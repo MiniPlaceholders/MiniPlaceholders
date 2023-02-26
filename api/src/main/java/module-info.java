@@ -1,14 +1,14 @@
-/** MiniPlaceholdes API Module */
-open module me.dreamerzero.miniplaceholders.api {
+/** MiniPlaceholders API Module */
+open module io.github.miniplaceholders.api {
     requires net.kyori.adventure;
     requires net.kyori.adventure.text.minimessage;
     requires net.kyori.examination.api;
     requires static org.jetbrains.annotations;
-    requires me.dreamerzero.miniplaceholders.connect;
+    requires io.github.miniplaceholders.connect;
     requires net.kyori.adventure.text.serializer.legacy;
 
-    exports me.dreamerzero.miniplaceholders.api;
-    exports me.dreamerzero.miniplaceholders.api.enums;
-    exports me.dreamerzero.miniplaceholders.api.utils;
-    exports me.dreamerzero.miniplaceholders.api.placeholder;
+    exports io.github.miniplaceholders.api;
+    exports io.github.miniplaceholders.api.enums;
+    exports io.github.miniplaceholders.api.utils;
+    exports io.github.miniplaceholders.api.placeholder;
 }

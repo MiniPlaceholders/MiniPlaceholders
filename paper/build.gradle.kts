@@ -11,9 +11,10 @@ dependencies {
     paperweight.paperDevBundle(libs.versions.paper.get())
 }
 
+// TODO: Migrate to Paper Plugin
 bukkit {
     name = "MiniPlaceholders"
-    main = "me.dreamerzero.miniplaceholders.paper.PaperPlugin"
+    main = "io.github.miniplaceholders.paper.PaperPlugin"
     apiVersion = "1.18"
     website = "https://github.com/4drian3d/MiniPlaceholders"
     authors = listOf("4drian3d")
@@ -36,7 +37,7 @@ tasks {
     }
     jar {
         manifest {
-            attributes("Automatic-Module-Name" to "me.dreamerzero.miniplaceholders.paper")
+            attributes("Automatic-Module-Name" to "io.github.miniplaceholders.paper")
         }
     }
 }
