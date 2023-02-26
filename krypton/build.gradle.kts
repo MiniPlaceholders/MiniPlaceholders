@@ -10,7 +10,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly("org.kryptonmc:krypton-server:0.66.3")
+    compileOnly("org.kryptonmc:krypton-server:499879f4ef")
     compileOnly(kotlin("stdlib", "1.8.10"))
     kapt("org.kryptonmc:annotation-processor:0.66.2")
     compileOnly(projects.miniplaceholdersCommon)
