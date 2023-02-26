@@ -27,7 +27,7 @@ java {
 kotlin {
     explicitApi()
 }
-
+/*
 publishing {
     publications {
         create<MavenPublication>("maven") {
@@ -81,7 +81,7 @@ publishing {
             }
         }
     }
-}
+}*/
 
 val dokkaHtmlJar = tasks.register<Jar>("dokkaHtmlJar") {
     dependsOn(tasks.dokkaHtml)
@@ -94,9 +94,9 @@ kotlin {
         languageVersion.set(JavaLanguageVersion.of(17))
     }
 }
-
+/*
 signing {
     useGpgCmd()
     sign(configurations.archives.get())
     sign(publishing.publications["maven"])
-}
+}*/

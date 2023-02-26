@@ -40,7 +40,7 @@ java {
 repositories {
     mavenCentral()
 }
-
+/*
 publishing {
     publications {
         create<MavenPublication>("maven") {
@@ -94,7 +94,7 @@ publishing {
             }
         }
     }
-}
+}*/
 
 tasks {
     compileJava {
@@ -113,9 +113,9 @@ tasks {
         filteringCharset = Charsets.UTF_8.name()
     }
 }
-
+/*
 signing {
     useGpgCmd()
     sign(configurations.archives.get())
     sign(publishing.publications["maven"])
-}
+}*/
