@@ -1,5 +1,5 @@
 plugins {
-    id("me.champeau.jmh") version "0.6.6"
+    id("me.champeau.jmh") version "0.7.0"
     `maven-publish`
     signing
 }
