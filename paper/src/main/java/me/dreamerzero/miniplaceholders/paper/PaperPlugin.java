@@ -75,7 +75,7 @@ public final class PaperPlugin extends JavaPlugin implements PlaceholdersPlugin 
     }
 
     @Override
-    @SuppressWarnings({"sonarlint(java:s1874)", /*TODO: replace with Java(536871800) */ "all"})
+    @SuppressWarnings({"sonarlint(java:s1874)" /*TODO: replace with Java(536871800) */ })
     public void registerPlatformCommand() {
         MinecraftServer.getServer()
             .vanillaCommandDispatcher

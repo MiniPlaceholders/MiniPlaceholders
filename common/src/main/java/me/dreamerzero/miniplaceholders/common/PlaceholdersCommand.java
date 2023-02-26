@@ -32,7 +32,7 @@ public class PlaceholdersCommand<A> {
         .globalPlaceholder("version", (queue, ctx) -> Tag.selfClosingInserting(Component.text(PluginConstants.VERSION)))
         .build();
 
-    public PlaceholdersCommand(Supplier<Collection<String>> playersSuggestions, Function<@NotNull String, @Nullable Audience> toAudience){
+    public PlaceholdersCommand(@NotNull Supplier<Collection<String>> playersSuggestions, @NotNull Function<@NotNull String, @Nullable Audience> toAudience){
         this.playersSuggestions = playersSuggestions;
         this.toAudience = toAudience;
     }
@@ -50,7 +50,7 @@ public class PlaceholdersCommand<A> {
             .requires(a -> getAudience(a).pointers().supports(PermissionChecker.POINTER))
             .executes(cmd -> {
                 Audience source = getAudience(cmd.getSource());
-                if (source.pointers().get(PermissionChecker.POINTER).get().test("miniplaceholders.command")){
+                if (source.pointers().get(PermissionChecker.POINTER).orElseThrow().test("miniplaceholders.command")) {
                     source.sendMessage(
                         Component.text()
                             .append(HEADER).append(Component.newline())

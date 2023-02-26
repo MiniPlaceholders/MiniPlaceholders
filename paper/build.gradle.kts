@@ -1,14 +1,14 @@
 plugins {
-    id("net.minecrell.plugin-yml.bukkit") version "0.5.2"
+    id("net.minecrell.plugin-yml.bukkit") version "0.5.3"
     id("io.papermc.paperweight.userdev") version "1.3.8"
     id("xyz.jpenilla.run-paper") version "1.0.6"
 }
 
 dependencies {
-    compileOnly(project(":miniplaceholders-common"))
-    compileOnly(project(":miniplaceholders-api"))
-    compileOnly(project(":miniplaceholders-connect"))
-    paperDevBundle("1.19.1-R0.1-SNAPSHOT")
+    compileOnly(projects.miniplaceholdersCommon)
+    compileOnly(projects.miniplaceholdersApi)
+    compileOnly(projects.miniplaceholdersConnect)
+    paperDevBundle("1.19.3-R0.1-SNAPSHOT")
 }
 
 bukkit {
@@ -32,7 +32,7 @@ tasks {
         options.release.set(17)
     }
     runServer {
-        minecraftVersion("1.19.1")
+        minecraftVersion("1.19.3")
     }
     jar {
         manifest {

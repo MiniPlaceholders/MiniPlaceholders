@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import me.dreamerzero.miniplaceholders.api.enums.Platform;
@@ -74,7 +73,6 @@ public final class MiniPlaceholders {
      * @return {@link TagResolver} with placeholders based on an audience
      * @since 1.0.0
      */
-    @Contract("null -> fail, !null -> !null")
     public static @NotNull TagResolver getAudiencePlaceholders(final @NotNull Audience audience) {
         requireNonNull(audience, "audience cannot be null");
 
@@ -98,7 +96,6 @@ public final class MiniPlaceholders {
      * @return placeholders based on two audiences
      * @since 1.0.0
      */
-    @Contract("_, null -> fail; null, _ -> fail; !null, !null -> !null")
     public static @NotNull TagResolver getRelationalPlaceholders(final @NotNull Audience audience, final @NotNull Audience otherAudience) {
         requireNonNull(audience, "audience cannot be null");
         requireNonNull(otherAudience, "otherAudience cannot be null");
@@ -132,7 +129,6 @@ public final class MiniPlaceholders {
      * @return {@link TagResolver} with placeholders based on an audience and the global placeholders
      * @since 1.1.0
      */
-    @Contract("_, null -> fail; null, _ -> fail; !null, !null -> !null")
     public static @NotNull TagResolver getAudienceGlobalPlaceholders(final @NotNull Audience audience) {
         requireNonNull(audience, "audience cannot be null");
         final TagResolver.Builder builder = TagResolver.builder();
@@ -166,7 +162,6 @@ public final class MiniPlaceholders {
      * @return the placeholders based on two audiences, placeholders based on the first audience and the global placeholders
      * @since 1.1.0
      */
-    @Contract("_, null -> fail; null, _ -> fail; !null, !null -> !null")
     public static @NotNull TagResolver getRelationalGlobalPlaceholders(final @NotNull Audience audience, final @NotNull Audience otherAudience) {
         requireNonNull(audience, "audience cannot be null");
         requireNonNull(otherAudience, "otherAudience cannot be null");

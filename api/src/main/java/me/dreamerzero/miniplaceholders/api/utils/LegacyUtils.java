@@ -16,9 +16,8 @@ public final class LegacyUtils {
 
     /**
      * Legacy serializer with hex support
-     * 
-     * Use this as the last available alternative,
-     * it is recommended to use MiniMessage instead of this serializer
+     * <p>Use this as the last available alternative,
+     * it is recommended to use MiniMessage instead of this serializer</p>
      */
     public static final LegacyComponentSerializer LEGACY_HEX_SERIALIZER = LegacyComponentSerializer.builder()
         .character('&')

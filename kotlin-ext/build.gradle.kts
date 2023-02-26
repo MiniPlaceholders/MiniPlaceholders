@@ -1,44 +1,31 @@
 plugins {
-    id("me.champeau.jmh") version "0.6.6"
+    kotlin("jvm")
+    id("org.jetbrains.dokka") version "1.7.20"
+    `java-library`
     `maven-publish`
     signing
 }
 
 dependencies {
+    compileOnly(kotlin("stdlib", "1.8.10"))
     compileOnly("net.kyori:adventure-api:4.12.0")
     compileOnly("net.kyori:adventure-text-minimessage:4.12.0")
-    compileOnly("net.kyori:adventure-text-serializer-legacy:4.12.0")
-    compileOnly(projects.miniplaceholdersConnect)
-    testImplementation(platform("org.junit:junit-bom:5.8.1"))
-    testImplementation("org.junit.jupiter:junit-jupiter")
-    testImplementation("net.kyori:adventure-api:4.12.0")
-    testImplementation("net.kyori:adventure-text-minimessage:4.12.0")
-    testImplementation("net.kyori:adventure-text-serializer-plain:4.12.0")
+    compileOnlyApi(projects.miniplaceholdersApi)
 }
 
 tasks {
-    test {
-        useJUnitPlatform()
-        testLogging {
-            events("passed", "failed")
-        }
+    build {
+        dependsOn(dokkaHtmlJar)
     }
-}
-
-jmh {
-    warmupIterations.set(2)
-    iterations.set(2)
-    fork.set(2)
 }
 
 java {
     withSourcesJar()
     withJavadocJar()
-    toolchain.languageVersion.set(JavaLanguageVersion.of(17))
 }
 
-repositories {
-    mavenCentral()
+kotlin {
+    explicitApi()
 }
 /*
 publishing {
@@ -96,21 +83,15 @@ publishing {
     }
 }*/
 
-tasks {
-    compileJava {
-        options.encoding = Charsets.UTF_8.name()
+val dokkaHtmlJar = tasks.register<Jar>("dokkaHtmlJar") {
+    dependsOn(tasks.dokkaHtml)
+    from(tasks.dokkaHtml.flatMap { it.outputDirectory })
+    archiveClassifier.set("javadoc")
+}
 
-        options.release.set(11)
-    }
-    javadoc {
-        options.encoding = Charsets.UTF_8.name()
-        (options as StandardJavadocDocletOptions).links(
-            "https://jd.adventure.kyori.net/api/4.10.0/",
-            "https://jd.adventure.kyori.net/text-minimessage/4.11.0/"
-        )
-    }
-    processResources {
-        filteringCharset = Charsets.UTF_8.name()
+kotlin {
+    jvmToolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
     }
 }
 /*
