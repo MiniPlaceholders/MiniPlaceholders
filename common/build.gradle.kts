@@ -1,5 +1,5 @@
 plugins {
-    id("net.kyori.blossom") version "1.3.1"
+    alias(libs.plugins.blossom)
 }
 
 repositories {
@@ -13,9 +13,9 @@ repositories {
 
 dependencies {
     implementation(projects.miniplaceholdersApi)
-    compileOnly("net.kyori:adventure-api:4.12.0")
-    compileOnly("net.kyori:adventure-text-minimessage:4.12.0")
-    compileOnly("com.mojang:brigadier:1.0.18")
+    compileOnly(libs.adventure.api)
+    compileOnly(libs.adventure.minimesssage)
+    compileOnly(libs.brigadier)
 }
 
 blossom{

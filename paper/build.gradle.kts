@@ -1,14 +1,14 @@
 plugins {
-    id("net.minecrell.plugin-yml.bukkit") version "0.5.3"
-    id("io.papermc.paperweight.userdev") version "1.5.1"
-    id("xyz.jpenilla.run-paper") version "2.0.1"
+    alias(libs.plugins.pluginyml)
+    alias(libs.plugins.userdev)
+    alias(libs.plugins.runpaper)
 }
 
 dependencies {
     compileOnly(projects.miniplaceholdersCommon)
     compileOnly(projects.miniplaceholdersApi)
     compileOnly(projects.miniplaceholdersConnect)
-    paperDevBundle("1.19.3-R0.1-SNAPSHOT")
+    paperweight.paperDevBundle(libs.versions.paper.get())
 }
 
 bukkit {

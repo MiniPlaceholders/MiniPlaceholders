@@ -1,6 +1,10 @@
+plugins {
+    alias(libs.plugins.runvelocity)
+}
+
 dependencies {
-    compileOnly("com.velocitypowered:velocity-api:3.2.0-SNAPSHOT")
-    annotationProcessor("com.velocitypowered:velocity-api:3.2.0-SNAPSHOT")
+    compileOnly(libs.velocity)
+    annotationProcessor(libs.velocity)
     compileOnly(projects.miniplaceholdersCommon)
     compileOnly(projects.miniplaceholdersApi)
     compileOnly(projects.miniplaceholdersConnect)
@@ -19,5 +23,9 @@ tasks {
         manifest {
             attributes("Automatic-Module-Name" to "me.dreamerzero.miniplaceholders.velocity")
         }
+    }
+
+    runVelocity {
+        velocityVersion(libs.versions.velocity.get())
     }
 }

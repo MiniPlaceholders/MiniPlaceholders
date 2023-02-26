@@ -8,8 +8,8 @@ plugins {
 
 dependencies {
     compileOnly(kotlin("stdlib", "1.8.10"))
-    compileOnly("net.kyori:adventure-api:4.12.0")
-    compileOnly("net.kyori:adventure-text-minimessage:4.12.0")
+    compileOnly(libs.adventure.api)
+    compileOnly(libs.adventure.minimesssage)
     compileOnlyApi(projects.miniplaceholdersApi)
 }
 
