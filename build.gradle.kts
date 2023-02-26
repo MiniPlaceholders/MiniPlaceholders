@@ -1,7 +1,7 @@
 plugins {
     java
     id("com.github.johnrengelman.shadow") version "8.0.0"
-    kotlin("jvm") version "1.8.0" apply false
+    kotlin("jvm") version "1.8.10" apply false
 }
 
 allprojects {
