@@ -15,7 +15,7 @@ dependencies {
     implementation(projects.miniplaceholdersApi)
     compileOnly("net.kyori:adventure-api:4.12.0")
     compileOnly("net.kyori:adventure-text-minimessage:4.12.0")
-    compileOnly("com.mojang:brigadier:1.0.18")
+    compileOnly("com.mojang:brigadier:1.0.500")
 }
 
 blossom{
