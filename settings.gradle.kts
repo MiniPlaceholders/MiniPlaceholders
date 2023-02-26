@@ -1,3 +1,5 @@
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
 pluginManagement {
     repositories {
         gradlePluginPortal()
@@ -7,9 +9,15 @@ pluginManagement {
 
 rootProject.name = "miniplaceholders-parent"
 
-val modules = listOf("connect", "api", "common", "paper", "velocity", "krypton")
-
-modules.forEach {
+arrayOf(
+    "connect",
+    "api",
+    "kotlin-ext",
+    "common",
+    "paper",
+    "velocity",
+    "krypton"
+).forEach {
     include("miniplaceholders-$it")
     project(":miniplaceholders-$it").projectDir = file(it)
 }

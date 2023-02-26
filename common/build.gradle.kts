@@ -3,13 +3,18 @@ plugins {
 }
 
 repositories {
-    maven("https://libraries.minecraft.net");
+    maven("https://libraries.minecraft.net") {
+        mavenContent {
+            includeGroup("com.mojang")
+        }
+    }
+    mavenCentral()
 }
 
 dependencies {
-    implementation(project(":miniplaceholders-api"))
-    compileOnly("net.kyori:adventure-api:4.11.0")
-    compileOnly("net.kyori:adventure-text-minimessage:4.11.0")
+    implementation(projects.miniplaceholdersApi)
+    compileOnly("net.kyori:adventure-api:4.12.0")
+    compileOnly("net.kyori:adventure-text-minimessage:4.12.0")
     compileOnly("com.mojang:brigadier:1.0.18")
 }
 
@@ -21,7 +26,6 @@ blossom{
 tasks {
     compileJava {
         options.encoding = Charsets.UTF_8.name()
-
         options.release.set(17)
     }
 

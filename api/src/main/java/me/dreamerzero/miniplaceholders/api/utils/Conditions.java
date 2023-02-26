@@ -14,9 +14,9 @@ public final class Conditions {
      * @since 1.0.0
      */
     public static String nonNullOrEmptyString(String string, Supplier<String> name){
-        if(string == null)
+        if (string == null)
             throw new NullPointerException("the " + name.get() + " cannot be null");
-        if(string.isBlank())
+        if (string.isBlank())
             throw new IllegalStateException("the " + name.get() + "cannot be an empty string");
         return string;
     }
@@ -29,7 +29,7 @@ public final class Conditions {
      * @since 1.0.0
      */
     public static String nonEmptyString(String string, Supplier<String> reason){
-        if(string.isBlank())
+        if (string.isBlank())
             throw new IllegalStateException(reason.get());
         return string;
     }

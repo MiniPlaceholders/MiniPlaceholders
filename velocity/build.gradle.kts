@@ -1,9 +1,9 @@
 dependencies {
-    compileOnly("com.velocitypowered:velocity-api:3.1.2-SNAPSHOT")
-    annotationProcessor("com.velocitypowered:velocity-api:3.1.2-SNAPSHOT")
-    compileOnly(project(":miniplaceholders-common"))
-    compileOnly(project(":miniplaceholders-api"))
-    compileOnly(project(":miniplaceholders-connect"))
+    compileOnly("com.velocitypowered:velocity-api:3.2.0-SNAPSHOT")
+    annotationProcessor("com.velocitypowered:velocity-api:3.2.0-SNAPSHOT")
+    compileOnly(projects.miniplaceholdersCommon)
+    compileOnly(projects.miniplaceholdersApi)
+    compileOnly(projects.miniplaceholdersConnect)
 }
 
 java.toolchain.languageVersion.set(JavaLanguageVersion.of(17))

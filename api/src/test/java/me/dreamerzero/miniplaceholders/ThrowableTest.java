@@ -15,6 +15,8 @@ import net.kyori.adventure.text.minimessage.Context;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.ArgumentQueue;
 
+//yea... it is intended xd
+@SuppressWarnings("DataFlowIssue")
 class ThrowableTest {
     @Test
     @DisplayName("Nullable Exception")
