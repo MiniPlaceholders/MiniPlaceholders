@@ -4,7 +4,7 @@ metadata.format.version = "1.1"
 
 velocity = "3.2.0-SNAPSHOT"
 paper = "1.19.3-R0.1-SNAPSHOT"
-krypton = "0.66.3"
+krypton = "7f7a457cdf"
 
 runtask = "2.0.1"
 pluginyml = "0.5.3"

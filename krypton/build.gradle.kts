@@ -11,7 +11,7 @@ repositories {
 
 dependencies {
     compileOnly(libs.krypton.server)
-    compileOnly(kotlin("stdlib", "1.8.10"))
+    compileOnly(kotlin("stdlib"))
     kapt(libs.krypton.annotation)
     compileOnly(projects.miniplaceholdersCommon)
     compileOnly(projects.miniplaceholdersApi)

@@ -8,17 +8,15 @@ import io.github.miniplaceholders.common.PluginConstants
 import io.github.miniplaceholders.connect.InternalPlatform
 import io.github.miniplaceholders.kotlin.asClosingTag
 import io.github.miniplaceholders.kotlin.expansion
-import me.lucko.spark.api.statistic.StatisticWindow
-import net.kyori.adventure.key.Key
 import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText
 import org.apache.logging.log4j.Logger
 import org.kryptonmc.api.command.BrigadierCommand
-import org.kryptonmc.api.command.Sender
+import org.kryptonmc.api.command.CommandExecutionContext
 import org.kryptonmc.api.event.Listener
 import org.kryptonmc.api.event.server.ServerStartEvent
 import org.kryptonmc.api.plugin.annotation.Plugin
 import org.kryptonmc.krypton.KryptonServer
+import org.kryptonmc.krypton.command.KryptonCommandMeta
 
 @Plugin(
     name = "MiniPlaceholders",
@@ -29,7 +27,7 @@ import org.kryptonmc.krypton.KryptonServer
 class KotlinKryptonPlugin @Inject constructor(
     private val server: KryptonServer,
     private val logger: Logger
-): PlaceholdersPlugin {
+) : PlaceholdersPlugin {
 
     init {
         InternalPlatform.platform(InternalPlatform.KRYPTON)
@@ -63,33 +61,25 @@ class KotlinKryptonPlugin @Inject constructor(
             globalPlaceholder("online") { queue, _ ->
                 if (queue.hasNext()) {
                     val worldName = queue.pop().value()
-                    val players = server.worldManager[Key.key(worldName)]?.players?.size
-                    if (players != null) {
-                        return@globalPlaceholder Component.text(players).asClosingTag()
-                    }
+                    val players = server.players.filter { it.world.name == worldName }
 
+                    return@globalPlaceholder Component.text(players.joinToString(", ")).asClosingTag()
                 }
                 Component.text(server.players.size).asClosingTag()
             }
             globalPlaceholder("version", TagsUtils.staticTag(server.platform.version))
-            globalPlaceholder("max_players", Component.text(server.maxPlayers).asClosingTag())
-            globalPlaceholder("has_whitelist") { _, _ -> Component.text(server.playerManager.whitelistEnabled).asClosingTag() }
-            globalPlaceholder("tps_1") { _, _ -> Component.text(server.spark.tps()!!.poll(StatisticWindow.TicksPerSecond.MINUTES_1)).asClosingTag() }
-            globalPlaceholder("tps_5") { _, _ -> Component.text(server.spark.tps()!!.poll(StatisticWindow.TicksPerSecond.MINUTES_5)).asClosingTag() }
-            globalPlaceholder("tps_15") { _, _ -> Component.text(server.spark.tps()!!.poll(StatisticWindow.TicksPerSecond.MINUTES_15)).asClosingTag() }
-            globalPlaceholder("mspt") { _, _ -> Component.text(server.spark.mspt()!!.poll(StatisticWindow.MillisPerTick.SECONDS_10).mean()).asClosingTag() }
+            globalPlaceholder("max_players", Component.text(server.config.maxPlayers).asClosingTag())
         }.register()
     }
 
     override fun registerPlatformCommand() {
-        val command = PlaceholdersCommand<Sender>(
-            {
-                server.players
-                    .map { it.name }
-                    .map { plainText().serialize(it) }
-            }, server::player
+        val command = PlaceholdersCommand<CommandExecutionContext>(
+            { server.players.map { it.name } },
+            { server.getPlayer(it) },
+            { it.sender }
         )
         val brigadierCMD = BrigadierCommand.of(command.placeholderTestCommand("miniplaceholders"))
-        server.commandManager.register(brigadierCMD)
+        val meta = KryptonCommandMeta.Builder("miniplaceholders").build()
+        server.commandManager.register(brigadierCMD, meta)
     }
 }
