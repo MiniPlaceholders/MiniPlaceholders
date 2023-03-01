@@ -1,24 +1,14 @@
 plugins {
-    alias(libs.plugins.pluginyml)
     alias(libs.plugins.userdev)
     alias(libs.plugins.runpaper)
+    alias(libs.plugins.shadow)
 }
 
 dependencies {
-    compileOnly(projects.miniplaceholdersCommon)
-    compileOnly(projects.miniplaceholdersApi)
-    compileOnly(projects.miniplaceholdersConnect)
     paperweight.paperDevBundle(libs.versions.paper.get())
-}
-
-// TODO: Migrate to Paper Plugin
-bukkit {
-    name = "MiniPlaceholders"
-    main = "io.github.miniplaceholders.paper.PaperPlugin"
-    apiVersion = "1.18"
-    website = "https://github.com/4drian3d/MiniPlaceholders"
-    authors = listOf("4drian3d")
-    version = project.version as String
+    implementation(projects.miniplaceholdersCommon)
+    implementation(projects.miniplaceholdersApi)
+    implementation(projects.miniplaceholdersConnect)
 }
 
 java.toolchain.languageVersion.set(JavaLanguageVersion.of(17))
@@ -38,6 +28,11 @@ tasks {
     jar {
         manifest {
             attributes("Automatic-Module-Name" to "io.github.miniplaceholders.paper")
+        }
+    }
+    processResources {
+        filesMatching("paper-plugin.yml") {
+            expand("version" to project.version)
         }
     }
 }

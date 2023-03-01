@@ -9,13 +9,9 @@ allprojects {
 }
 
 dependencies {
-    shadow(projects.miniplaceholdersConnect)
-    shadow(projects.miniplaceholdersApi)
-    shadow(projects.miniplaceholdersKotlinExt)
-    shadow(projects.miniplaceholdersCommon)
-    shadow(projects.miniplaceholdersVelocity)
-    shadow(project(":miniplaceholders-paper", "reobf"))
-    shadow(projects.miniplaceholdersKrypton)
+    implementation(projects.miniplaceholdersVelocity)
+    implementation(project(":miniplaceholders-paper", "reobf"))
+    implementation(projects.miniplaceholdersKrypton)
 }
 
 subprojects {
@@ -30,7 +26,6 @@ tasks {
     shadowJar {
         archiveFileName.set("MiniPlaceholders-${project.version}.jar")
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-        configurations = listOf(project.configurations.shadow.get())
     }
     build {
         dependsOn(shadowJar)

@@ -1,6 +1,7 @@
 package io.github.miniplaceholders.common;
 
 import java.util.Collection;
+import java.util.function.BiPredicate;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -27,19 +28,38 @@ public class PlaceholdersCommand<A> {
     private final @NotNull Supplier<@NotNull Collection<@NotNull String>> playersSuggestions;
     private final @NotNull Function<@NotNull String, @Nullable Audience> toAudience;
     private Function<A, Audience> fromAToAudience = a -> Audience.empty();
+    private BiPredicate<A, String> hasPermission = null;
     private final Expansion commandExpansion = Expansion.builder("placeholders")
         .globalPlaceholder("count", (queue, ctx) -> Tag.selfClosingInserting(Component.text(MiniPlaceholders.getExpansionCount())))
         .globalPlaceholder("version", (queue, ctx) -> Tag.selfClosingInserting(Component.text(PluginConstants.VERSION)))
         .build();
 
-    public PlaceholdersCommand(@NotNull Supplier<Collection<String>> playersSuggestions, @NotNull Function<@NotNull String, @Nullable Audience> toAudience){
+    public PlaceholdersCommand(
+            @NotNull Supplier<Collection<String>> playersSuggestions,
+            @NotNull Function<@NotNull String,
+            @Nullable Audience> toAudience
+    ) {
         this.playersSuggestions = playersSuggestions;
         this.toAudience = toAudience;
     }
 
-    public PlaceholdersCommand(Supplier<Collection<String>> playersSuggestions, Function<@NotNull String, @Nullable Audience> toAudience, Function<A, Audience> fromAToAudience){
+    public PlaceholdersCommand(
+            Supplier<Collection<String>> playersSuggestions,
+            Function<@NotNull String, @Nullable Audience> toAudience,
+            Function<A, Audience> fromAToAudience
+    ) {
         this(playersSuggestions, toAudience);
         this.fromAToAudience = fromAToAudience;
+    }
+
+    public PlaceholdersCommand(
+            Supplier<Collection<String>> playersSuggestions,
+            Function<@NotNull String, @Nullable Audience> toAudience,
+            Function<A, Audience> fromAToAudience,
+            BiPredicate<A, String> hasPermission
+    ) {
+        this(playersSuggestions, toAudience, fromAToAudience);
+        this.hasPermission = hasPermission;
     }
 
     private static final Component HEADER = miniMessage().deserialize("<gradient:aqua:white:aqua>---------- <gradient:#4d8bff:#a4ff96>MiniPlaceholders</gradient> -----------</gradient>");
@@ -50,7 +70,7 @@ public class PlaceholdersCommand<A> {
             .requires(a -> getAudience(a).pointers().supports(PermissionChecker.POINTER))
             .executes(cmd -> {
                 Audience source = getAudience(cmd.getSource());
-                if (source.pointers().get(PermissionChecker.POINTER).orElseThrow().test("miniplaceholders.command")) {
+                if (hasPermission(cmd.getSource(), "miniplaceholders.command")) {
                     source.sendMessage(
                         Component.text()
                             .append(HEADER).append(Component.newline())
@@ -70,10 +90,7 @@ public class PlaceholdersCommand<A> {
                 return 1;
             })
             .then(LiteralArgumentBuilder.<A>literal("help")
-                .requires(cmd -> getAudience(cmd)
-                    .get(PermissionChecker.POINTER)
-                    .map(checker -> checker.test("miniplaceholders.command.help"))
-                    .orElse(false))
+                .requires(src -> hasPermission(src, "miniplaceholders.command.help"))
                 .executes(cmd -> {
                     getAudience(cmd.getSource()).sendMessage(
                         Component.text()
@@ -88,14 +105,11 @@ public class PlaceholdersCommand<A> {
                 })
             )
             .then(LiteralArgumentBuilder.<A>literal("parse")
-                .requires(cmd -> getAudience(cmd)
-                    .get(PermissionChecker.POINTER)
-                    .map(checker -> checker.test("miniplaceholders.command.parse"))
-                    .orElse(false))
+                .requires(cmd -> hasPermission(cmd, "miniplaceholders.command.parse"))
                 .then(LiteralArgumentBuilder.<A>literal("me")
-                    .then(RequiredArgumentBuilder.<A, String>argument("selfStringToParse", StringArgumentType.string())
+                    .then(RequiredArgumentBuilder.<A, String>argument("string", StringArgumentType.string())
                         .executes(cmd -> {
-                            String stringToParse = cmd.getArgument("selfStringToParse", String.class);
+                            String stringToParse = cmd.getArgument("string", String.class);
                             Component parsed = this.parseGlobal(stringToParse, getAudience(cmd.getSource()));
                             getAudience(cmd.getSource()).sendMessage(parsed);
                             return 1;
@@ -108,7 +122,7 @@ public class PlaceholdersCommand<A> {
                             playersSuggestions.get().forEach(builder::suggest);
                             return builder.buildFuture();
                         })
-                        .then(RequiredArgumentBuilder.<A, String>argument("playerStringToParse", StringArgumentType.string())
+                        .then(RequiredArgumentBuilder.<A, String>argument("string", StringArgumentType.string())
                             .executes(cmd -> {
                                 Audience objetive = toAudience.apply(cmd.getArgument("source", String.class));
                                 if(objetive == null){
@@ -147,5 +161,15 @@ public class PlaceholdersCommand<A> {
         }
         Audience audience = fromAToAudience.apply(possibleAudience);
         return audience != null ? audience : Audience.empty();
+    }
+
+    private boolean hasPermission(A source, String permission) {
+        if (hasPermission != null) {
+            return hasPermission.test(source, permission);
+        }
+        return getAudience(source)
+                .get(PermissionChecker.POINTER)
+                .map(checker -> checker.test(permission))
+                .orElse(false);
     }
 }

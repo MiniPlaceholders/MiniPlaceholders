@@ -76,15 +76,16 @@ public final class PaperPlugin extends JavaPlugin implements PlaceholdersPlugin 
     }
 
     @Override
-    @SuppressWarnings({"sonarlint(java:s1874)" /*TODO: replace with Java(536871800) */ })
+    @SuppressWarnings({"sonarlint(java:s1874)"})
     public void registerPlatformCommand() {
         MinecraftServer.getServer()
-            .vanillaCommandDispatcher
+            .getCommands()
             .getDispatcher()
             .register(new PlaceholdersCommand<>(
                     () -> this.getServer().getOnlinePlayers().stream().map(Player::getName).toList(),
                     (String st) -> this.getServer().getPlayer(st),
-                    CommandSourceStack::getBukkitSender
+                    CommandSourceStack::getBukkitSender,
+                    (source, permission) -> source.getBukkitSender().hasPermission(permission)
                 ).placeholderTestBuilder("miniplaceholders")
             );
     }

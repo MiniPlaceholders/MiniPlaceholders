@@ -1,13 +1,14 @@
 plugins {
     alias(libs.plugins.runvelocity)
+    alias(libs.plugins.shadow)
 }
 
 dependencies {
     compileOnly(libs.velocity)
     annotationProcessor(libs.velocity)
-    compileOnly(projects.miniplaceholdersCommon)
-    compileOnly(projects.miniplaceholdersApi)
-    compileOnly(projects.miniplaceholdersConnect)
+    implementation(projects.miniplaceholdersCommon)
+    implementation(projects.miniplaceholdersApi)
+    implementation(projects.miniplaceholdersConnect)
 }
 
 java.toolchain.languageVersion.set(JavaLanguageVersion.of(17))

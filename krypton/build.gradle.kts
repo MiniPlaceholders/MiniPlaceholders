@@ -1,6 +1,7 @@
 plugins {
     kotlin("jvm")
     kotlin("kapt")
+    alias(libs.plugins.shadow)
 }
 
 repositories {
@@ -13,10 +14,10 @@ dependencies {
     compileOnly(libs.krypton.server)
     compileOnly(kotlin("stdlib"))
     kapt(libs.krypton.annotation)
-    compileOnly(projects.miniplaceholdersCommon)
-    compileOnly(projects.miniplaceholdersApi)
-    compileOnly(projects.miniplaceholdersConnect)
-    compileOnly(projects.miniplaceholdersKotlinExt)
+    implementation(projects.miniplaceholdersCommon)
+    implementation(projects.miniplaceholdersApi)
+    implementation(projects.miniplaceholdersConnect)
+    implementation(projects.miniplaceholdersKotlinExt)
 }
 
 tasks {
