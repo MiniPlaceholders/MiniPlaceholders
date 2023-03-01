@@ -18,6 +18,7 @@ Check our usage wiki [here](https://github.com/MiniPlaceholders/MiniPlaceholders
 
 ## API
 
+### Java
 ```java
 
 class Main {
@@ -39,6 +40,26 @@ class Main {
 }
 
 ```
+
+### Kotlin
+```kotlin
+fun register() {
+  val expansion = expansion("my-expansion") {
+      audiencePlaceholder("name") { aud, _, _ ->
+          aud.getName().asClosingTag()
+      }
+      globalPlaceholder("tps") { _, _ ->
+          Component.text(Bukkit.getTps()[0]).asInsertingTag()
+      }
+  }
+    
+    expansion.register()
+    
+    val player: Player
+    player.sendMessage(miniMessage().deserialize("Player Name: <my-expansion_name>", MiniPlaceholders.getAudiencePlaceholders(player)))
+}
+```
+
 
 Check the available javadocs [here](https://javadoc.jitpack.io/com/github/4drian3d/MiniPlaceholders/latest/javadoc/index.html)
 
