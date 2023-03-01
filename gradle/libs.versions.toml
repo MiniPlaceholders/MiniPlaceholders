@@ -10,9 +10,14 @@ runtask = "2.0.1"
 pluginyml = "0.5.3"
 userdev = "1.5.1"
 blossom = "1.3.1"
+indra = "3.0.1"
+shadow = "8.0.0"
+jmh = "0.7.0"
+dokka = "1.7.20"
 
 adventure = "4.12.0"
 brigadier = "1.0.18"
+kotlin="1.8.10"
 
 
 [libraries]
@@ -28,6 +33,12 @@ brigadier = { group = "com.mojang", name = "brigadier", version.ref = "brigadier
 
 krypton-annotation = { group = "org.kryptonmc", name = "annotation-processor", version.ref = "krypton" }
 
+plugin-shadow = { group = "gradle.plugin.com.github.johnrengelman", name = "shadow", version.ref = "shadow" }
+plugin-kotlin =  { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+plugin-indra-common = { module = "net.kyori:indra-common", version.ref = "indra" }
+plugin-indra-spotless = { module = "net.kyori:indra-licenser-spotless", version.ref = "indra" }
+plugin-dokka = "org.jetbrains.dokka:dokka-gradle-plugin:1.7.20"
+
 [plugins]
 
 pluginyml = { id = "net.minecrell.plugin-yml.bukkit", version.ref = "pluginyml" }
@@ -35,3 +46,6 @@ userdev = { id = "io.papermc.paperweight.userdev", version.ref = "userdev" }
 runpaper = { id = "xyz.jpenilla.run-paper", version.ref = "runtask" }
 runvelocity = { id = "xyz.jpenilla.run-velocity", version.ref = "runtask" }
 blossom = { id = "net.kyori.blossom", version.ref = "blossom" }
+shadow = { id = "com.github.johnrengelman.shadow", version.ref = "shadow" }
+jmh = { id = "me.champeau.jmh", version.ref = "jmh" }
+dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }

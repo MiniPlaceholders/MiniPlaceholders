@@ -1,6 +1,6 @@
 plugins {
     java
-    id("com.github.johnrengelman.shadow") version "8.0.0"
+    alias(libs.plugins.shadow)
     kotlin("jvm") version "1.8.10" apply false
 }
 

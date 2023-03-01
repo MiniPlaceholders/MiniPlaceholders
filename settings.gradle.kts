@@ -1,13 +1,15 @@
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
+rootProject.name = "miniplaceholders-parent"
+
 pluginManagement {
+    @Suppress("UnstableApiUsage")
+    includeBuild("build-logic")
     repositories {
         gradlePluginPortal()
-        maven("https://papermc.io/repo/repository/maven-public/")
+        mavenCentral()
     }
 }
-
-rootProject.name = "miniplaceholders-parent"
 
 arrayOf(
     "connect",
@@ -21,4 +23,3 @@ arrayOf(
     include("miniplaceholders-$it")
     project(":miniplaceholders-$it").projectDir = file(it)
 }
-
