@@ -61,7 +61,7 @@ fun register() {
 ```
 
 
-Check the available javadocs [here](https://javadoc.jitpack.io/com/github/4drian3d/MiniPlaceholders/latest/javadoc/index.html)
+Check the available javadocs [here](https://javadoc.io/doc/io.github.miniplaceholders/miniplaceholders-api)
 
 Or check the developer wiki [here](https://github.com/MiniPlaceholders/MiniPlaceholders/wiki/Developer-Getting-Started)
 
