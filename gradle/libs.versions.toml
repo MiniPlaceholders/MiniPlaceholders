@@ -31,7 +31,7 @@ adventure-minimesssage = { group = "net.kyori", name = "adventure-text-minimessa
 
 brigadier = { group = "com.mojang", name = "brigadier", version.ref = "brigadier" }
 
-krypton-annotation = { group = "org.kryptonmc", name = "annotation-processor", version.ref = "krypton" }
+krypton-annotation = { group = "org.kryptonmc", name = "krypton-annotation-processor", version.ref = "krypton" }
 
 plugin-shadow = { group = "gradle.plugin.com.github.johnrengelman", name = "shadow", version.ref = "shadow" }
 plugin-kotlin =  { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
