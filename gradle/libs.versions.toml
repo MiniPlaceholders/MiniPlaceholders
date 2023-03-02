@@ -11,7 +11,7 @@ pluginyml = "0.5.3"
 userdev = "1.5.2"
 blossom = "1.3.1"
 indra = "3.0.1"
-shadow = "8.0.0"
+shadow = "8.1.0"
 jmh = "0.7.0"
 dokka = "1.7.20"
 
@@ -33,7 +33,7 @@ brigadier = { group = "com.mojang", name = "brigadier", version.ref = "brigadier
 
 krypton-annotation = { group = "org.kryptonmc", name = "krypton-annotation-processor", version.ref = "krypton" }
 
-plugin-shadow = { group = "gradle.plugin.com.github.johnrengelman", name = "shadow", version.ref = "shadow" }
+plugin-shadow = { group = "com.github.johnrengelman", name = "shadow", version.ref = "shadow" }
 plugin-kotlin =  { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 plugin-indra-common = { module = "net.kyori:indra-common", version.ref = "indra" }
 plugin-indra-spotless = { module = "net.kyori:indra-licenser-spotless", version.ref = "indra" }
