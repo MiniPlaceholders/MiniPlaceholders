@@ -3,5 +3,5 @@
   "extends": [
     "config:base"
   ],
-  "ignoreDeps": ["krypton", "krypton-api", "krypton-annotation-processor"]
+  "ignoreDeps": ["krypton", "krypton-api", "krypton-annotation-processor", "krypton-server"]
 }
