@@ -1,37 +1,37 @@
 package io.github.miniplaceholders.paper;
 
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
-
-import org.bukkit.World;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
-
-import io.papermc.paper.datapack.Datapack;
 import io.github.miniplaceholders.api.Expansion;
 import io.github.miniplaceholders.api.utils.TagsUtils;
 import io.github.miniplaceholders.common.PlaceholdersCommand;
 import io.github.miniplaceholders.common.PlaceholdersPlugin;
 import io.github.miniplaceholders.connect.InternalPlatform;
+import io.papermc.paper.datapack.Datapack;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.MinecraftServer;
+import org.bukkit.World;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
+
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 
 @SuppressWarnings("unused")
 public final class PaperPlugin extends JavaPlugin implements PlaceholdersPlugin {
-    private final DecimalFormat tpsFormat = new DecimalFormat("###.##");
-    private final DecimalFormat msptFormat = new DecimalFormat("###.###");
+    private static final DecimalFormat TPS_FORMAT = new DecimalFormat("###.##");
+    private static final DecimalFormat MSPT_FORMAT = new DecimalFormat("###.###");
+
+    static {
+        InternalPlatform.platform(InternalPlatform.PAPER);
+        TPS_FORMAT.setRoundingMode(RoundingMode.HALF_UP);
+        MSPT_FORMAT.setRoundingMode(RoundingMode.HALF_UP);
+    }
 
     @Override
     public void onEnable(){
         this.getSLF4JLogger().info("Starting MiniPlaceholders Paper");
-        InternalPlatform.platform(InternalPlatform.PAPER);
-
-        tpsFormat.setRoundingMode(RoundingMode.HALF_UP);
-        msptFormat.setRoundingMode(RoundingMode.HALF_UP);
-        
         this.loadDefaultExpansions();
         this.registerPlatformCommand();
     }
@@ -44,28 +44,28 @@ public final class PaperPlugin extends JavaPlugin implements PlaceholdersPlugin 
             .globalPlaceholder("version", TagsUtils.staticTag(this.getServer().getVersion()))
             .globalPlaceholder("max_players", (queue, ctx) -> TagsUtils.staticTag(Component.text(this.getServer().getMaxPlayers())))
             .globalPlaceholder("unique_joins", (queue, ctx) -> TagsUtils.staticTag(Component.text(this.getServer().getOfflinePlayers().length)))
-            .globalPlaceholder("tps_1", (queue, ctx) -> TagsUtils.staticTag(tpsFormat.format(this.getServer().getTPS()[0])))
-            .globalPlaceholder("tps_5", (queue, ctx) -> TagsUtils.staticTag(tpsFormat.format(this.getServer().getTPS()[1])))
-            .globalPlaceholder("tps_15", (queue, ctx) -> TagsUtils.staticTag(tpsFormat.format(this.getServer().getTPS()[2])))
+            .globalPlaceholder("tps_1", (queue, ctx) -> TagsUtils.staticTag(TPS_FORMAT.format(this.getServer().getTPS()[0])))
+            .globalPlaceholder("tps_5", (queue, ctx) -> TagsUtils.staticTag(TPS_FORMAT.format(this.getServer().getTPS()[1])))
+            .globalPlaceholder("tps_15", (queue, ctx) -> TagsUtils.staticTag(TPS_FORMAT.format(this.getServer().getTPS()[2])))
             .globalPlaceholder("has_whitelist", (queue, ctx) -> TagsUtils.staticTag(Component.text(this.getServer().hasWhitelist())))
             .globalPlaceholder("total_chunks", (queue, ctx) -> {
                 int chunkCount = 0;
-                for(World world : this.getServer().getWorlds()){
+                for (World world : this.getServer().getWorlds()){
                     chunkCount += world.getLoadedChunks().length;
                 }
                 return TagsUtils.staticTag(Component.text(chunkCount));
             })
             .globalPlaceholder("total_entities", (queue, ctx) -> {
                 int entityCount = 0;
-                for(World world : this.getServer().getWorlds()){
+                for (World world : this.getServer().getWorlds()){
                     entityCount += world.getEntityCount();
                 }
                 return TagsUtils.staticTag(Component.text(entityCount));
             })
-            .globalPlaceholder("mspt", (queue, ctx) -> TagsUtils.staticTag(msptFormat.format(this.getServer().getAverageTickTime())))
+            .globalPlaceholder("mspt", (queue, ctx) -> TagsUtils.staticTag(MSPT_FORMAT.format(this.getServer().getAverageTickTime())))
             .globalPlaceholder("datapack_list", (queue, ctx) -> {
-                TextComponent.Builder builder = Component.text();
-                for(Datapack datapack : this.getServer().getDatapackManager().getEnabledPacks()){
+                final TextComponent.Builder builder = Component.text();
+                for (Datapack datapack : this.getServer().getDatapackManager().getEnabledPacks()){
                     builder.append(Component.text("[").append(Component.text(datapack.getName()).append(Component.text("] "))));
                 }
                 return Tag.selfClosingInserting(builder.build());
@@ -81,12 +81,16 @@ public final class PaperPlugin extends JavaPlugin implements PlaceholdersPlugin 
         MinecraftServer.getServer()
             .getCommands()
             .getDispatcher()
-            .register(new PlaceholdersCommand<>(
-                    () -> this.getServer().getOnlinePlayers().stream().map(Player::getName).toList(),
-                    (String st) -> this.getServer().getPlayer(st),
-                    CommandSourceStack::getBukkitSender,
-                    (source, permission) -> source.getBukkitSender().hasPermission(permission)
-                ).placeholderTestBuilder("miniplaceholders")
+            .register(PlaceholdersCommand.<CommandSourceStack>builder()
+                    .playerSuggestions(() -> getServer().getOnlinePlayers()
+                            .stream()
+                            .map(Player::getName)
+                            .toList())
+                    .toAudience(st -> getServer().getPlayer(st))
+                    .hasPermissionCheck((source, permission) -> source.getBukkitSender().hasPermission(permission))
+                    .fromSourceToAudience(CommandSourceStack::getBukkitSender)
+                    .build()
+                    .asBuilder("miniplaceholders")
             );
     }
 }
