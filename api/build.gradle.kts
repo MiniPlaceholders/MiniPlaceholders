@@ -13,7 +13,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
     testImplementation(libs.adventure.api)
     testImplementation(libs.adventure.minimesssage)
-    testImplementation("net.kyori:adventure-text-serializer-plain:4.12.0")
+    testImplementation("net.kyori:adventure-text-serializer-plain:4.13.0")
 }
 
 tasks {
