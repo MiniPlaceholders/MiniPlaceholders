@@ -23,7 +23,7 @@ tasks {
         options.release.set(17)
     }
     runServer {
-        minecraftVersion("1.19.3")
+        minecraftVersion("1.19.4")
     }
     jar {
         manifest {
