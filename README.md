@@ -2,7 +2,7 @@
 MiniMessage Component-based Placeholders for PaperMC and Velocity platforms
 
 ## Compatibility
-- Paper 1.19.3+
+- Paper 1.19.4+
 - Velocity 3.1.2+
 - Krypton
 
@@ -25,12 +25,12 @@ class Main {
     public static void registerExpansion() {
         Expansion expansion = Expansion.builder("my-expansion")
                 .filter(Player.class)
-                .audiencePlaceholder("name", (aud, ctx, queue) -> {
-                    return Tag.selfClosingInserting(aud.getName());
-                })
-                .globalPlaceholder("tps", (ctx, queue) -> {
-                    return Tag.inserting(Component.text(Bukkit.getTps()[0]));
-                }).build;
+                .audiencePlaceholder("name", (aud, ctx, queue) ->
+                    Tag.selfClosingInserting(aud.getName())
+                )
+                .globalPlaceholder("tps", (ctx, queue) ->
+                    Tag.selfClosingInserting(Component.text(Bukkit.getTps()[0]))
+                ).build;
         
         expansion.register();
         
