@@ -1,7 +1,7 @@
 plugins {
     java
     alias(libs.plugins.shadow)
-    kotlin("jvm") version "1.8.10" apply false
+    kotlin("jvm") version "1.8.20" apply false
 }
 
 allprojects {

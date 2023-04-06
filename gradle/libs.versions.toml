@@ -17,7 +17,7 @@ dokka = "1.8.10"
 
 adventure = "4.13.0"
 brigadier = "1.0.500"
-kotlin="1.8.10"
+kotlin="1.8.20"
 
 
 [libraries]
