@@ -7,7 +7,7 @@ plugins {
 dependencies {
     compileOnly(libs.adventure.api)
     compileOnly(libs.adventure.minimesssage)
-    compileOnly("net.kyori:adventure-text-serializer-legacy:4.13.0")
+    compileOnly("net.kyori:adventure-text-serializer-legacy:4.13.1")
     compileOnly(projects.miniplaceholdersConnect)
     testImplementation(platform("org.junit:junit-bom:5.9.2"))
     testImplementation("org.junit.jupiter:junit-jupiter")
