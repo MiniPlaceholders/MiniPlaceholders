@@ -3,3 +3,4 @@ version: '${version}'
 main: io.github.miniplaceholders.paper.PaperPlugin
 description: MiniMessage Component-based Placeholders for PaperMC, Krypton and Velocity platforms
 api-version: '1.19'
+folia-supported: true
