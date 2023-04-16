@@ -102,8 +102,24 @@ final class ExpansionImpl implements Expansion {
     }
 
     @Override
-    public void register(){
+    public void register() {
+        if (this.registered()) {
+            throw new IllegalStateException("Expansion" + this.name + "is already registered");
+        }
         MiniPlaceholders.expansions.add(this);
+    }
+
+    @Override
+    public void unregister() {
+        if (!this.registered()) {
+            throw new IllegalStateException("Expansion " + this.name + " is not registered");
+        }
+        MiniPlaceholders.expansions.remove(this);
+    }
+
+    @Override
+    public boolean registered() {
+        return MiniPlaceholders.expansions.contains(this);
     }
 
     static final class Builder implements Expansion.Builder {

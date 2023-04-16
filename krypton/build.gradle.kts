@@ -20,8 +20,8 @@ dependencies {
     implementation(projects.miniplaceholdersKotlinExt)
 }
 
-tasks {
-    compileKotlin {
-        kotlinOptions.jvmTarget = "17"
+kotlin {
+    jvmToolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
     }
 }
