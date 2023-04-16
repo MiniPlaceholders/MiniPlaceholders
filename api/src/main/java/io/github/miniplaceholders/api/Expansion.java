@@ -74,8 +74,25 @@ public interface Expansion {
     /**
      * Register this expansion
      * @since 1.0.0
+     * @throws IllegalStateException if the expansion you are trying to register is already registered
+     * @see Expansion#registered()
      */
     void register();
+
+    /**
+     * Unregisters this expansion
+     * @since 2.1.0
+     * @throws IllegalStateException if the expansion you are trying to unregister is not registered
+     * @see Expansion#registered()
+     */
+    void unregister();
+
+    /**
+     * Get the registration status of this expansion
+     * @return true if the expansion is registered, otherwise false
+     * @since 2.1.0
+     */
+    boolean registered();
 
     /**
      * Creates a new Expansion Builder
@@ -125,7 +142,7 @@ public interface Expansion {
         @NotNull Builder audiencePlaceholder(final @NotNull String key, final @NotNull AudiencePlaceholder audiencePlaceholder);
 
         /**
-         * Adds an Relational Placeholder based on two audiences
+         * Adds a Relational Placeholder based on two audiences
          *
          * <p>This type of placeholder allows you to create
          * components based on a 2-audiences relationship,
@@ -157,7 +174,7 @@ public interface Expansion {
         /**
          * Adds a global placeholder
          * 
-         * <p>This placeholder is not cached and is inmutable</p>
+         * <p>This placeholder is not cached and is immutable</p>
          * @param key the placeholder key, cannot be an empty or black string
          * @param tag the tag of this placeholder
          * @return the {@link Builder} itself

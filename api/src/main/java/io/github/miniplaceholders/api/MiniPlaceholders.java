@@ -1,5 +1,6 @@
 package io.github.miniplaceholders.api;
 
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -9,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import io.github.miniplaceholders.connect.InternalPlatform;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import org.jetbrains.annotations.Nullable;
 
 import static io.github.miniplaceholders.api.utils.Resolvers.applyIfNotEmpty;
 import static java.util.Objects.requireNonNull;
@@ -26,7 +28,7 @@ import static java.util.Objects.requireNonNull;
  * @since 1.0.0
  */
 public final class MiniPlaceholders {
-    private MiniPlaceholders(){}
+    private MiniPlaceholders() {}
     static final Set<Expansion> expansions = ConcurrentHashMap.newKeySet();
 
     /**
@@ -48,7 +50,7 @@ public final class MiniPlaceholders {
      * <pre>TagResolver resolver = MiniPlaceholders.getGlobalPlaceholders();
      * Component messageParsed = MiniMessage.miniMessage().deserialize({@link String}, resolver);</pre>
      *
-     * @return global placeholders independient of any audience
+     * @return global placeholders independent of any audience
      * @see TagResolver
      * @since 1.0.0
      */
@@ -181,5 +183,28 @@ public final class MiniPlaceholders {
      */
     public static int getExpansionCount(){
         return expansions.size();
+    }
+
+    /**
+     * Get a specific expansion by name
+     * <p>The name of each expansion is set when the expansion is created</p>
+     * <pre>
+     *     Expansion expansion = Expansion.builder("example").build();
+     *     expansion.register();
+     *
+     *     assertThat(MiniPlaceholders.getExpansionByName("example")).isNotNull();
+     * </pre>
+     * @param name the name of the required expansion
+     * @return the required expansion, if not present, will return null
+     * @see Expansion#builder(String)
+     * @since 2.1.0
+     */
+    public @Nullable Expansion getExpansionByName(final @NotNull String name) {
+        for (final Expansion expansion : expansions) {
+            if (Objects.equals(expansion.name(), name)) {
+                return expansion;
+            }
+        }
+        return null;
     }
 }
