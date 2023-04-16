@@ -1,17 +1,16 @@
 package io.github.miniplaceholders.api;
 
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import io.github.miniplaceholders.api.enums.Platform;
-import io.github.miniplaceholders.api.utils.Resolvers;
 import org.jetbrains.annotations.NotNull;
 
 import io.github.miniplaceholders.connect.InternalPlatform;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 
+import static io.github.miniplaceholders.api.utils.Resolvers.applyIfNotEmpty;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -28,7 +27,7 @@ import static java.util.Objects.requireNonNull;
  */
 public final class MiniPlaceholders {
     private MiniPlaceholders(){}
-    static final Set<Expansion> expansions = Collections.synchronizedSet(new HashSet<>());
+    static final Set<Expansion> expansions = ConcurrentHashMap.newKeySet();
 
     /**
      * Get the platform
@@ -36,11 +35,11 @@ public final class MiniPlaceholders {
      * @since 1.0.0
      */
     public static @NotNull Platform getPlatform() {
-        switch (InternalPlatform.platform()) {
-            case PAPER: return Platform.PAPER;
-            case VELOCITY: return Platform.VELOCITY;
-            default: return Platform.KRYPTON;
-        }
+        return switch (InternalPlatform.platform()) {
+            case PAPER -> Platform.PAPER;
+            case VELOCITY -> Platform.VELOCITY;
+            case KRYPTON -> Platform.KRYPTON;
+        };
     }
 
     /**
@@ -79,8 +78,7 @@ public final class MiniPlaceholders {
         final TagResolver.Builder resolvers = TagResolver.builder();
         for (Expansion expansion : expansions) {
             final TagResolver resolver = expansion.audiencePlaceholders(audience);
-            if (resolver != TagResolver.empty())
-                resolvers.resolver(resolver);
+            applyIfNotEmpty(resolver, resolvers);
         }
         return resolvers.build();
     }
@@ -102,7 +100,7 @@ public final class MiniPlaceholders {
 
         final TagResolver.Builder builder = TagResolver.builder();
         for (final Expansion expansion : expansions) {
-            Resolvers.applyIfNotEmpty(
+            applyIfNotEmpty(
                 expansion.relationalPlaceholders(audience, otherAudience),
                 builder
             );
@@ -134,8 +132,8 @@ public final class MiniPlaceholders {
         final TagResolver.Builder builder = TagResolver.builder();
 
         for (final Expansion expansion : expansions) {
-            Resolvers.applyIfNotEmpty(expansion.audiencePlaceholders(audience), builder);
-            Resolvers.applyIfNotEmpty(expansion.globalPlaceholders(), builder);
+            applyIfNotEmpty(expansion.audiencePlaceholders(audience), builder);
+            applyIfNotEmpty(expansion.globalPlaceholders(), builder);
         }
 
         return builder.build();
@@ -168,9 +166,9 @@ public final class MiniPlaceholders {
 
         final TagResolver.Builder builder = TagResolver.builder();
         for (final Expansion expansion : expansions) {
-            Resolvers.applyIfNotEmpty(expansion.audiencePlaceholders(audience), builder);
-            Resolvers.applyIfNotEmpty(expansion.relationalPlaceholders(audience, otherAudience), builder);
-            Resolvers.applyIfNotEmpty(expansion.globalPlaceholders(), builder);
+            applyIfNotEmpty(expansion.audiencePlaceholders(audience), builder);
+            applyIfNotEmpty(expansion.relationalPlaceholders(audience, otherAudience), builder);
+            applyIfNotEmpty(expansion.globalPlaceholders(), builder);
         }
 
         return builder.build();
