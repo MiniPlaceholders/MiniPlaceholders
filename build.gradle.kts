@@ -12,11 +12,11 @@ dependencies {
     implementation(projects.miniplaceholdersVelocity)
     implementation(project(":miniplaceholders-paper", "reobf"))
     implementation(projects.miniplaceholdersKrypton)
+    //implementation(projects.miniplaceholdersFabric)
 }
 
 subprojects {
     repositories {
-        mavenCentral()
         maven("https://papermc.io/repo/repository/maven-public/")
         maven("https://repo.maven.apache.org/maven2/")
     }

@@ -36,10 +36,6 @@ java {
     toolchain.languageVersion.set(JavaLanguageVersion.of(17))
 }
 
-repositories {
-    mavenCentral()
-}
-
 tasks {
     compileJava {
         options.encoding = Charsets.UTF_8.name()
