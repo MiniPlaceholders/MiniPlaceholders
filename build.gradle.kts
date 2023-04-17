@@ -12,7 +12,6 @@ dependencies {
     implementation(projects.miniplaceholdersVelocity)
     implementation(project(":miniplaceholders-paper", "reobf"))
     implementation(projects.miniplaceholdersKrypton)
-    //implementation(projects.miniplaceholdersFabric)
 }
 
 subprojects {

@@ -3,16 +3,20 @@ plugins {
     alias(libs.plugins.shadow)
 }
 
+repositories {
+    maven("https://oss.sonatype.org/content/repositories/snapshots")
+}
+
 val shade: Configuration by configurations.creating
 
 dependencies {
     minecraft(libs.minecraft)
-    mappings("net.fabricmc:yarn:1.19.4+build.2:v2")
+    mappings(loom.officialMojangMappings())
     modImplementation(libs.fabric.loader)
     modImplementation(libs.fabric.api)
-    modImplementation(libs.adventure.platform.fabric)
-    modCompileOnly("me.lucko:fabric-permissions-api:0.2-SNAPSHOT")
-
+    include(modImplementation(libs.adventure.platform.fabric)!!)
+    include(modImplementation(libs.luckopermissionsapi)!!)
+    include(libs.luckopermissionsapi)
     shadeModule(projects.miniplaceholdersCommon)
     shadeModule(projects.miniplaceholdersApi)
     shadeModule(projects.miniplaceholdersConnect)
@@ -36,7 +40,7 @@ tasks {
     }
     remapJar {
         inputFile.set(shadowJar.get().archiveFile)
-        archiveFileName.set("${project.name}-mc${libs.versions.minecraft.get()}-v${project.version}.jar")
+        archiveFileName.set("MiniPlaceholders-Fabric-mc${libs.versions.minecraft.get()}-v${project.version}.jar")
     }
     shadowJar {
         configurations = listOf(shade)
