@@ -8,7 +8,6 @@ repositories {
             includeGroup("com.mojang")
         }
     }
-    mavenCentral()
 }
 
 dependencies {

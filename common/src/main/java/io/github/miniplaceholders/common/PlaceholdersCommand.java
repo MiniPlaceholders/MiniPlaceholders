@@ -165,7 +165,7 @@ public final class PlaceholdersCommand<A> {
     }
 
     private Audience getAudience(final A possibleAudience) {
-        if (possibleAudience instanceof Audience audience){
+        if (possibleAudience instanceof Audience audience) {
             return audience;
         }
         final Audience audience = sourceToAudience.apply(possibleAudience);

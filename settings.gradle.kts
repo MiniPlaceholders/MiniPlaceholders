@@ -3,11 +3,12 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 rootProject.name = "miniplaceholders-parent"
 
 pluginManagement {
-    @Suppress("UnstableApiUsage")
     includeBuild("build-logic")
     repositories {
         gradlePluginPortal()
         mavenCentral()
+        maven("https://maven.fabricmc.net/")
+        maven("https://maven.quiltmc.org/repository/release/")
     }
 }
 
@@ -22,7 +23,8 @@ arrayOf(
     "common",
     "paper",
     "velocity",
-    "krypton"
+    "krypton",
+    "fabric"
 ).forEach {
     include("miniplaceholders-$it")
     project(":miniplaceholders-$it").projectDir = file(it)

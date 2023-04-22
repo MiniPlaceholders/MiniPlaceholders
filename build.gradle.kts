@@ -16,7 +16,6 @@ dependencies {
 
 subprojects {
     repositories {
-        mavenCentral()
         maven("https://papermc.io/repo/repository/maven-public/")
         maven("https://repo.maven.apache.org/maven2/")
     }

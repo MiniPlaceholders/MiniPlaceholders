@@ -7,5 +7,7 @@ public enum Platform {
     /**Velocity Platform */
     VELOCITY,
     /**Krypton Platform */
-    KRYPTON
+    KRYPTON,
+    /**Fabric Platform */
+    FABRIC
 }

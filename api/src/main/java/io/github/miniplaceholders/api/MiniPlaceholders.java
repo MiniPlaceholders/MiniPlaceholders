@@ -41,6 +41,7 @@ public final class MiniPlaceholders {
             case PAPER -> Platform.PAPER;
             case VELOCITY -> Platform.VELOCITY;
             case KRYPTON -> Platform.KRYPTON;
+            case FABRIC -> Platform.FABRIC;
         };
     }
 

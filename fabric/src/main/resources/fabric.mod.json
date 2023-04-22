@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "id": "miniplaceholders",
+  "version": "${version}",
+  "name": "MiniPlaceholders",
+  "description": "MiniMessage Component-based Placeholders for PaperMC, Fabric, Krypton and Velocity platforms",
+  "authors": [
+    "4drian3d"
+  ],
+  "contact": {
+    "homepage": "https://github.com/MiniPlaceholders/MiniPlaceholders",
+    "sources": "https://github.com/MiniPlaceholders/MiniPlaceholders",
+    "issues": "https://github.com/MiniPlaceholders/MiniPlaceholders/issues"
+  },
+  "license": "GPL",
+  "environment": "server",
+  "entrypoints": {
+    "main": [
+      "io.github.miniplaceholders.fabric.FabricMod"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.14.19",
+    "fabric": "*",
+    "java": ">=17",
+    "minecraft": "~1.19.4",
+    "fabric-permissions-api-v0": "*"
+  }
+}
