@@ -28,4 +28,6 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: MiniPlaceholders
-        path: build/libs/MiniPlaceholders-*.jar
+        path: |-
+          build/libs/MiniPlaceholders-*.jar
+          fabric/build/libs/MiniPlaceholders-Fabric-mc*.jar

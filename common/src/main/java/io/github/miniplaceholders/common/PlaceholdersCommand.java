@@ -74,7 +74,7 @@ public final class PlaceholdersCommand<A> {
             .credits("Author", AboutMenu.Credit.of("4drian3d").url("https://github.com/4drian3d"))
             .credits("Contributors", AboutMenu.Credit.of("Sliman4"))
             .buttons(
-                    AboutMenu.Link.of("https://github.com/MiniPlaceholders/MiniPlaceholders/wiki/User-Getting-Started").text("Documentation").icon("\uD83D\uDCD6"),
+                    AboutMenu.Link.of("https://github.com/MiniPlaceholders/MiniPlaceholders/wiki/User-Getting-Started").text("Documentation").icon("⛏"),
                     AboutMenu.Link.of("https://discord.gg/5NMMzK5mAn").text("Discord").color(TextColor.color(0x7289da)).icon("⭐"),
                     AboutMenu.Link.of("https://modrinth.com/plugin/miniplaceholders").text("Downloads").color(TextColor.color(0xff496e)).icon("↓")
             ).version(Version.fromString(PluginConstants.VERSION))
