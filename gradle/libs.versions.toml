@@ -24,6 +24,7 @@ kotlin="1.8.20"
 fabric-api = "0.79.0+1.20"
 fabric-loader = "0.14.19"
 
+desertwell = "2.0.2"
 
 [libraries]
 
@@ -49,6 +50,8 @@ plugin-kotlin =  { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version
 plugin-indra-common = { module = "net.kyori:indra-common", version.ref = "indra" }
 plugin-indra-spotless = { module = "net.kyori:indra-licenser-spotless", version.ref = "indra" }
 plugin-dokka = "org.jetbrains.dokka:dokka-gradle-plugin:1.8.10"
+
+desertwell = { group = "net.william278", name = "DesertWell", version.ref = "desertwell" }
 
 [plugins]
 

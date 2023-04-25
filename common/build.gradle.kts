@@ -12,6 +12,9 @@ repositories {
 
 dependencies {
     implementation(projects.miniplaceholdersApi)
+    implementation(libs.desertwell) {
+        exclude("org.json")
+    }
     compileOnly(libs.adventure.api)
     compileOnly(libs.adventure.minimesssage)
     compileOnly(libs.brigadier)
@@ -27,7 +30,6 @@ tasks {
         options.encoding = Charsets.UTF_8.name()
         options.release.set(17)
     }
-
     jar {
         manifest {
             attributes("Automatic-Module-Name" to "io.github.miniplaceholders.common")

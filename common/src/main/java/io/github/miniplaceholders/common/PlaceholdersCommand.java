@@ -4,14 +4,16 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.tree.LiteralCommandNode;
-import io.github.miniplaceholders.api.Expansion;
 import io.github.miniplaceholders.api.MiniPlaceholders;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.builder.AbstractBuilder;
 import net.kyori.adventure.permission.PermissionChecker;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.tag.Tag;
+import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import net.kyori.adventure.util.TriState;
+import net.william278.desertwell.about.AboutMenu;
+import net.william278.desertwell.util.Version;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -23,7 +25,7 @@ import java.util.function.Supplier;
 import static com.mojang.brigadier.arguments.StringArgumentType.*;
 import static java.util.Objects.requireNonNull;
 import static java.util.concurrent.CompletableFuture.supplyAsync;
-import static net.kyori.adventure.text.Component.text;
+import static net.kyori.adventure.text.Component.*;
 import static net.kyori.adventure.text.format.NamedTextColor.RED;
 import static net.kyori.adventure.text.minimessage.MiniMessage.miniMessage;
 
@@ -32,10 +34,6 @@ public final class PlaceholdersCommand<A> {
     private final Function<String, Audience> toAudience;
     private final Function<A, Audience> sourceToAudience;
     private final BiPredicate<A, String> hasPermission;
-    private final Expansion commandExpansion = Expansion.builder("placeholders")
-        .globalPlaceholder("count", (queue, ctx) -> Tag.selfClosingInserting(text(MiniPlaceholders.getExpansionCount())))
-        .globalPlaceholder("version", (queue, ctx) -> Tag.selfClosingInserting(text(PluginConstants.VERSION)))
-        .build();
 
     private PlaceholdersCommand(
             final Supplier<Collection<String>> playersSuggestions,
@@ -49,73 +47,59 @@ public final class PlaceholdersCommand<A> {
         this.hasPermission = hasPermission;
     }
 
-    private static final Component HEADER = miniMessage()
-            .deserialize("<gradient:aqua:white:aqua>---------- <gradient:#4d8bff:#a4ff96>MiniPlaceholders</gradient> -----------</gradient>");
-    private static final Component FOOTER = miniMessage()
-            .deserialize("<gradient:aqua:white:aqua> ---------------       ---------------</gradient>");
+    private static final Component HELP = text()
+            .append(newline())
+            .append(miniMessage()
+                    .deserialize("<gradient:aqua:white:aqua><st><b>             </st> <gradient:#4d8bff:#a4ff96>MiniPlaceholders</gradient> <st><b>             </st>"))
+            .append(newline())
+            .append(miniMessage()
+                    .deserialize(
+                            "<gradient:#9694ff:#5269ff>Commands:</gradient>"))
+            .append(newline())
+            .append(miniMessage()
+                    .deserialize(
+                            "<gradient:aqua:#94d1ff>/miniplaceholders</gradient> <aqua>help</aqua>"))
+            .append(newline())
+            .append(miniMessage()
+                    .deserialize(
+                            "<gradient:aqua:#94d1ff>/miniplaceholders</gradient> <aqua>parse</aqua> <#8fadff><player | me></#8fadff> <#99ffb6><player></#99ffb6>"))
+            .append(newline())
+            .append(miniMessage()
+                    .deserialize("<gradient:aqua:white:aqua><st><b>                                                 "))
+            .build();
+
+    private static final Component INFO = AboutMenu.builder()
+            .title(miniMessage().deserialize("<gradient:#4d8bff:#a4ff96>MiniPlaceholders</gradient>"))
+            .description(text("MiniMessage Component-based Placeholders for PaperMC, Folia, Fabric, Velocity and Krypton platforms"))
+            .credits("Author", AboutMenu.Credit.of("4drian3d").url("https://github.com/4drian3d"))
+            .credits("Contributors", AboutMenu.Credit.of("Sliman4"))
+            .buttons(
+                    AboutMenu.Link.of("https://github.com/MiniPlaceholders/MiniPlaceholders/wiki/User-Getting-Started").text("Documentation").icon("\uD83D\uDCD6"),
+                    AboutMenu.Link.of("https://discord.gg/5NMMzK5mAn").text("Discord").color(TextColor.color(0x7289da)).icon("⭐"),
+                    AboutMenu.Link.of("https://modrinth.com/plugin/miniplaceholders").text("Downloads").color(TextColor.color(0xff496e)).icon("↓")
+            ).version(Version.fromString(PluginConstants.VERSION))
+            .build()
+            .toComponent();
 
     public LiteralArgumentBuilder<A> asBuilder(String commandName){
         return LiteralArgumentBuilder.<A>literal(commandName)
-            .requires(a -> getAudience(a).pointers().supports(PermissionChecker.POINTER))
+            .requires(a -> permissionValue(a, "miniplaceholders.command") != TriState.FALSE)
             .executes(cmd -> {
                 Audience source = getAudience(cmd.getSource());
-                if (hasPermission(cmd.getSource(), "miniplaceholders.command")) {
-                    source.sendMessage(
-                        text()
-                            .append(HEADER)
-                            .append(Component.newline())
-                            .append(miniMessage()
-                                    .deserialize(
-                                            "<gradient:aqua:#918fff>Placeholders Available:</gradient> <aqua><placeholders_count></aqua>",
-                                            commandExpansion.globalPlaceholders()
-                                    )).append(Component.newline())
-                            .append(FOOTER)
-                        .build()
-                    );
-                } else {
-                    source.sendMessage(
-                        text()
-                            .append(HEADER)
-                            .append(Component.newline())
-                            .append(miniMessage()
-                                    .deserialize(
-                                            "<gradient:#8693AB:#BDD4E7>Version: <placeholders_version>",
-                                            commandExpansion.globalPlaceholders()
-                                    )).append(Component.newline())
-                            .append(FOOTER)
-                        .build()
-                    );
-                }
-                return 1;
+                source.sendMessage(INFO);
+                return Command.SINGLE_SUCCESS;
             })
             .then(LiteralArgumentBuilder.<A>literal("help")
-                .requires(src -> hasPermission(src, "miniplaceholders.command.help"))
+                .requires(src -> permissionValue(src, "miniplaceholders.command.help").toBooleanOrElse(false))
                 .executes(cmd -> {
-                    getAudience(cmd.getSource()).sendMessage(
-                        text()
-                            .append(HEADER)
-                            .append(Component.newline())
-                            .append(miniMessage()
-                                    .deserialize(
-                                            "<gradient:#9694ff:#5269ff>Commands:</gradient>"))
-                                    .append(Component.newline())
-                            .append(miniMessage()
-                                    .deserialize(
-                                            "<gradient:aqua:#94d1ff>/miniplaceholders</gradient> <aqua>help</aqua>"))
-                                    .append(Component.newline())
-                            .append(miniMessage()
-                                    .deserialize(
-                                            "<gradient:aqua:#94d1ff>/miniplaceholders</gradient> <aqua>parse</aqua> <#8fadff><player|me></#8fadff> <#99ffb6><player></#99ffb6>"))
-                                    .append(Component.newline())
-                            .append(FOOTER)
-                        .build()
-                    );
+                    getAudience(cmd.getSource()).sendMessage(HELP);
                     return Command.SINGLE_SUCCESS;
                 })
             )
             .then(LiteralArgumentBuilder.<A>literal("parse")
-                .requires(cmd -> hasPermission(cmd, "miniplaceholders.command.parse"))
+                .requires(cmd -> permissionValue(cmd, "miniplaceholders.command.parse").toBooleanOrElse(false))
                 .then(LiteralArgumentBuilder.<A>literal("me")
+                    .requires(cmd -> permissionValue(cmd, "miniplaceholders.command.parse.me").toBooleanOrElse(false))
                     .then(RequiredArgumentBuilder.<A, String>argument("string", string())
                         .executes(cmd -> {
                             final String toParse = getString(cmd, "string");
@@ -126,6 +110,7 @@ public final class PlaceholdersCommand<A> {
                     )
                 )
                 .then(LiteralArgumentBuilder.<A>literal("player")
+                    .requires(cmd -> permissionValue(cmd, "miniplaceholders.command.parse.player").toBooleanOrElse(false))
                     .then(RequiredArgumentBuilder.<A, String>argument("source", word())
                         .suggests((argument, builder) -> supplyAsync(() -> {
                                 playersSuggestions.get().forEach(builder::suggest);
@@ -172,14 +157,14 @@ public final class PlaceholdersCommand<A> {
         return audience != null ? audience : Audience.empty();
     }
 
-    private boolean hasPermission(final A source, final String permission) {
+    private TriState permissionValue(final A source, final String permission) {
         if (hasPermission != null) {
-            return hasPermission.test(source, permission);
+            return TriState.byBoolean(hasPermission.test(source, permission));
         }
         return getAudience(source)
                 .get(PermissionChecker.POINTER)
-                .map(checker -> checker.test(permission))
-                .orElse(false);
+                .map(checker -> checker.value(permission))
+                .orElse(TriState.FALSE);
     }
 
     public static <A> Builder<A> builder() {

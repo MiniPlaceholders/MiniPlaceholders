@@ -6,6 +6,15 @@ plugins {
 
 allprojects {
     apply<JavaPlugin>()
+    repositories {
+        maven("https://papermc.io/repo/repository/maven-public/")
+        maven("https://repo.maven.apache.org/maven2/")
+        maven("https://jitpack.io") {
+            mavenContent {
+                includeGroup("net.william278")
+            }
+        }
+    }
 }
 
 dependencies {
@@ -14,17 +23,11 @@ dependencies {
     implementation(projects.miniplaceholdersKrypton)
 }
 
-subprojects {
-    repositories {
-        maven("https://papermc.io/repo/repository/maven-public/")
-        maven("https://repo.maven.apache.org/maven2/")
-    }
-}
-
 tasks {
     shadowJar {
         archiveFileName.set("MiniPlaceholders-${project.version}.jar")
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+        relocate("net.william278.desertwell", "io.github.miniplaceholders.libs.desertwell")
     }
     build {
         dependsOn(shadowJar)
