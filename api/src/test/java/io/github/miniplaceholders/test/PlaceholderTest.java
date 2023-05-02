@@ -1,6 +1,8 @@
 package io.github.miniplaceholders.test;
 
+import static net.kyori.adventure.text.minimessage.MiniMessage.miniMessage;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import io.github.miniplaceholders.test.testobjects.TestAudience;
 import org.junit.jupiter.api.Test;
@@ -94,8 +96,26 @@ class PlaceholderTest {
 
         assertEquals(playerExpected, MiniMessage.miniMessage().deserialize(string, expansion.audiencePlaceholders(player)));
         assertEquals(emptyExpected, MiniMessage.miniMessage().deserialize(string, expansion.audiencePlaceholders(emptyAudience)));
+    }
 
+    @Test
+    @DisplayName("Empty Arguments")
+    void testEmptyArguments() {
+        final Expansion expansion = Expansion.builder("test")
+                .globalPlaceholder("testing", (queue, ctx) -> {
+                    int arguments = 0;
+                    while (queue.hasNext()) {
+                        arguments++;
+                        Tag.Argument argument = queue.pop();
+                        assertTrue(argument.value().isBlank());
+                    }
+                    return Tag.selfClosingInserting(Component.text("Arguments: "+arguments));
+                })
+                .build();
 
+        Component parsed = miniMessage().deserialize("<test_testing::>", expansion.globalPlaceholders());
+
+        assertContentEquals(parsed, Component.text("Arguments: 2"));
     }
 
     void assertContentEquals(Component first, Component second){

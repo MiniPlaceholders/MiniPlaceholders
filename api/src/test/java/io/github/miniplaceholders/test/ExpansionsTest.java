@@ -1,12 +1,11 @@
 package io.github.miniplaceholders.test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
+import io.github.miniplaceholders.api.Expansion;
+import io.github.miniplaceholders.api.utils.TagsUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import io.github.miniplaceholders.api.Expansion;
-import io.github.miniplaceholders.api.utils.TagsUtils;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ExpansionsTest {
     @Test
