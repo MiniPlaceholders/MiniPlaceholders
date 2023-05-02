@@ -9,6 +9,7 @@ import java.util.Set;
 import io.github.miniplaceholders.api.placeholder.AudiencePlaceholder;
 import io.github.miniplaceholders.api.placeholder.RelationalPlaceholder;
 import io.github.miniplaceholders.api.utils.Conditions;
+import net.kyori.adventure.audience.ForwardingAudience;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -20,6 +21,8 @@ import net.kyori.adventure.text.minimessage.Context;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.ArgumentQueue;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+
+import static java.util.Objects.requireNonNull;
 
 final class ExpansionImpl implements Expansion {
     private final String name;
@@ -56,44 +59,53 @@ final class ExpansionImpl implements Expansion {
     }
 
     @Override
-    public @NotNull TagResolver audiencePlaceholders(@NotNull final Audience audience){
-        if(audiencePlaceholders.length == 0) return TagResolver.empty();
+    public @NotNull TagResolver audiencePlaceholders(@NotNull Audience audience) {
+        if (audiencePlaceholders.length == 0) return TagResolver.empty();
 
-        Objects.requireNonNull(audience, "the audience cannot be null");
+        requireNonNull(audience, "the audience cannot be null");
 
-        if(this.singleFilter(audience)) return TagResolver.empty();
+        if ((audience = expansionFilter(audience)) == null) return TagResolver.empty();
 
         final TagResolver.Builder placeholders = TagResolver.builder();
-        for(final Tags.Single pl : this.audiencePlaceholders){
+        for (final Tags.Single pl : this.audiencePlaceholders) {
             placeholders.resolver(pl.of(audience));
         }
         return placeholders.build();
     }
 
-    private boolean singleFilter(final Audience audience){
-        return filterClass != null && !filterClass.isInstance(audience)
-            || predicateFilter != null && predicateFilter.test(audience);
+    private Audience expansionFilter(final Audience audience) {
+        if (filterClass == null && predicateFilter == null) {
+            return audience;
+        }
+        final boolean eligible = filterClass != null && filterClass.isInstance(audience)
+                || predicateFilter != null && predicateFilter.test(audience);
+        if (eligible) {
+            return audience;
+        }
+        if (audience instanceof final ForwardingAudience.Single forward) {
+            return expansionFilter(forward.audience());
+        }
+        return null;
     }
 
     @Override
-    public @NotNull TagResolver relationalPlaceholders(@NotNull final Audience audience, @NotNull final Audience otherAudience){
-        if(relationalPlaceholders.length == 0) return TagResolver.empty();
+    public @NotNull TagResolver relationalPlaceholders(@NotNull Audience audience, @NotNull Audience otherAudience){
+        if (relationalPlaceholders.length == 0) return TagResolver.empty();
 
-        Objects.requireNonNull(audience, "the audience cannot be null");
-        Objects.requireNonNull(otherAudience, "the other audience cannot be null");
+        requireNonNull(audience, "the audience cannot be null");
+        requireNonNull(otherAudience, "the other audience cannot be null");
 
-        if (this.relationalFilter(audience, otherAudience)) return TagResolver.empty();
+        audience = expansionFilter(audience);
+        otherAudience = expansionFilter(otherAudience);
+        if (audience == null || otherAudience == null) {
+            return TagResolver.empty();
+        }
 
         final TagResolver.Builder placeholders = TagResolver.builder();
-        for (final Tags.Relational pl : this.relationalPlaceholders){
+        for (final Tags.Relational pl : this.relationalPlaceholders) {
             placeholders.resolver(pl.of(audience, otherAudience));
         }
         return placeholders.build();
-    }
-
-    private boolean relationalFilter(final Audience audience, final Audience otherAudience){
-        return filterClass != null && (!filterClass.isInstance(audience) || !filterClass.isInstance(otherAudience))
-            || predicateFilter != null && (!predicateFilter.test(audience) || !predicateFilter.test(otherAudience));
     }
 
     @Override
@@ -138,7 +150,7 @@ final class ExpansionImpl implements Expansion {
         @Override
         public @NotNull Builder audiencePlaceholder(@NotNull final String key, @NotNull final AudiencePlaceholder audiencePlaceholder){
             Conditions.nonNullOrEmptyString(key, () -> "placeholder key");
-            Objects.requireNonNull(audiencePlaceholder, "the audience placeholder cannot be null");
+            requireNonNull(audiencePlaceholder, "the audience placeholder cannot be null");
 
             if (this.audiencePlaceholders == null) this.audiencePlaceholders = new HashSet<>(5);
 
@@ -149,7 +161,7 @@ final class ExpansionImpl implements Expansion {
         @Override
         public @NotNull Builder relationalPlaceholder(@NotNull final String key, @NotNull final RelationalPlaceholder relationalPlaceholder){
             Conditions.nonNullOrEmptyString(key, () -> "placeholder key");
-            Objects.requireNonNull(relationalPlaceholder, "the relational placeholder cannot be null");
+            requireNonNull(relationalPlaceholder, "the relational placeholder cannot be null");
 
             if (this.relationalPlaceholders == null) this.relationalPlaceholders = new HashSet<>(4);
 
@@ -160,7 +172,7 @@ final class ExpansionImpl implements Expansion {
         @Override
         public @NotNull Builder globalPlaceholder(@NotNull final String key, @NotNull final BiFunction<ArgumentQueue, Context, Tag> function){
             Conditions.nonNullOrEmptyString(key, () -> "placeholder key");
-            Objects.requireNonNull(function, "the global placeholder cannot be null");
+            requireNonNull(function, "the global placeholder cannot be null");
 
             if(this.globalPlaceholders == null) this.globalPlaceholders = TagResolver.builder();
 
@@ -171,7 +183,7 @@ final class ExpansionImpl implements Expansion {
         @Override
         public @NotNull Builder globalPlaceholder(@NotNull final String key, @NotNull final Tag tag){
             Conditions.nonNullOrEmptyString(key, () -> "placeholder key");
-            Objects.requireNonNull(tag, "the tag cannot be null");
+            requireNonNull(tag, "the tag cannot be null");
 
             if(this.globalPlaceholders == null) this.globalPlaceholders = TagResolver.builder();
 
