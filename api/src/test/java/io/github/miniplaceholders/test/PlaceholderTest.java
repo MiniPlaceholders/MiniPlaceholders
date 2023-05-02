@@ -1,8 +1,7 @@
 package io.github.miniplaceholders.test;
 
 import static net.kyori.adventure.text.minimessage.MiniMessage.miniMessage;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 import io.github.miniplaceholders.test.testobjects.TestAudience;
 import org.junit.jupiter.api.Test;
@@ -25,12 +24,15 @@ class PlaceholderTest {
         TestAudience player = new TestAudience("4drian3d");
 
         Expansion expansion = Expansion.builder("example")
-            .audiencePlaceholder("name", (aud, queue, ctx) -> Tag.selfClosingInserting(Component.text(((TestAudience)aud).name()))).build();
+            .audiencePlaceholder("name", (aud, queue, ctx) -> {
+                TestAudience audience = (TestAudience) aud;
+                return Tag.selfClosingInserting(Component.text(audience.name()));
+            }).build();
 
         final Component expected = Component.text("Player Name: 4drian3d");
-        final Component result = MiniMessage.miniMessage().deserialize("Player Name: <example_name>", expansion.audiencePlaceholders(player));
+        final Component result = miniMessage().deserialize("Player Name: <example_name>", expansion.audiencePlaceholders(player));
 
-        assertEquals(expected, result);
+        assertContentEquals(expected, result);
     }
 
     @Test
@@ -61,7 +63,7 @@ class PlaceholderTest {
         final Component expected = Component.text("Online players: 1305 | Servers: 7");
         final Component actual = MiniMessage.miniMessage().deserialize("Online players: <global_players> | Servers: <global_servers>", expansion.globalPlaceholders());
 
-        assertEquals(expected, actual);
+        assertContentEquals(expected, actual);
     }
 
     @Test
@@ -94,8 +96,8 @@ class PlaceholderTest {
         Component playerExpected = Component.text("Player Name: TestPlayer04");
         Component emptyExpected = Component.text("Player Name: <filter_name>");
 
-        assertEquals(playerExpected, MiniMessage.miniMessage().deserialize(string, expansion.audiencePlaceholders(player)));
-        assertEquals(emptyExpected, MiniMessage.miniMessage().deserialize(string, expansion.audiencePlaceholders(emptyAudience)));
+        assertContentEquals(playerExpected, MiniMessage.miniMessage().deserialize(string, expansion.audiencePlaceholders(player)));
+        assertContentEquals(emptyExpected, MiniMessage.miniMessage().deserialize(string, expansion.audiencePlaceholders(emptyAudience)));
     }
 
     @Test
@@ -116,6 +118,25 @@ class PlaceholderTest {
         Component parsed = miniMessage().deserialize("<test_testing::>", expansion.globalPlaceholders());
 
         assertContentEquals(parsed, Component.text("Arguments: 2"));
+    }
+
+    @Test
+    @DisplayName("Forwarding Audience Parsing Test")
+    void forwardingAudienceTest() {
+        Expansion expansion = Expansion.builder("test")
+                .filter(TestAudience.class)
+                .audiencePlaceholder("testing", (audience, queue, ctx) -> {
+                    TestAudience testAudience = (TestAudience) audience;
+                    return Tag.selfClosingInserting(Component.text("Name: "+testAudience.name()));
+                }).build();
+
+        TestAudience testAudience = new TestAudience("4drian3d");
+        Audience forward = Audience.audience(testAudience);
+
+        Component parsed = miniMessage().deserialize("<test_testing>.", expansion.audiencePlaceholders(forward));
+        Component expected = Component.text("Name: 4drian3d.");
+
+        assertContentEquals(parsed, expected);
     }
 
     void assertContentEquals(Component first, Component second){
