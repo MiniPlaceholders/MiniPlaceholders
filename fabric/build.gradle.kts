@@ -1,5 +1,5 @@
 plugins {
-    id("fabric-loom") version "1.2.5"
+    id("fabric-loom") version "1.2.6"
     alias(libs.plugins.shadow)
 }
 
