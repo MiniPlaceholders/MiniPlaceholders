@@ -24,7 +24,9 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import org.slf4j.Logger;
 
+import java.util.ArrayList;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Plugin(
         name = "MiniPlaceholders",
@@ -89,7 +91,7 @@ public final class VelocityPlugin implements PlaceholdersPlugin {
                 .playerSuggestions(() -> proxy.getAllPlayers()
                         .stream()
                         .map(Player::getUsername)
-                        .toList())
+                        .collect(Collectors.toCollection(ArrayList::new)))
                 .toAudience(st -> proxy.getPlayer(st).orElse(null))
                 .command("vminiplaceholders")
                 .manager(commandManager)

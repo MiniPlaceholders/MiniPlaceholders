@@ -48,6 +48,7 @@ cloud-velocity = { group = "cloud.commandframework", name = "cloud-velocity", ve
 cloud-paper = { group = "cloud.commandframework", name = "cloud-paper", version.ref = "cloud" }
 cloud-fabric = { group = "cloud.commandframework", name = "cloud-fabric", version.ref = "cloud" }
 cloud-sponge = { group = "cloud.commandframework", name = "cloud-sponge", version.ref = "cloud" }
+cloud-extras = { group = "cloud.commandframework", name = "cloud-minecraft-extras", version.ref = "cloud" }
 
 brigadier = { group = "com.mojang", name = "brigadier", version.ref = "brigadier" }
 

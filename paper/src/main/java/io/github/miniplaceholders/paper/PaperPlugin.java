@@ -19,7 +19,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("unused")
 public final class PaperPlugin extends JavaPlugin implements PlaceholdersPlugin {
@@ -94,7 +96,7 @@ public final class PaperPlugin extends JavaPlugin implements PlaceholdersPlugin 
                     .playerSuggestions(() -> getServer().getOnlinePlayers()
                             .stream()
                             .map(Player::getName)
-                            .toList())
+                            .collect(Collectors.toCollection(ArrayList::new)))
                     .toAudience(st -> getServer().getPlayer(st))
                     .hasPermissionCheck(Permissible::hasPermission)
                     .manager(commandManager)

@@ -20,7 +20,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.text.DecimalFormat;
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Function;
 
 public class FabricMod implements ModInitializer, PlaceholdersPlugin {
@@ -103,7 +104,7 @@ public class FabricMod implements ModInitializer, PlaceholdersPlugin {
         PlaceholdersCommand.<CommandSourceStack>builder()
                 .hasPermissionCheck((source, permission) -> Permissions.check(source, permission, 4))
                 .toAudience(string -> this.minecraftServer.getPlayerList().getPlayerByName(string))
-                .playerSuggestions(() -> Arrays.asList(this.minecraftServer.getPlayerNames()))
+                .playerSuggestions(() -> new ArrayList<>(List.of(this.minecraftServer.getPlayerNames())))
                 .manager(commandManager)
                 .command("miniplaceholders")
                 .build()
