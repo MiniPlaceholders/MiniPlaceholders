@@ -28,6 +28,7 @@ tasks {
         archiveFileName.set("MiniPlaceholders-${project.version}.jar")
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
         relocate("net.william278.desertwell", "io.github.miniplaceholders.libs.desertwell")
+        relocate("cloud.commandframework", "io.github.miniplaceholders.libs.cloud")
     }
     build {
         dependsOn(shadowJar)
