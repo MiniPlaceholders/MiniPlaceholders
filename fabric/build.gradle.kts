@@ -15,17 +15,31 @@ dependencies {
     modImplementation(libs.fabric.loader)
     modImplementation(libs.fabric.api)
     modImplementation(libs.adventure.platform.fabric)
+    modImplementation(libs.cloud.fabric)
+    include(libs.cloud.fabric)
     include(libs.adventure.platform.fabric)
     modImplementation(libs.luckopermissionsapi)
     include(libs.luckopermissionsapi)
+
+    modImplementation(libs.cloud.core)
+    include(libs.cloud.core)
+    modImplementation(libs.cloud.extras)
+    include(libs.cloud.extras)
+    modImplementation(libs.desertwell)
+    include(libs.desertwell)
+
     shadeModule(projects.miniplaceholdersCommon)
     shadeModule(projects.miniplaceholdersApi)
     shadeModule(projects.miniplaceholdersConnect)
 }
 
 fun DependencyHandlerScope.shadeModule(module: ProjectDependency) {
-    shade(module)
-    implementation(module)
+    shade(module) {
+        isTransitive = false
+    }
+    implementation(module) {
+        isTransitive = false
+    }
 }
 
 tasks {
@@ -41,7 +55,10 @@ tasks {
     }
     remapJar {
         inputFile.set(shadowJar.get().archiveFile)
-        archiveFileName.set("MiniPlaceholders-Fabric-mc${libs.versions.minecraft.get()}-v${project.version}.jar")
+        manifest {
+            attributes("Automatic-Module-Name" to "io.github.miniplaceholders.fabric")
+        }
+        archiveFileName.set("MiniPlaceholders-Fabric-${project.version}.jar")
     }
     shadowJar {
         configurations = listOf(shade)

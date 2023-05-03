@@ -1,7 +1,12 @@
 package io.github.miniplaceholders.velocity;
 
+import cloud.commandframework.execution.CommandExecutionCoordinator;
+import cloud.commandframework.velocity.CloudInjectionModule;
+import cloud.commandframework.velocity.VelocityCommandManager;
 import com.google.inject.Inject;
-import com.velocitypowered.api.command.BrigadierCommand;
+import com.google.inject.Injector;
+import com.google.inject.Key;
+import com.google.inject.TypeLiteral;
 import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
@@ -19,6 +24,10 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import org.slf4j.Logger;
 
+import java.util.ArrayList;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
 @Plugin(
         name = "MiniPlaceholders",
         id = "miniplaceholders",
@@ -28,6 +37,8 @@ import org.slf4j.Logger;
 public final class VelocityPlugin implements PlaceholdersPlugin {
     private final Logger logger;
     private final ProxyServer proxy;
+    @Inject
+    private Injector injector;
 
     @Inject
     public VelocityPlugin(final Logger logger, final ProxyServer proxy) {
@@ -67,17 +78,23 @@ public final class VelocityPlugin implements PlaceholdersPlugin {
 
     @Override
     public void registerPlatformCommand() {
-        final BrigadierCommand brigadierCMD = new BrigadierCommand(
-                PlaceholdersCommand.<CommandSource>builder()
-                        .playerSuggestions(() -> proxy.getAllPlayers()
-                                .stream()
-                                .map(Player::getUsername)
-                                .toList())
-                        .toAudience(st -> proxy.getPlayer(st).orElse(null))
-                        .build()
-                        .asNode("vminiplaceholders")
+        injector = injector.createChildInjector(
+            new CloudInjectionModule<>(
+                    CommandSource.class,
+                    CommandExecutionCoordinator.simpleCoordinator(),
+                    Function.identity(),
+                    Function.identity()
+            )
         );
-
-        proxy.getCommandManager().register(brigadierCMD);
+        VelocityCommandManager<CommandSource> commandManager = injector.getInstance(Key.get(new TypeLiteral<>() {}));
+        PlaceholdersCommand.<CommandSource>builder()
+                .playerSuggestions(() -> proxy.getAllPlayers()
+                        .stream()
+                        .map(Player::getUsername)
+                        .collect(Collectors.toCollection(ArrayList::new)))
+                .toAudience(st -> proxy.getPlayer(st).orElse(null))
+                .command("vminiplaceholders")
+                .manager(commandManager)
+                .build().register();
     }
 }

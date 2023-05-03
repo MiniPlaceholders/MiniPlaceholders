@@ -1,75 +1,74 @@
 package io.github.miniplaceholders.common;
 
-import com.mojang.brigadier.Command;
-import com.mojang.brigadier.builder.LiteralArgumentBuilder;
-import com.mojang.brigadier.builder.RequiredArgumentBuilder;
-import com.mojang.brigadier.tree.LiteralCommandNode;
+import cloud.commandframework.ArgumentDescription;
+import cloud.commandframework.Command;
+import cloud.commandframework.CommandManager;
+import cloud.commandframework.arguments.CommandArgument;
+import cloud.commandframework.arguments.standard.StringArgument;
+import cloud.commandframework.minecraft.extras.AudienceProvider;
+import cloud.commandframework.minecraft.extras.MinecraftExceptionHandler;
 import io.github.miniplaceholders.api.MiniPlaceholders;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.builder.AbstractBuilder;
 import net.kyori.adventure.permission.PermissionChecker;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
-import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.util.TriState;
 import net.william278.desertwell.about.AboutMenu;
 import net.william278.desertwell.util.Version;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.BiPredicate;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import static com.mojang.brigadier.arguments.StringArgumentType.*;
 import static java.util.Objects.requireNonNull;
-import static java.util.concurrent.CompletableFuture.supplyAsync;
-import static net.kyori.adventure.text.Component.*;
+import static net.kyori.adventure.text.Component.newline;
+import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.format.NamedTextColor.RED;
 import static net.kyori.adventure.text.minimessage.MiniMessage.miniMessage;
 
-public final class PlaceholdersCommand<A> {
-    private final Supplier<Collection<String>> playersSuggestions;
+public final class PlaceholdersCommand<A extends Audience> {
+    private final Supplier<ArrayList<String>> playersSuggestions;
     private final Function<String, Audience> toAudience;
-    private final Function<A, Audience> sourceToAudience;
     private final BiPredicate<A, String> hasPermission;
+    private final String command;
+    private final CommandManager<A> commandManager;
 
     private PlaceholdersCommand(
-            final Supplier<Collection<String>> playersSuggestions,
+            final Supplier<ArrayList<String>> playersSuggestions,
             final Function<String, Audience> toAudience,
-            final Function<A, Audience> sourceToAudience,
-            final BiPredicate<A, String> hasPermission
+            final BiPredicate<A, String> hasPermission,
+            String command,
+            CommandManager<A> commandManager
     ) {
         this.playersSuggestions = playersSuggestions;
         this.toAudience = toAudience;
-        this.sourceToAudience = sourceToAudience;
         this.hasPermission = hasPermission;
+        this.command = command;
+        this.commandManager = commandManager;
     }
 
+    private static final Component TITLE = miniMessage().deserialize("<gradient:#4d8bff:#a4ff96>MiniPlaceholders</gradient>");
     private static final Component HELP = text()
-            .append(newline())
-            .append(miniMessage()
-                    .deserialize("<gradient:aqua:white:aqua><st><b>             </st> <gradient:#4d8bff:#a4ff96>MiniPlaceholders</gradient> <st><b>             </st>"))
-            .append(newline())
-            .append(miniMessage()
-                    .deserialize(
-                            "<gradient:#9694ff:#5269ff>Commands:</gradient>"))
-            .append(newline())
-            .append(miniMessage()
-                    .deserialize(
-                            "<gradient:aqua:#94d1ff>/miniplaceholders</gradient> <aqua>help</aqua>"))
-            .append(newline())
-            .append(miniMessage()
-                    .deserialize(
-                            "<gradient:aqua:#94d1ff>/miniplaceholders</gradient> <aqua>parse</aqua> <#8fadff><player | me></#8fadff> <#99ffb6><player></#99ffb6>"))
-            .append(newline())
-            .append(miniMessage()
-                    .deserialize("<gradient:aqua:white:aqua><st><b>                                                 "))
+            .append(newline(), miniMessage().deserialize(
+                    "<gradient:aqua:white:aqua><st><b>             </st> <title> <st><b>             </st>", Placeholder.component("title", TITLE)))
+            .append(newline(), miniMessage().deserialize(
+                    "<gradient:#9694ff:#5269ff>Commands:</gradient>"))
+            .append(newline(), miniMessage().deserialize(
+                    "<gradient:aqua:#94d1ff>/miniplaceholders</gradient> <aqua>help</aqua>"))
+            .append(newline(), miniMessage().deserialize(
+                    "<gradient:aqua:#94d1ff>/miniplaceholders</gradient> <aqua>parse</aqua> <#8fadff><player | me></#8fadff> <#99ffb6><player></#99ffb6>"))
+            .append(newline(), miniMessage().deserialize(
+                    "<gradient:aqua:white:aqua><st><b>                                                 "))
             .build();
 
     private static final Component INFO = AboutMenu.builder()
-            .title(miniMessage().deserialize("<gradient:#4d8bff:#a4ff96>MiniPlaceholders</gradient>"))
+            .title(TITLE)
             .description(text("MiniMessage Component-based Placeholders for PaperMC, Folia, Fabric, Velocity and Krypton platforms"))
             .credits("Author", AboutMenu.Credit.of("4drian3d").url("https://github.com/4drian3d"))
             .credits("Contributors", AboutMenu.Credit.of("Sliman4"))
@@ -81,105 +80,86 @@ public final class PlaceholdersCommand<A> {
             .build()
             .toComponent();
 
-    public LiteralArgumentBuilder<A> asBuilder(String commandName){
-        return LiteralArgumentBuilder.<A>literal(commandName)
-            .requires(a -> permissionValue(a, "miniplaceholders.command") != TriState.FALSE)
-            .executes(cmd -> {
-                Audience source = getAudience(cmd.getSource());
-                source.sendMessage(INFO);
-                return Command.SINGLE_SUCCESS;
-            })
-            .then(LiteralArgumentBuilder.<A>literal("help")
-                .requires(src -> permissionValue(src, "miniplaceholders.command.help").toBooleanOrElse(false))
-                .executes(cmd -> {
-                    getAudience(cmd.getSource()).sendMessage(HELP);
-                    return Command.SINGLE_SUCCESS;
+    private Command.Builder<A> rootBuilder() {
+        return commandManager.commandBuilder(command);
+    }
+
+    public void register() {
+        new MinecraftExceptionHandler<A>()
+                .withDefaultHandlers()
+                .withDecorator(component -> Component.text().append(TITLE).appendSpace().append(component).build())
+                .apply(commandManager, AudienceProvider.nativeAudience());
+
+        commandManager.command(rootBuilder()
+                .permission(src -> {
+                    if (hasPermission != null) {
+                        return hasPermission.test(src, "miniplaceholders.command");
+                    }
+                    return src
+                            .get(PermissionChecker.POINTER)
+                            .map(checker -> checker.value("miniplaceholders.command"))
+                            .orElse(TriState.FALSE) != TriState.FALSE;
                 })
-            )
-            .then(LiteralArgumentBuilder.<A>literal("parse")
-                .requires(cmd -> permissionValue(cmd, "miniplaceholders.command.parse").toBooleanOrElse(false))
-                .then(LiteralArgumentBuilder.<A>literal("me")
-                    .requires(cmd -> permissionValue(cmd, "miniplaceholders.command.parse.me").toBooleanOrElse(false))
-                    .then(RequiredArgumentBuilder.<A, String>argument("string", string())
-                        .executes(cmd -> {
-                            final String toParse = getString(cmd, "string");
-                            final Component parsed = parseGlobal(toParse, getAudience(cmd.getSource()));
-                            getAudience(cmd.getSource()).sendMessage(parsed);
-                            return Command.SINGLE_SUCCESS;
+                .handler(handler -> handler.getSender().sendMessage(INFO)));
+        final CommandArgument<A, String> sourceArgument = StringArgument.<A>builder("source")
+                .single()
+                .withDefaultDescription(ArgumentDescription.of("The source from which the message will be parsed"))
+                .withSuggestionsProvider((ctx, st) -> {
+                    final List<String> suggestions = playersSuggestions.get();
+                    suggestions.add("me");
+                    return suggestions;
+                })
+                .build();
+        final CommandArgument<A, String> stringArgument = StringArgument.<A>builder("message")
+                .greedy()
+                .withDefaultDescription(ArgumentDescription.of("Message to be parsed"))
+                .build();
+
+        commandManager.command(
+                rootBuilder().literal("parse")
+                        .argument(sourceArgument)
+                        .argument(stringArgument)
+                        .permission("miniplaceholders.command.parse")
+                        .handler(handler -> {
+                            final String source = handler.get(sourceArgument);
+
+                            final Audience objective = "me".equals(source)
+                                    ? handler.getSender()
+                                    : toAudience.apply(source);
+                            if (objective == null){
+                                handler.getSender().sendMessage(text("You must specify a valid player", RED));
+                                return;
+                            }
+                            final String toParse = handler.get(stringArgument);
+
+                            final Component parsed = miniMessage().deserialize(
+                                    toParse,
+                                    MiniPlaceholders.getAudienceGlobalPlaceholders(objective)
+                            );
+                            handler.getSender().sendMessage(parsed);
                         })
-                    )
-                )
-                .then(LiteralArgumentBuilder.<A>literal("player")
-                    .requires(cmd -> permissionValue(cmd, "miniplaceholders.command.parse.player").toBooleanOrElse(false))
-                    .then(RequiredArgumentBuilder.<A, String>argument("source", word())
-                        .suggests((argument, builder) -> supplyAsync(() -> {
-                                playersSuggestions.get().forEach(builder::suggest);
-                                return builder.build();
-                        }))
-                        .then(RequiredArgumentBuilder.<A, String>argument("string", string())
-                            .executes(cmd -> {
-                                final Audience objective = toAudience.apply(getString(cmd, "source"));
-                                if (objective == null){
-                                    getAudience(cmd.getSource()).sendMessage(text("You must specify a valid player", RED));
-                                    return -1;
-                                }
-                                final String toParse = cmd.getArgument("string", String.class);
-
-                                final Component parsed = parseGlobal(toParse, objective);
-                                getAudience(cmd.getSource()).sendMessage(parsed);
-                                return Command.SINGLE_SUCCESS;
-                            })
-                        )
-                    )
-                )
-            );
-    }
-
-    public LiteralCommandNode<A> asNode(String command) {
-        return asBuilder(command).build();
-    }
-
-    private Component parseGlobal(final String string, final Audience audience) {
-        return miniMessage().deserialize(
-            string,
-            TagResolver.resolver(
-                MiniPlaceholders.getGlobalPlaceholders(),
-                MiniPlaceholders.getAudiencePlaceholders(audience)
-            )
+        );
+        commandManager.command(
+                rootBuilder().literal("help")
+                        .permission("miniplaceholders.command.help")
+                        .handler(handler -> handler.getSender().sendMessage(HELP))
         );
     }
 
-    private Audience getAudience(final A possibleAudience) {
-        if (possibleAudience instanceof Audience audience) {
-            return audience;
-        }
-        final Audience audience = sourceToAudience.apply(possibleAudience);
-        return audience != null ? audience : Audience.empty();
-    }
-
-    private TriState permissionValue(final A source, final String permission) {
-        if (hasPermission != null) {
-            return TriState.byBoolean(hasPermission.test(source, permission));
-        }
-        return getAudience(source)
-                .get(PermissionChecker.POINTER)
-                .map(checker -> checker.value(permission))
-                .orElse(TriState.FALSE);
-    }
-
-    public static <A> Builder<A> builder() {
+    public static <A extends Audience> Builder<A> builder() {
         return new Builder<>();
     }
 
-    public final static class Builder<A> implements AbstractBuilder<PlaceholdersCommand<A>> {
-        private Supplier<Collection<String>> playersSuggestions;
+    public final static class Builder<A extends Audience> implements AbstractBuilder<PlaceholdersCommand<A>> {
+        private Supplier<ArrayList<String>> playersSuggestions;
         private Function<String, Audience> toAudience;
-        private Function<A, Audience> fromAToAudience = a -> Audience.empty();
         private BiPredicate<A, String> hasPermission;
+        private String command;
+        private CommandManager<A> commandManager;
 
         private Builder() {}
 
-        public Builder<A> playerSuggestions(final Supplier<@NotNull Collection<@NotNull String>> playersSuggestions) {
+        public Builder<A> playerSuggestions(final Supplier<@NotNull ArrayList<@NotNull String>> playersSuggestions) {
             this.playersSuggestions = playersSuggestions;
             return this;
         }
@@ -189,13 +169,18 @@ public final class PlaceholdersCommand<A> {
             return this;
         }
 
-        public Builder<A> fromSourceToAudience(final @NotNull Function<@NotNull A, @Nullable Audience> sourceToAudience) {
-            this.fromAToAudience = sourceToAudience;
+        public Builder<A> hasPermissionCheck(final @NotNull BiPredicate<@NotNull A, @NotNull String> hasPermission) {
+            this.hasPermission = hasPermission;
             return this;
         }
 
-        public Builder<A> hasPermissionCheck(final @NotNull BiPredicate<@NotNull A, @NotNull String> hasPermission) {
-            this.hasPermission = hasPermission;
+        public Builder<A> command(final String command) {
+            this.command = command;
+            return this;
+        }
+
+        public Builder<A> manager(CommandManager<A> commandManager) {
+            this.commandManager = commandManager;
             return this;
         }
 
@@ -204,8 +189,9 @@ public final class PlaceholdersCommand<A> {
             return new PlaceholdersCommand<>(
                     requireNonNull(playersSuggestions),
                     requireNonNull(toAudience),
-                    requireNonNull(fromAToAudience),
-                    hasPermission
+                    hasPermission,
+                    command,
+                    commandManager
             );
         }
     }

@@ -23,7 +23,7 @@ arrayOf(
     "common",
     "paper",
     "velocity",
-    "krypton",
+    //"krypton",
     "fabric"
 ).forEach {
     include("miniplaceholders-$it")

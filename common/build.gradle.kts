@@ -2,22 +2,17 @@ plugins {
     alias(libs.plugins.blossom)
 }
 
-repositories {
-    maven("https://libraries.minecraft.net") {
-        mavenContent {
-            includeGroup("com.mojang")
-        }
-    }
-}
-
 dependencies {
     implementation(projects.miniplaceholdersApi)
     implementation(libs.desertwell) {
         exclude("org.json")
     }
+    implementation(libs.cloud.core)
+    implementation(libs.cloud.extras) {
+        isTransitive = false
+    }
     compileOnly(libs.adventure.api)
     compileOnly(libs.adventure.minimesssage)
-    compileOnly(libs.brigadier)
 }
 
 blossom{

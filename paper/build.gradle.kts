@@ -1,25 +1,21 @@
 plugins {
-    alias(libs.plugins.userdev)
     alias(libs.plugins.runpaper)
     alias(libs.plugins.shadow)
 }
 
 dependencies {
-    paperweight.paperDevBundle(libs.versions.paper.get())
+    compileOnly(libs.paper)
     implementation(projects.miniplaceholdersCommon)
     implementation(projects.miniplaceholdersApi)
     implementation(projects.miniplaceholdersConnect)
+    implementation(libs.cloud.paper)
 }
 
 java.toolchain.languageVersion.set(JavaLanguageVersion.of(17))
 
 tasks {
-    assemble {
-        dependsOn(reobfJar)
-    }
     compileJava {
         options.encoding = Charsets.UTF_8.name()
-
         options.release.set(17)
     }
     runServer {

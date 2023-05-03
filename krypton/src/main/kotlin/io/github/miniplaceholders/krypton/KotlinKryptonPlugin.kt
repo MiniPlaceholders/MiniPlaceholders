@@ -73,13 +73,13 @@ class KotlinKryptonPlugin @Inject constructor(
     }
 
     override fun registerPlatformCommand() {
-        val command = PlaceholdersCommand.builder<CommandExecutionContext>()
+        /*val command = PlaceholdersCommand.builder<CommandExecutionContext>()
             .fromSourceToAudience { it.sender }
             .playerSuggestions { server.players.map { it.name } }
             .toAudience { server.getPlayer(it) }
             .build()
         val brigadierCMD = BrigadierCommand.of(command.asNode("miniplaceholders"))
         val meta = KryptonCommandMeta.Builder("miniplaceholders").build()
-        server.commandManager.register(brigadierCMD, meta)
+        server.commandManager.register(brigadierCMD, meta)*/
     }
 }
