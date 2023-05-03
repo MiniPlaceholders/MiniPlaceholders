@@ -55,6 +55,9 @@ tasks {
     }
     remapJar {
         inputFile.set(shadowJar.get().archiveFile)
+        manifest {
+            attributes("Automatic-Module-Name" to "io.github.miniplaceholders.fabric")
+        }
         archiveFileName.set("MiniPlaceholders-Fabric-${project.version}.jar")
     }
     shadowJar {
