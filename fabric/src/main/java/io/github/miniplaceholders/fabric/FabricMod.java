@@ -1,12 +1,13 @@
 package io.github.miniplaceholders.fabric;
 
+import cloud.commandframework.execution.AsynchronousCommandExecutionCoordinator;
+import cloud.commandframework.fabric.FabricServerCommandManager;
 import io.github.miniplaceholders.api.Expansion;
 import io.github.miniplaceholders.common.PlaceholdersCommand;
 import io.github.miniplaceholders.common.PlaceholdersPlugin;
 import io.github.miniplaceholders.connect.InternalPlatform;
 import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.tag.Tag;
@@ -20,6 +21,7 @@ import org.slf4j.LoggerFactory;
 
 import java.text.DecimalFormat;
 import java.util.Arrays;
+import java.util.function.Function;
 
 public class FabricMod implements ModInitializer, PlaceholdersPlugin {
     private final Logger logger = LoggerFactory.getLogger("miniplaceholders");
@@ -93,13 +95,18 @@ public class FabricMod implements ModInitializer, PlaceholdersPlugin {
 
     @Override
     public void registerPlatformCommand() {
-        CommandRegistrationCallback.EVENT.register((dispatcher, commandBuildContext, commandSelection) ->
-            dispatcher.register(PlaceholdersCommand.<CommandSourceStack>builder()
-                    .hasPermissionCheck((source, permission) -> Permissions.check(source, permission, 4))
-                    .toAudience(string -> this.minecraftServer.getPlayerList().getPlayerByName(string))
-                    .playerSuggestions(() -> Arrays.asList(this.minecraftServer.getPlayerNames()))
-                    .build()
-                    .asBuilder("miniplaceholders"))
+        FabricServerCommandManager<CommandSourceStack> commandManager = new FabricServerCommandManager<>(
+                AsynchronousCommandExecutionCoordinator.simpleCoordinator(),
+                Function.identity(),
+                Function.identity()
         );
+        PlaceholdersCommand.<CommandSourceStack>builder()
+                .hasPermissionCheck((source, permission) -> Permissions.check(source, permission, 4))
+                .toAudience(string -> this.minecraftServer.getPlayerList().getPlayerByName(string))
+                .playerSuggestions(() -> Arrays.asList(this.minecraftServer.getPlayerNames()))
+                .manager(commandManager)
+                .command("miniplaceholders")
+                .build()
+                .register();
     }
 }

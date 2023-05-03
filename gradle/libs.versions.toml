@@ -16,6 +16,7 @@ shadow = "8.1.1"
 jmh = "0.7.1"
 dokka = "1.8.10"
 
+cloud = "1.8.3"
 adventure = "4.13.1"
 adventurefabric = "5.8.0"
 brigadier = "1.0.500"
@@ -40,6 +41,13 @@ luckopermissionsapi = { group = "me.lucko", name = "fabric-permissions-api", ver
 adventure-api = { group = "net.kyori", name = "adventure-api", version.ref = "adventure" }
 adventure-minimesssage = { group = "net.kyori", name = "adventure-text-minimessage", version.ref = "adventure" }
 adventure-platform-fabric = { group = "net.kyori", name = "adventure-platform-fabric", version.ref = "adventurefabric" }
+
+cloud-core = { group = "cloud.commandframework", name = "cloud-core", version.ref = "cloud" }
+cloud-annotations = { group = "cloud.commandframework", name = "cloud-annotations", version.ref = "cloud" }
+cloud-velocity = { group = "cloud.commandframework", name = "cloud-velocity", version.ref = "cloud" }
+cloud-paper = { group = "cloud.commandframework", name = "cloud-paper", version.ref = "cloud" }
+cloud-fabric = { group = "cloud.commandframework", name = "cloud-fabric", version.ref = "cloud" }
+cloud-sponge = { group = "cloud.commandframework", name = "cloud-sponge", version.ref = "cloud" }
 
 brigadier = { group = "com.mojang", name = "brigadier", version.ref = "brigadier" }
 

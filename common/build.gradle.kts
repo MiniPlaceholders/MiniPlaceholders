@@ -15,9 +15,9 @@ dependencies {
     implementation(libs.desertwell) {
         exclude("org.json")
     }
+    implementation(libs.cloud.core)
     compileOnly(libs.adventure.api)
     compileOnly(libs.adventure.minimesssage)
-    compileOnly(libs.brigadier)
 }
 
 blossom{

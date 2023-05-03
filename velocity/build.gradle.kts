@@ -9,6 +9,7 @@ dependencies {
     implementation(projects.miniplaceholdersCommon)
     implementation(projects.miniplaceholdersApi)
     implementation(projects.miniplaceholdersConnect)
+    implementation(libs.cloud.velocity)
 }
 
 java.toolchain.languageVersion.set(JavaLanguageVersion.of(17))
@@ -16,7 +17,6 @@ java.toolchain.languageVersion.set(JavaLanguageVersion.of(17))
 tasks {
     compileJava {
         options.encoding = Charsets.UTF_8.name()
-
         options.release.set(17)
     }
 

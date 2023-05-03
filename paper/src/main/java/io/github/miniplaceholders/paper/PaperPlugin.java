@@ -1,5 +1,7 @@
 package io.github.miniplaceholders.paper;
 
+import cloud.commandframework.execution.AsynchronousCommandExecutionCoordinator;
+import cloud.commandframework.paper.PaperCommandManager;
 import io.github.miniplaceholders.api.Expansion;
 import io.github.miniplaceholders.api.utils.TagsUtils;
 import io.github.miniplaceholders.common.PlaceholdersCommand;
@@ -9,14 +11,15 @@ import io.papermc.paper.datapack.Datapack;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.minimessage.tag.Tag;
-import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.server.MinecraftServer;
 import org.bukkit.World;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.Permissible;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.util.function.Function;
 
 @SuppressWarnings("unused")
 public final class PaperPlugin extends JavaPlugin implements PlaceholdersPlugin {
@@ -78,19 +81,28 @@ public final class PaperPlugin extends JavaPlugin implements PlaceholdersPlugin 
     @Override
     @SuppressWarnings({"sonarlint(java:s1874)"})
     public void registerPlatformCommand() {
-        MinecraftServer.getServer()
-            .getCommands()
-            .getDispatcher()
-            .register(PlaceholdersCommand.<CommandSourceStack>builder()
+        try {
+            PaperCommandManager<CommandSender> commandManager = new PaperCommandManager<>(
+                    this,
+                    AsynchronousCommandExecutionCoordinator.simpleCoordinator(),
+                    Function.identity(),
+                    Function.identity()
+            );
+            commandManager.registerBrigadier();
+
+            PlaceholdersCommand.<CommandSender>builder()
                     .playerSuggestions(() -> getServer().getOnlinePlayers()
                             .stream()
                             .map(Player::getName)
                             .toList())
                     .toAudience(st -> getServer().getPlayer(st))
-                    .hasPermissionCheck((source, permission) -> source.getBukkitSender().hasPermission(permission))
-                    .fromSourceToAudience(CommandSourceStack::getBukkitSender)
+                    .hasPermissionCheck(Permissible::hasPermission)
+                    .manager(commandManager)
+                    .command("miniplaceholders")
                     .build()
-                    .asBuilder("miniplaceholders")
-            );
+                    .register();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
