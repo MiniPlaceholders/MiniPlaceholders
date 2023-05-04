@@ -43,8 +43,8 @@ public final class PlaceholdersCommand<A extends Audience> {
             final Supplier<ArrayList<String>> playersSuggestions,
             final Function<String, Audience> toAudience,
             final BiPredicate<A, String> hasPermission,
-            String command,
-            CommandManager<A> commandManager
+            final String command,
+            final CommandManager<A> commandManager
     ) {
         this.playersSuggestions = playersSuggestions;
         this.toAudience = toAudience;

@@ -17,9 +17,14 @@ allprojects {
     }
 }
 
+repositories {
+    maven("https://repo.jpenilla.xyz/snapshots/")
+}
+
 dependencies {
     implementation(projects.miniplaceholdersVelocity)
     implementation(projects.miniplaceholdersPaper)
+    implementation(projects.miniplaceholdersSponge)
     //implementation(projects.miniplaceholdersKrypton)
 }
 
