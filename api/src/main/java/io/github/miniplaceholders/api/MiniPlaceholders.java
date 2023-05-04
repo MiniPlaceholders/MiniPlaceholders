@@ -42,6 +42,7 @@ public final class MiniPlaceholders {
             case VELOCITY -> Platform.VELOCITY;
             case KRYPTON -> Platform.KRYPTON;
             case FABRIC -> Platform.FABRIC;
+            case SPONGE -> Platform.SPONGE;
         };
     }
 
@@ -200,7 +201,7 @@ public final class MiniPlaceholders {
      * @see Expansion#builder(String)
      * @since 2.1.0
      */
-    public @Nullable Expansion getExpansionByName(final @NotNull String name) {
+    public static @Nullable Expansion getExpansionByName(final @NotNull String name) {
         for (final Expansion expansion : expansions) {
             if (Objects.equals(expansion.name(), name)) {
                 return expansion;

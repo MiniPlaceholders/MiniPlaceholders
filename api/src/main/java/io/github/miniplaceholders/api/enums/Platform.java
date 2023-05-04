@@ -9,5 +9,7 @@ public enum Platform {
     /**Krypton Platform */
     KRYPTON,
     /**Fabric Platform */
-    FABRIC
+    FABRIC,
+    /**Sponge Platform */
+    SPONGE
 }
