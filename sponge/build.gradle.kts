@@ -2,12 +2,9 @@ import org.spongepowered.gradle.plugin.config.PluginLoaders
 import org.spongepowered.plugin.metadata.model.PluginDependency
 
 plugins {
-    id("org.spongepowered.gradle.plugin") version "2.1.1"
-    alias(libs.plugins.shadow)
-}
-
-repositories {
-    maven("https://repo.jpenilla.xyz/snapshots/")
+    id("miniplaceholders.auto.module")
+    id("miniplaceholders.shadow")
+    id("org.spongepowered.gradle.plugin")
 }
 
 dependencies {
@@ -42,18 +39,3 @@ sponge {
         }
     }
 }
-
-java.toolchain.languageVersion.set(JavaLanguageVersion.of(17))
-
-tasks {
-    compileJava {
-        options.encoding = Charsets.UTF_8.name()
-        options.release.set(17)
-    }
-     jar {
-        manifest {
-            attributes("Automatic-Module-Name" to "io.github.miniplaceholders.sponge")
-        }
-    }
-}
-

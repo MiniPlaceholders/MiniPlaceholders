@@ -2,6 +2,7 @@
 /.idea/
 build/
 bin/
+jar/
 
 # Visual Studio Code
 

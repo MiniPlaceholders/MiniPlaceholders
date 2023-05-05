@@ -1,6 +1,7 @@
 plugins {
+    id("miniplaceholders.shadow")
+    id("miniplaceholders.auto.module")
     alias(libs.plugins.runvelocity)
-    alias(libs.plugins.shadow)
 }
 
 dependencies {
@@ -12,20 +13,7 @@ dependencies {
     implementation(libs.cloud.velocity)
 }
 
-java.toolchain.languageVersion.set(JavaLanguageVersion.of(17))
-
 tasks {
-    compileJava {
-        options.encoding = Charsets.UTF_8.name()
-        options.release.set(17)
-    }
-
-    jar {
-        manifest {
-            attributes("Automatic-Module-Name" to "io.github.miniplaceholders.velocity")
-        }
-    }
-
     runVelocity {
         velocityVersion(libs.versions.velocity.get())
     }

@@ -1,7 +1,7 @@
 plugins {
+    id("miniplaceholders.base")
     alias(libs.plugins.jmh)
     id("miniplaceholders.publish")
-
 }
 
 dependencies {
@@ -33,14 +33,9 @@ jmh {
 
 java {
     withJavadocJar()
-    toolchain.languageVersion.set(JavaLanguageVersion.of(17))
 }
 
 tasks {
-    compileJava {
-        options.encoding = Charsets.UTF_8.name()
-        options.release.set(17)
-    }
     processResources {
         filteringCharset = Charsets.UTF_8.name()
     }
