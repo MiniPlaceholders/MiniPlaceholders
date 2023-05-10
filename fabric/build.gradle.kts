@@ -19,8 +19,7 @@ dependencies {
     includeDependency(libs.cloud.extras)
     includeDependency(libs.desertwell)
 
-    api(projects.miniplaceholdersApi)
-    include(projects.miniplaceholdersApi)
+    shadeModule(projects.miniplaceholdersApi)
     shadeModule(projects.miniplaceholdersCommon)
     shadeModule(projects.miniplaceholdersConnect)
 }

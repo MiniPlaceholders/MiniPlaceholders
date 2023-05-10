@@ -39,3 +39,9 @@ sponge {
         }
     }
 }
+
+tasks {
+    shadowJar {
+        exclude("io/leangen/geantyref/**")
+    }
+}

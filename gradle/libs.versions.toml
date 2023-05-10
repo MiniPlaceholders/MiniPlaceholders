@@ -41,6 +41,8 @@ luckopermissionsapi = { group = "me.lucko", name = "fabric-permissions-api", ver
 adventure-api = { group = "net.kyori", name = "adventure-api", version.ref = "adventure" }
 adventure-minimesssage = { group = "net.kyori", name = "adventure-text-minimessage", version.ref = "adventure" }
 adventure-platform-fabric = { group = "net.kyori", name = "adventure-platform-fabric", version.ref = "adventurefabric" }
+adventure-serializer-legacy = { group = "net.kyori", name = "adventure-text-serializer-legacy", version.ref = "adventure" }
+adventure-serializer-plain = { group = "net.kyori", name = "adventure-text-serializer-plain", version.ref = "adventure" }
 
 cloud-core = { group = "cloud.commandframework", name = "cloud-core", version.ref = "cloud" }
 cloud-annotations = { group = "cloud.commandframework", name = "cloud-annotations", version.ref = "cloud" }
@@ -61,6 +63,8 @@ plugin-indra-spotless = { module = "net.kyori:indra-licenser-spotless", version.
 plugin-dokka = "org.jetbrains.dokka:dokka-gradle-plugin:1.8.10"
 
 desertwell = { group = "net.william278", name = "DesertWell", version.ref = "desertwell" }
+
+junit-bom = "org.junit:junit-bom:5.9.3"
 
 [plugins]
 
