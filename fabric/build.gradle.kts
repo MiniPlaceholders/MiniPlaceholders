@@ -1,10 +1,7 @@
 plugins {
-    id("fabric-loom") version "1.2.7"
+    id("miniplaceholders.auto.module")
+    id("fabric-loom")
     alias(libs.plugins.shadow)
-}
-
-repositories {
-    maven("https://oss.sonatype.org/content/repositories/snapshots")
 }
 
 val shade: Configuration by configurations.creating
@@ -14,22 +11,16 @@ dependencies {
     mappings(loom.officialMojangMappings())
     modImplementation(libs.fabric.loader)
     modImplementation(libs.fabric.api)
-    modImplementation(libs.adventure.platform.fabric)
-    modImplementation(libs.cloud.fabric)
-    include(libs.cloud.fabric)
-    include(libs.adventure.platform.fabric)
-    modImplementation(libs.luckopermissionsapi)
-    include(libs.luckopermissionsapi)
 
-    modImplementation(libs.cloud.core)
-    include(libs.cloud.core)
-    modImplementation(libs.cloud.extras)
-    include(libs.cloud.extras)
-    modImplementation(libs.desertwell)
-    include(libs.desertwell)
+    includeDependency(libs.adventure.platform.fabric)
+    includeDependency(libs.luckopermissionsapi)
+    includeDependency(libs.cloud.fabric)
+    includeDependency(libs.cloud.core)
+    includeDependency(libs.cloud.extras)
+    includeDependency(libs.desertwell)
 
-    shadeModule(projects.miniplaceholdersCommon)
     shadeModule(projects.miniplaceholdersApi)
+    shadeModule(projects.miniplaceholdersCommon)
     shadeModule(projects.miniplaceholdersConnect)
 }
 
@@ -42,6 +33,11 @@ fun DependencyHandlerScope.shadeModule(module: ProjectDependency) {
     }
 }
 
+fun DependencyHandlerScope.includeDependency(dependency: Any) {
+    modImplementation(dependency)
+    include(dependency)
+}
+
 tasks {
     processResources {
         filteringCharset = Charsets.UTF_8.name()
@@ -49,16 +45,10 @@ tasks {
             expand("version" to project.version)
         }
     }
-    compileJava {
-        options.encoding = Charsets.UTF_8.name()
-        options.release.set(17)
-    }
     remapJar {
         inputFile.set(shadowJar.get().archiveFile)
-        manifest {
-            attributes("Automatic-Module-Name" to "io.github.miniplaceholders.fabric")
-        }
         archiveFileName.set("MiniPlaceholders-Fabric-${project.version}.jar")
+        destinationDirectory.set(file("${project.rootDir}/jar"))
     }
     shadowJar {
         configurations = listOf(shade)
@@ -67,5 +57,4 @@ tasks {
 
 java {
     withSourcesJar()
-    toolchain.languageVersion.set(JavaLanguageVersion.of(17))
 }

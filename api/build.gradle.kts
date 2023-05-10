@@ -1,19 +1,19 @@
 plugins {
+    id("miniplaceholders.base")
     alias(libs.plugins.jmh)
     id("miniplaceholders.publish")
-
 }
 
 dependencies {
     compileOnly(libs.adventure.api)
     compileOnly(libs.adventure.minimesssage)
-    compileOnly("net.kyori:adventure-text-serializer-legacy:4.13.1")
+    compileOnly(libs.adventure.serializer.legacy)
     compileOnly(projects.miniplaceholdersConnect)
-    testImplementation(platform("org.junit:junit-bom:5.9.3"))
+    testImplementation(platform(libs.junit.bom))
     testImplementation("org.junit.jupiter:junit-jupiter")
     testImplementation(libs.adventure.api)
     testImplementation(libs.adventure.minimesssage)
-    testImplementation("net.kyori:adventure-text-serializer-plain:4.13.1")
+    testImplementation(libs.adventure.serializer.plain)
 }
 
 tasks {
@@ -33,14 +33,9 @@ jmh {
 
 java {
     withJavadocJar()
-    toolchain.languageVersion.set(JavaLanguageVersion.of(17))
 }
 
 tasks {
-    compileJava {
-        options.encoding = Charsets.UTF_8.name()
-        options.release.set(17)
-    }
     processResources {
         filteringCharset = Charsets.UTF_8.name()
     }

@@ -86,7 +86,9 @@ public final class VelocityPlugin implements PlaceholdersPlugin {
                     Function.identity()
             )
         );
-        VelocityCommandManager<CommandSource> commandManager = injector.getInstance(Key.get(new TypeLiteral<>() {}));
+        final VelocityCommandManager<CommandSource> commandManager = injector.getInstance(
+                Key.get(new TypeLiteral<>() {})
+        );
         PlaceholdersCommand.<CommandSource>builder()
                 .playerSuggestions(() -> proxy.getAllPlayers()
                         .stream()

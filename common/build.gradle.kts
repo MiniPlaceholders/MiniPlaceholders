@@ -1,4 +1,5 @@
 plugins {
+    id("miniplaceholders.auto.module")
     alias(libs.plugins.blossom)
 }
 
@@ -18,16 +19,4 @@ dependencies {
 blossom{
     replaceToken("{version}", project.version)
     replaceTokenIn("src/main/java/io/github/miniplaceholders/common/PluginConstants.java")
-}
-
-tasks {
-    compileJava {
-        options.encoding = Charsets.UTF_8.name()
-        options.release.set(17)
-    }
-    jar {
-        manifest {
-            attributes("Automatic-Module-Name" to "io.github.miniplaceholders.common")
-        }
-    }
 }

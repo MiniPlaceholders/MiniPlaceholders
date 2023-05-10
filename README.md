@@ -5,13 +5,14 @@
 ![Modrinth Downloads](https://img.shields.io/modrinth/dt/HQyibRsN?logo=Modrinth&style=flat-square)
 ![GitHub Downloads](https://img.shields.io/github/downloads/MiniPlaceholders/MiniPlaceholders/total?logo=GitHub&style=flat-square)
 
-MiniMessage Component-based Placeholders for PaperMC, Folia, Fabric, Krypton and Velocity platforms
+MiniMessage Component-based Placeholders for PaperMC, Folia, Fabric, Sponge, Krypton and Velocity platforms
 
 ## Compatibility
-- Paper 1.19.4+
+- Paper 1.19.3, 1.19.4+
 - Folia 1.19.4
 - Velocity 3.1.2+
-- Fabric
+- Fabric 1.19.4+
+- Sponge API 8, 9, 10
 - Krypton
 
 ## Commands

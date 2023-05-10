@@ -96,7 +96,7 @@ public class FabricMod implements ModInitializer, PlaceholdersPlugin {
 
     @Override
     public void registerPlatformCommand() {
-        FabricServerCommandManager<CommandSourceStack> commandManager = new FabricServerCommandManager<>(
+        final FabricServerCommandManager<CommandSourceStack> commandManager = new FabricServerCommandManager<>(
                 AsynchronousCommandExecutionCoordinator.simpleCoordinator(),
                 Function.identity(),
                 Function.identity()
