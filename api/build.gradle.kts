@@ -10,9 +10,10 @@ dependencies {
     compileOnly(libs.adventure.serializer.legacy)
     compileOnly(projects.miniplaceholdersConnect)
     testImplementation(platform(libs.junit.bom))
+    testImplementation("org.junit.jupiter:junit-jupiter")
     testImplementation(libs.adventure.api)
     testImplementation(libs.adventure.minimesssage)
-    testImplementation(libs.adventure.serializer.legacy)
+    testImplementation(libs.adventure.serializer.plain)
 }
 
 tasks {
