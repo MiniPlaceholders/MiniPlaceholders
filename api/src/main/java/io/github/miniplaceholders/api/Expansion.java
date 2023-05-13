@@ -206,7 +206,7 @@ public interface Expansion {
          * <p>Example:</p>
          * <pre>
          *  Expansion.builder("example")
-         *      .filter(aud -> aud instanceof Player player && isInProtectedServer(player)
+         *      .filter(aud -> aud instanceof Player player{@literal &&} isInProtectedServer(player)
          *      .audiencePlaceholder("hello", (aud, queue, ctx) -> Tag.selfInsertingClosing(Component.text("you are in protected server")))
          *      .build();
          * </pre>
