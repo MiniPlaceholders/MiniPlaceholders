@@ -4,6 +4,7 @@ import static net.kyori.adventure.text.minimessage.MiniMessage.miniMessage;
 import static org.junit.jupiter.api.Assertions.*;
 
 import io.github.miniplaceholders.test.testobjects.TestAudience;
+import io.github.miniplaceholders.test.testobjects.TestAudienceHolder;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
 
@@ -131,7 +132,7 @@ class PlaceholderTest {
                 }).build();
 
         TestAudience testAudience = new TestAudience("4drian3d");
-        Audience forward = Audience.audience(testAudience);
+        Audience forward = new TestAudienceHolder(testAudience);
 
         Component parsed = miniMessage().deserialize("<test_testing>.", expansion.audiencePlaceholders(forward));
         Component expected = Component.text("Name: 4drian3d.");
@@ -139,7 +140,7 @@ class PlaceholderTest {
         assertContentEquals(parsed, expected);
     }
 
-    void assertContentEquals(Component first, Component second){
+    static void assertContentEquals(Component first, Component second){
         String firstSerialized = PlainTextComponentSerializer.plainText().serialize(first);
         String secondSerialized = PlainTextComponentSerializer.plainText().serialize(second);
 

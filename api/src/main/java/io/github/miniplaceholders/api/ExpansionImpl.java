@@ -73,8 +73,9 @@ final class ExpansionImpl implements Expansion {
         return placeholders.build();
     }
 
+    @SuppressWarnings("OverrideOnly")
     private Audience expansionFilter(final Audience audience) {
-        if (filterClass == null && predicateFilter == null) {
+        if (audience == null || filterClass == null && predicateFilter == null) {
             return audience;
         }
         final boolean eligible = filterClass != null && filterClass.isInstance(audience)

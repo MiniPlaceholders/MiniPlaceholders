@@ -134,6 +134,7 @@ public interface Expansion {
          *
          * <p>The content of this Placeholder is cached
          * and can mutate depending on when it is invoked</p>
+         *
          * @param key the placeholder key, cannot be an empty or black string
          * @param audiencePlaceholder the single placeholder
          * @return the {@link Builder} itself
@@ -152,6 +153,7 @@ public interface Expansion {
          *
          * <p>The content of this Placeholder is cached
          * and can mutate depending on when it is invoked</p>
+         *
          * @param key the placeholder key, cannot be an empty or black string
          * @param relationalPlaceholder the relational placeholder
          * @return the {@link Builder} itself
@@ -191,6 +193,7 @@ public interface Expansion {
          *
          * <p>This eliminates the need to perform a manual
          * <pre>if(!(audience instanceof Player)) return TagResolver.empty();</pre>
+         *
          * @param clazz the class to filter
          * @return the {@link Builder} itself
          * @since 1.0.0
@@ -202,15 +205,17 @@ public interface Expansion {
          * Filters the audiences that this expansion can receive through a Predicate
          * <p>Example:</p>
          * <pre>
-         *  Expansion.builder("example").filter(Player.class).filter(aud -> isInProtectedServer((Player)aud))
+         *  Expansion.builder("example")
+         *      .filter(aud -> aud instanceof Player player && isInProtectedServer(player)
          *      .audiencePlaceholder("hello", (aud, queue, ctx) -> Tag.selfInsertingClosing(Component.text("you are in protected server")))
          *      .build();
          * </pre>
+         *
          * @param predicate the check to realize
          * @return the {@link Builder} itself
          * @since 1.0.0
          */
         @Contract("_ -> this")
-        @NotNull Builder filter(final @Nullable Predicate<Audience> predicate);
+        @NotNull Builder filter(final @Nullable Predicate<@NotNull Audience> predicate);
     }
 }
