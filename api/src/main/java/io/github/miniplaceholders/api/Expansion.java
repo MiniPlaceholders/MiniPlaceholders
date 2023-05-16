@@ -35,7 +35,7 @@ import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
  * 
  * @since 1.0.0
  */
-public interface Expansion {
+public sealed interface Expansion permits ExpansionImpl {
     /**
      * Get the expansion name
      * @return the expansion name
