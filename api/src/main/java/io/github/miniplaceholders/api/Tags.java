@@ -15,7 +15,7 @@ import net.kyori.adventure.text.minimessage.tag.resolver.ArgumentQueue;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 
 final class Tags {
-    private Tags(){}
+    private Tags() {}
 
     static Relational relational(@NotNull final String name, @NotNull final RelationalPlaceholder relationalPlaceholder){
         return new Tags.Relational(name, relationalPlaceholder);
@@ -35,7 +35,7 @@ final class Tags {
         }
 
         TagResolver of(@NotNull final Audience audience, @NotNull final Audience otherAudience){
-            return new TagResolver(){
+            return new TagResolver() {
                 @Override
                 public @Nullable Tag resolve(@NotNull String name, @NotNull ArgumentQueue arguments,
                         @NotNull Context ctx) throws ParsingException {
@@ -53,10 +53,10 @@ final class Tags {
         }
 
         @Override
-        public boolean equals(Object o){
-            if(o == this) return true;
-            if(!(o instanceof Relational)) return false;
-            return ((Relational)o).key.equals(this.key);
+        public boolean equals(final Object o) {
+            if (o == this) return true;
+            if (!(o instanceof final Relational that)) return false;
+            return that.key.equalsIgnoreCase(this.key);
         }
 
         @Override
@@ -93,10 +93,10 @@ final class Tags {
         }
 
         @Override
-        public boolean equals(Object o){
-            if(o == this) return true;
-            if(!(o instanceof Single)) return false;
-            return ((Single)o).key.equals(this.key);
+        public boolean equals(final Object o) {
+            if (o == this) return true;
+            if (!(o instanceof final Single that)) return false;
+            return that.key.equalsIgnoreCase(this.key);
         }
 
         @Override
