@@ -17,7 +17,7 @@ jmh = "0.7.1"
 dokka = "1.8.20"
 
 cloud = "1.8.3"
-adventure = "4.13.1"
+adventure = "4.14.0"
 adventurefabric = "5.8.0"
 brigadier = "1.0.500"
 kotlin="1.8.21"
