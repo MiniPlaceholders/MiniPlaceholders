@@ -20,7 +20,7 @@ cloud = "1.8.3"
 adventure = "4.14.0"
 adventurefabric = "5.8.0"
 brigadier = "1.0.500"
-kotlin="1.8.21"
+kotlin="1.8.22"
 
 fabric-api = "0.83.0+1.20"
 fabric-loader = "0.14.21"
