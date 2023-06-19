@@ -8,7 +8,7 @@ krypton = "cbfaff4aa4"
 minecraft = "1.19.4"
 
 runtask = "2.1.0"
-pluginyml = "0.5.3"
+pluginyml = "0.6.0"
 userdev = "1.5.5"
 blossom = "1.3.1"
 indra = "3.1.1"
