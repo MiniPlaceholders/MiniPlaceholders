@@ -30,7 +30,7 @@ dependencyResolutionManagement {
 }
 
 plugins {
-    id("fabric-loom") version "1.2.7"
+    id("fabric-loom") version "1.3.2"
     id("org.spongepowered.gradle.plugin") version "2.1.1"
     id("org.gradle.toolchains.foojay-resolver-convention") version "0.5.0"
 }
