@@ -147,7 +147,7 @@ final class ExpansionImpl implements Expansion {
             nonNullOrEmptyString(key, "Placeholder key");
             requireNonNull(audiencePlaceholder, "the audience placeholder cannot be null");
 
-            if (this.audiencePlaceholders == null) this.audiencePlaceholders = new HashSet<>(5);
+            if (this.audiencePlaceholders == null) this.audiencePlaceholders = new HashSet<>();
 
             this.audiencePlaceholders.add(Tags.single(expansionName+key, audiencePlaceholder));
             return this;
@@ -158,7 +158,7 @@ final class ExpansionImpl implements Expansion {
             nonNullOrEmptyString(key, "Placeholder key");
             requireNonNull(relationalPlaceholder, "the relational placeholder cannot be null");
 
-            if (this.relationalPlaceholders == null) this.relationalPlaceholders = new HashSet<>(4);
+            if (this.relationalPlaceholders == null) this.relationalPlaceholders = new HashSet<>();
 
             this.relationalPlaceholders.add(Tags.relational(expansionName+"rel_"+key, relationalPlaceholder));
             return this;
@@ -169,7 +169,7 @@ final class ExpansionImpl implements Expansion {
             nonNullOrEmptyString(key, "Placeholder key");
             requireNonNull(function, "the global placeholder cannot be null");
 
-            if(this.globalPlaceholders == null) this.globalPlaceholders = TagResolver.builder();
+            if (this.globalPlaceholders == null) this.globalPlaceholders = TagResolver.builder();
 
             this.globalPlaceholders.tag(expansionName+key, function);
             return this;
@@ -180,7 +180,7 @@ final class ExpansionImpl implements Expansion {
             nonNullOrEmptyString(key, "Placeholder key");
             requireNonNull(tag, "the tag cannot be null");
 
-            if(this.globalPlaceholders == null) this.globalPlaceholders = TagResolver.builder();
+            if (this.globalPlaceholders == null) this.globalPlaceholders = TagResolver.builder();
 
             this.globalPlaceholders.tag(expansionName+key, tag);
             return this;
@@ -212,10 +212,11 @@ final class ExpansionImpl implements Expansion {
     }
 
     @Override
-    public boolean equals(Object o){
-        if (this==o) return true;
-        if (o == null || o.getClass() != ExpansionImpl.class) return false;
-        return ((ExpansionImpl)o).name.equals(this.name);
+    public boolean equals(final Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Expansion that)) return false;
+
+        return that.name().equalsIgnoreCase(this.name());
     }
 
     @Override

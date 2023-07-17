@@ -1,16 +1,15 @@
 package io.github.miniplaceholders.api;
 
-import java.util.Objects;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-
 import io.github.miniplaceholders.api.enums.Platform;
-import org.jetbrains.annotations.NotNull;
-
 import io.github.miniplaceholders.connect.InternalPlatform;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Objects;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static io.github.miniplaceholders.api.utils.Resolvers.applyIfNotEmpty;
 import static java.util.Objects.requireNonNull;

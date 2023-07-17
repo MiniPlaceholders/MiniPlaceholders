@@ -25,20 +25,22 @@ public final class LegacyUtils {
             .build();
 
     /**
-     * Parse a string with possible legacy symbols
+     * Parse a string with possible legacy Ampersand/Section symbols
      *
      * @param string the string
      * @return a parsed string
      * @since 1.0.0
      */
     public static @NotNull Component parsePossibleLegacy(@Nullable String string) {
-        if (string == null || string.isBlank()) return Component.empty();
-        if (string.indexOf('&') != 0) {
-            return miniMessage().deserialize(
-                    miniMessage().serialize(LEGACY_HEX_SERIALIZER.deserialize(string))
-            );
-        } else {
+        if (string == null || string.isEmpty()) return Component.empty();
+        if (string.indexOf(LegacyComponentSerializer.SECTION_CHAR) != -1) {
+            string = string.replace(LegacyComponentSerializer.SECTION_CHAR, LegacyComponentSerializer.AMPERSAND_CHAR);
+        }
+        if (string.indexOf(LegacyComponentSerializer.AMPERSAND_CHAR) == -1) {
             return miniMessage().deserialize(string);
         }
+        return miniMessage().deserialize(
+                miniMessage().serialize(LEGACY_HEX_SERIALIZER.deserialize(string))
+        );
     }
 }
