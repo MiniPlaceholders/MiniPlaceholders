@@ -14,6 +14,7 @@ dependencies {
     testImplementation(libs.adventure.api)
     testImplementation(libs.adventure.minimesssage)
     testImplementation(libs.adventure.serializer.plain)
+    testImplementation(libs.adventure.serializer.legacy)
 }
 
 tasks {
@@ -45,5 +46,8 @@ tasks {
             "https://jd.advntr.dev/api/${libs.versions.adventure.get()}/",
             "https://jd.advntr.dev/text-minimessage/${libs.versions.adventure.get()}/"
         )
+    }
+    compileTestJava {
+        options.encoding = Charsets.UTF_8.name()
     }
 }
