@@ -16,7 +16,7 @@ dependencies {
     compileOnly(libs.adventure.minimesssage)
 }
 
-blossom{
+blossom {
     replaceToken("{version}", project.version)
     replaceTokenIn("src/main/java/io/github/miniplaceholders/common/PluginConstants.java")
 }

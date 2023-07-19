@@ -10,7 +10,7 @@ tasks {
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
         relocate("net.william278.desertwell", "io.github.miniplaceholders.libs.desertwell")
         relocate("cloud.commandframework", "io.github.miniplaceholders.libs.cloud")
-        if (project.simpleName != "sponge") {
+        if (project.simpleName() != "sponge") {
             relocate("io.leangen.geantyref", "io.github.miniplaceholders.libs.geantyref")
         }
         destinationDirectory.set(file("${project.rootDir}/jar"))
