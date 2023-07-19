@@ -3,9 +3,9 @@ metadata.format.version = "1.1"
 [versions]
 
 velocity = "3.2.0-SNAPSHOT"
-paper = "1.19.4-R0.1-SNAPSHOT"
+paper = "1.20.1-R0.1-SNAPSHOT"
 krypton = "7796647145"
-minecraft = "1.19.4"
+minecraft = "1.20.1"
 
 runtask = "2.1.0"
 pluginyml = "0.6.0"

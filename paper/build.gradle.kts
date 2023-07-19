@@ -14,7 +14,7 @@ dependencies {
 
 tasks {
     runServer {
-        minecraftVersion("1.19.4")
+        minecraftVersion("1.20.1")
     }
     processResources {
         filesMatching("paper-plugin.yml") {
