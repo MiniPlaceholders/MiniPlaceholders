@@ -60,7 +60,7 @@ plugin-shadow = { group = "com.github.johnrengelman", name = "shadow", version.r
 plugin-kotlin =  { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 plugin-indra-common = { module = "net.kyori:indra-common", version.ref = "indra" }
 plugin-indra-spotless = { module = "net.kyori:indra-licenser-spotless", version.ref = "indra" }
-plugin-dokka = "org.jetbrains.dokka:dokka-gradle-plugin:1.9.0"
+plugin-dokka = "org.jetbrains.dokka:dokka-gradle-plugin:1.9.10"
 
 desertwell = { group = "net.william278", name = "DesertWell", version.ref = "desertwell" }
 
