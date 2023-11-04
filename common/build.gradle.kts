@@ -1,5 +1,6 @@
 plugins {
     id("miniplaceholders.auto.module")
+    alias(libs.plugins.idea.ext)
     alias(libs.plugins.blossom)
 }
 
@@ -16,7 +17,12 @@ dependencies {
     compileOnly(libs.adventure.minimesssage)
 }
 
-blossom {
-    replaceToken("{version}", project.version)
-    replaceTokenIn("src/main/java/io/github/miniplaceholders/common/PluginConstants.java")
+sourceSets {
+    main {
+        blossom {
+            javaSources {
+                property("version", project.version.toString())
+            }
+        }
+    }
 }
