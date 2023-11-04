@@ -8,7 +8,7 @@ import java.math.RoundingMode;
 final class TickManager {
     private static final int TICK_DURATION = 20;
 
-    private static final BigDecimal TPS_BASE = new BigDecimal(1E9).multiply(new BigDecimal(TICK_DURATION));
+    private static final BigDecimal TPS_BASE = new BigDecimal("1E9").multiply(new BigDecimal(TICK_DURATION));
 
     private final RollingAverage tps1m = new RollingAverage(60);
     private final RollingAverage tps5m = new RollingAverage(60 * 5);

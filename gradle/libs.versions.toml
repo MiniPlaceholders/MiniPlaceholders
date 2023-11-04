@@ -3,9 +3,9 @@ metadata.format.version = "1.1"
 [versions]
 
 velocity = "3.2.0-SNAPSHOT"
-paper = "1.20.1-R0.1-SNAPSHOT"
+paper = "1.20.2-R0.1-SNAPSHOT"
 krypton = "7796647145"
-minecraft = "1.20.1"
+minecraft = "1.20.2"
 
 runtask = "2.2.0"
 pluginyml = "0.6.0"
@@ -20,7 +20,7 @@ cloud = "1.8.4"
 adventure = "4.14.0"
 adventurefabric = "5.10.0"
 brigadier = "1.0.500"
-kotlin="1.9.10"
+kotlin="1.9.20"
 
 fabric-api = "0.90.1+1.20.3"
 fabric-loader = "0.14.24"
