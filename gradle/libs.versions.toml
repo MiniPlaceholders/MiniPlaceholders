@@ -64,7 +64,7 @@ plugin-dokka = "org.jetbrains.dokka:dokka-gradle-plugin:1.9.10"
 
 desertwell = { group = "net.william278", name = "DesertWell", version.ref = "desertwell" }
 
-junit-bom = "org.junit:junit-bom:5.10.0"
+junit-bom = "org.junit:junit-bom:5.10.1"
 
 [plugins]
 
