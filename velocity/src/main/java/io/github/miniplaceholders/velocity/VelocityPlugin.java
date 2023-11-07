@@ -62,11 +62,14 @@ public final class VelocityPlugin implements PlaceholdersPlugin {
                 .globalPlaceholder("online_players", (queue, ctx) -> {
                     if (queue.hasNext()) {
                         String server = queue.pop().value();
-                        return Tag.selfClosingInserting(Component.text(proxy.getServer(server).map(sv -> sv.getPlayersConnected().size()).orElse(0)));
+                        return Tag.preProcessParsed(proxy.getServer(server)
+                                .map(sv -> sv.getPlayersConnected().size())
+                                .map(Integer::toString)
+                                .orElse("0"));
                     }
                     return Tag.selfClosingInserting(Component.text(proxy.getPlayerCount()));
                 })
-                .globalPlaceholder("server_count", (queue, ctx) -> Tag.selfClosingInserting(Component.text(proxy.getAllServers().size())))
+                .globalPlaceholder("server_count", (queue, ctx) -> Tag.preProcessParsed(Integer.toString(proxy.getAllServers().size())))
                 .globalPlaceholder("is_player_online", (queue, ctx) -> {
                     String playerName = queue.popOr(() -> "you need to introduce an argument").value();
                     return TagsUtils.staticTag(proxy.getPlayer(playerName).isPresent() ? Components.YES_COMPONENT : Components.NO_COMPONENT);
