@@ -64,7 +64,7 @@ public final class VelocityPlugin implements PlaceholdersPlugin {
                         String server = queue.pop().value();
                         return Tag.preProcessParsed(proxy.getServer(server)
                                 .map(sv -> sv.getPlayersConnected().size())
-                                .map(Integer::toString)
+                                .map(size -> Integer.toString(size))
                                 .orElse("0"));
                     }
                     return Tag.selfClosingInserting(Component.text(proxy.getPlayerCount()));
