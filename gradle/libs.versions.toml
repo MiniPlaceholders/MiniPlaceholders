@@ -7,7 +7,7 @@ paper = "1.20.2-R0.1-SNAPSHOT"
 krypton = "7796647145"
 minecraft = "1.20.2"
 
-runtask = "2.2.1"
+runtask = "2.2.2"
 pluginyml = "0.6.0"
 userdev = "1.5.9"
 blossom = "2.1.0"
