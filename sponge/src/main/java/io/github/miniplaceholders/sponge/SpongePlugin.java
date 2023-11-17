@@ -4,13 +4,12 @@ import cloud.commandframework.execution.CommandExecutionCoordinator;
 import cloud.commandframework.sponge.SpongeCommandManager;
 import com.google.inject.Inject;
 import io.github.miniplaceholders.api.Expansion;
-import io.github.miniplaceholders.api.utils.TagsUtils;
 import io.github.miniplaceholders.common.PlaceholdersCommand;
 import io.github.miniplaceholders.common.PlaceholdersPlugin;
 import io.github.miniplaceholders.connect.InternalPlatform;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.ForwardingAudience;
-import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.tag.Tag;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.spongepowered.api.Server;
@@ -59,26 +58,26 @@ public class SpongePlugin implements PlaceholdersPlugin {
     @Override
     public void loadDefaultExpansions() {
         Expansion.builder("server")
-                .globalPlaceholder("name", TagsUtils.staticTag("Sponge"))
-                .globalPlaceholder("online", (queue, ctx) -> TagsUtils.staticTag(Component.text(server.onlinePlayers().size())))
-                .globalPlaceholder("max_players", (queue, ctx) -> TagsUtils.staticTag(Component.text(server.maxPlayers())))
-                .globalPlaceholder("unique_joins", (queue, ctx) -> TagsUtils.staticTag(Component.text(server.userManager().streamAll().count())))
-                .globalPlaceholder("has_whitelist", (queue, ctx) -> TagsUtils.staticTag(Component.text(server.isWhitelistEnabled())))
+                .globalPlaceholder("name", Tag.preProcessParsed("Sponge"))
+                .globalPlaceholder("online", (queue, ctx) -> Tag.preProcessParsed(Integer.toString(server.onlinePlayers().size())))
+                .globalPlaceholder("max_players", (queue, ctx) -> Tag.preProcessParsed(Integer.toString(server.maxPlayers())))
+                .globalPlaceholder("unique_joins", (queue, ctx) -> Tag.preProcessParsed(Long.toString(server.userManager().streamAll().count())))
+                .globalPlaceholder("has_whitelist", (queue, ctx) -> Tag.preProcessParsed(Boolean.toString(server.isWhitelistEnabled())))
                 .globalPlaceholder("total_chunks", (queue, ctx) -> {
                     int chunkCount = 0;
                     for (ServerWorld world : server.worldManager().worlds()){
                         chunkCount += world.entities().size();
                     }
-                    return TagsUtils.staticTag(Component.text(chunkCount));
+                    return Tag.preProcessParsed(Integer.toString(chunkCount));
                 })
                 .globalPlaceholder("total_entities", (queue, ctx) -> {
                     int entityCount = 0;
                     for (ServerWorld world : server.worldManager().worlds()){
                         entityCount += world.entities().size();
                     }
-                    return TagsUtils.staticTag(Component.text(entityCount));
+                    return Tag.preProcessParsed(Integer.toString(entityCount));
                 })
-                .globalPlaceholder("mspt", (queue, ctx) -> TagsUtils.staticTag(Component.text(server.averageTickTime())))
+                .globalPlaceholder("mspt", (queue, ctx) -> Tag.preProcessParsed(Double.toString(server.averageTickTime())))
                 .build()
                 .register();
 

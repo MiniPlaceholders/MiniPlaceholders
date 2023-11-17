@@ -3,7 +3,6 @@ package io.github.miniplaceholders.paper;
 import cloud.commandframework.execution.AsynchronousCommandExecutionCoordinator;
 import cloud.commandframework.paper.PaperCommandManager;
 import io.github.miniplaceholders.api.Expansion;
-import io.github.miniplaceholders.api.utils.TagsUtils;
 import io.github.miniplaceholders.common.PlaceholdersCommand;
 import io.github.miniplaceholders.common.PlaceholdersPlugin;
 import io.github.miniplaceholders.connect.InternalPlatform;
@@ -44,38 +43,38 @@ public final class PaperPlugin extends JavaPlugin implements PlaceholdersPlugin 
     @Override
     public void loadDefaultExpansions() {
         Expansion.builder("server")
-            .globalPlaceholder("name", TagsUtils.staticTag(Component.text(this.getServer().getName())))
-            .globalPlaceholder("online", (queue, ctx) -> TagsUtils.staticTag(Component.text(this.getServer().getOnlinePlayers().size())))
-            .globalPlaceholder("version", TagsUtils.staticTag(this.getServer().getVersion()))
-            .globalPlaceholder("max_players", (queue, ctx) -> TagsUtils.staticTag(Component.text(this.getServer().getMaxPlayers())))
-            .globalPlaceholder("unique_joins", (queue, ctx) -> TagsUtils.staticTag(Component.text(this.getServer().getOfflinePlayers().length)))
-            .globalPlaceholder("tps_1", (queue, ctx) -> TagsUtils.staticTag(TPS_FORMAT.format(this.getServer().getTPS()[0])))
-            .globalPlaceholder("tps_5", (queue, ctx) -> TagsUtils.staticTag(TPS_FORMAT.format(this.getServer().getTPS()[1])))
-            .globalPlaceholder("tps_15", (queue, ctx) -> TagsUtils.staticTag(TPS_FORMAT.format(this.getServer().getTPS()[2])))
-            .globalPlaceholder("has_whitelist", (queue, ctx) -> TagsUtils.staticTag(Component.text(this.getServer().hasWhitelist())))
+            .globalPlaceholder("name", Tag.preProcessParsed(this.getServer().getName()))
+            .globalPlaceholder("online", (queue, ctx) -> Tag.preProcessParsed(Integer.toString(this.getServer().getOnlinePlayers().size())))
+            .globalPlaceholder("version", Tag.preProcessParsed(this.getServer().getVersion()))
+            .globalPlaceholder("max_players", (queue, ctx) -> Tag.preProcessParsed(Integer.toString(this.getServer().getMaxPlayers())))
+            .globalPlaceholder("unique_joins", (queue, ctx) -> Tag.preProcessParsed(Integer.toString(this.getServer().getOfflinePlayers().length)))
+            .globalPlaceholder("tps_1", (queue, ctx) -> Tag.preProcessParsed(TPS_FORMAT.format(this.getServer().getTPS()[0])))
+            .globalPlaceholder("tps_5", (queue, ctx) -> Tag.preProcessParsed(TPS_FORMAT.format(this.getServer().getTPS()[1])))
+            .globalPlaceholder("tps_15", (queue, ctx) -> Tag.preProcessParsed(TPS_FORMAT.format(this.getServer().getTPS()[2])))
+            .globalPlaceholder("has_whitelist", (queue, ctx) -> Tag.preProcessParsed(Boolean.toString(this.getServer().hasWhitelist())))
             .globalPlaceholder("total_chunks", (queue, ctx) -> {
                 int chunkCount = 0;
                 for (World world : this.getServer().getWorlds()){
                     chunkCount += world.getLoadedChunks().length;
                 }
-                return TagsUtils.staticTag(Component.text(chunkCount));
+                return Tag.preProcessParsed(Integer.toString(chunkCount));
             })
             .globalPlaceholder("total_entities", (queue, ctx) -> {
                 int entityCount = 0;
                 for (World world : this.getServer().getWorlds()){
                     entityCount += world.getEntityCount();
                 }
-                return TagsUtils.staticTag(Component.text(entityCount));
+                return Tag.preProcessParsed(Integer.toString(entityCount));
             })
-            .globalPlaceholder("mspt", (queue, ctx) -> TagsUtils.staticTag(MSPT_FORMAT.format(this.getServer().getAverageTickTime())))
+            .globalPlaceholder("mspt", (queue, ctx) -> Tag.preProcessParsed(MSPT_FORMAT.format(this.getServer().getAverageTickTime())))
             .globalPlaceholder("datapack_list", (queue, ctx) -> {
                 final TextComponent.Builder builder = Component.text();
-                for (Datapack datapack : this.getServer().getDatapackManager().getEnabledPacks()){
+                for (final Datapack datapack : this.getServer().getDatapackManager().getEnabledPacks()) {
                     builder.append(Component.text("[").append(Component.text(datapack.getName()).append(Component.text("] "))));
                 }
                 return Tag.selfClosingInserting(builder.build());
             })
-            .globalPlaceholder("datapack_count", (queue, ctx) -> Tag.selfClosingInserting(Component.text(this.getServer().getDatapackManager().getEnabledPacks().size())))
+            .globalPlaceholder("datapack_count", (queue, ctx) -> Tag.preProcessParsed(Integer.toString(this.getServer().getDatapackManager().getEnabledPacks().size())))
         .build()
         .register();
     }

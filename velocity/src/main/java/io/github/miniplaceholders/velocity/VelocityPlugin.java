@@ -15,12 +15,10 @@ import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 import io.github.miniplaceholders.api.Expansion;
 import io.github.miniplaceholders.api.utils.Components;
-import io.github.miniplaceholders.api.utils.TagsUtils;
 import io.github.miniplaceholders.common.PlaceholdersCommand;
 import io.github.miniplaceholders.common.PlaceholdersPlugin;
 import io.github.miniplaceholders.common.PluginConstants;
 import io.github.miniplaceholders.connect.InternalPlatform;
-import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import org.slf4j.Logger;
 
@@ -67,14 +65,14 @@ public final class VelocityPlugin implements PlaceholdersPlugin {
                                 .map(size -> Integer.toString(size))
                                 .orElse("0"));
                     }
-                    return Tag.selfClosingInserting(Component.text(proxy.getPlayerCount()));
+                    return Tag.preProcessParsed(Integer.toString(proxy.getPlayerCount()));
                 })
                 .globalPlaceholder("server_count", (queue, ctx) -> Tag.preProcessParsed(Integer.toString(proxy.getAllServers().size())))
                 .globalPlaceholder("is_player_online", (queue, ctx) -> {
                     String playerName = queue.popOr(() -> "you need to introduce an argument").value();
-                    return TagsUtils.staticTag(proxy.getPlayer(playerName).isPresent() ? Components.YES_COMPONENT : Components.NO_COMPONENT);
+                    return Tag.selfClosingInserting(proxy.getPlayer(playerName).isPresent() ? Components.YES_COMPONENT : Components.NO_COMPONENT);
                 })
-                .globalPlaceholder("version", TagsUtils.staticTag(proxy.getVersion().getVersion()))
+                .globalPlaceholder("version", Tag.preProcessParsed(proxy.getVersion().getVersion()))
                 .build()
                 .register();
     }

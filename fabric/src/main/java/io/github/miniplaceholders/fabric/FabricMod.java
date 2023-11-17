@@ -47,15 +47,15 @@ public class FabricMod implements ModInitializer, PlaceholdersPlugin {
     @Override
     public void loadDefaultExpansions() {
         Expansion.builder("server")
-                .globalPlaceholder("name", Tag.selfClosingInserting(Component.text(this.minecraftServer.getServerModName())))
+                .globalPlaceholder("name", Tag.preProcessParsed(this.minecraftServer.getServerModName()))
                 .globalPlaceholder("online", (queue, ctx) -> Tag.preProcessParsed(Integer.toString(this.minecraftServer.getPlayerCount())))
-                .globalPlaceholder("version", (ctx, queue) -> Tag.selfClosingInserting(Component.text(this.minecraftServer.getServerVersion())))
-                .globalPlaceholder("max_players", (ctx, queue) -> Tag.selfClosingInserting(Component.text(this.minecraftServer.getMaxPlayers())))
+                .globalPlaceholder("version", (ctx, queue) -> Tag.preProcessParsed(this.minecraftServer.getServerVersion()))
+                .globalPlaceholder("max_players", (ctx, queue) -> Tag.preProcessParsed(Integer.toString(this.minecraftServer.getMaxPlayers())))
                 .globalPlaceholder("unique_joins", (queue, ctx) -> Tag.preProcessParsed(Integer.toString(this.minecraftServer.getProfileCache().load().size())))
                 .globalPlaceholder("tps_1m", (ctx, queue) -> Tag.preProcessParsed(tickManager.getTps1m().formattedAverage()))
                 .globalPlaceholder("tps_5m", (ctx, queue) -> Tag.preProcessParsed(tickManager.getTps5m().formattedAverage()))
                 //.globalPlaceholder("tps_15m", (ctx, queue) -> Tag.preProcessParsed(tickManager.getTps15m().formattedAverage()))
-                .globalPlaceholder("tick_count", (queue, ctx) -> Tag.selfClosingInserting(Component.text(this.minecraftServer.getTickCount())))
+                .globalPlaceholder("tick_count", (queue, ctx) -> Tag.preProcessParsed(Integer.toString(this.minecraftServer.getTickCount())))
                 .globalPlaceholder("has_whitelist", (queue, ctx) -> Tag.preProcessParsed(Boolean.toString(this.minecraftServer.getPlayerList().isUsingWhitelist())))
                 .globalPlaceholder("total_chunks", (queue, ctx) -> {
                     int chunks = 0;
