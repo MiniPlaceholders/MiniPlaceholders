@@ -27,8 +27,8 @@ publishing {
                 url.set("https://github.com/MiniPlaceholders/MiniPlaceholders")
                 licenses {
                     license {
-                        name.set("GNU General Public License version 3 or later")
-                        url.set("https://opensource.org/licenses/GPL-3.0")
+                        name.set("Apache License 2.0")
+                        url.set("https://opensource.org/license/apache-2-0/")
                     }
                 }
                 scm {

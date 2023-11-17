@@ -12,7 +12,7 @@
     "sources": "https://github.com/MiniPlaceholders/MiniPlaceholders",
     "issues": "https://github.com/MiniPlaceholders/MiniPlaceholders/issues"
   },
-  "license": "GPL",
+  "license": "Apache-2",
   "environment": "server",
   "entrypoints": {
     "main": [
