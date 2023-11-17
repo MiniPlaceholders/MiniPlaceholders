@@ -7,7 +7,7 @@ import io.github.miniplaceholders.common.PlaceholdersCommand;
 import io.github.miniplaceholders.common.PlaceholdersPlugin;
 import io.github.miniplaceholders.connect.InternalPlatform;
 import me.lucko.fabric.api.permissions.v0.Permissions;
-import net.fabricmc.api.ModInitializer;
+import net.fabricmc.api.DedicatedServerModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.tag.Tag;
@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
-public class FabricMod implements ModInitializer, PlaceholdersPlugin {
+public final class FabricServerMod implements DedicatedServerModInitializer, PlaceholdersPlugin {
     private final Logger logger = LoggerFactory.getLogger("miniplaceholders");
     private static final DecimalFormat MSPT_FORMAT = new DecimalFormat("###.###");
 
@@ -32,7 +32,7 @@ public class FabricMod implements ModInitializer, PlaceholdersPlugin {
     private MinecraftServer minecraftServer;
 
     @Override
-    public void onInitialize() {
+    public void onInitializeServer() {
         logger.info("Starting MiniPlaceholders Fabric");
         InternalPlatform.platform(InternalPlatform.FABRIC);
 
@@ -51,7 +51,13 @@ public class FabricMod implements ModInitializer, PlaceholdersPlugin {
                 .globalPlaceholder("online", (queue, ctx) -> Tag.preProcessParsed(Integer.toString(this.minecraftServer.getPlayerCount())))
                 .globalPlaceholder("version", (ctx, queue) -> Tag.selfClosingInserting(Component.text(this.minecraftServer.getServerVersion())))
                 .globalPlaceholder("max_players", (ctx, queue) -> Tag.selfClosingInserting(Component.text(this.minecraftServer.getMaxPlayers())))
-                .globalPlaceholder("unique_joins", (queue, ctx) -> Tag.preProcessParsed(Integer.toString(this.minecraftServer.getProfileCache().load().size())))
+                .globalPlaceholder("unique_joins", (queue, ctx) -> {
+                    final var profileCache = this.minecraftServer.getProfileCache();
+                    if (profileCache == null) {
+                        return null;
+                    }
+                    return Tag.preProcessParsed(Integer.toString(profileCache.load().size()));
+                })
                 .globalPlaceholder("tps_1m", (ctx, queue) -> Tag.preProcessParsed(tickManager.getTps1m().formattedAverage()))
                 .globalPlaceholder("tps_5m", (ctx, queue) -> Tag.preProcessParsed(tickManager.getTps5m().formattedAverage()))
                 //.globalPlaceholder("tps_15m", (ctx, queue) -> Tag.preProcessParsed(tickManager.getTps15m().formattedAverage()))

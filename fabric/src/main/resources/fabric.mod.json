@@ -15,8 +15,11 @@
   "license": "Apache-2",
   "environment": "server",
   "entrypoints": {
-    "main": [
-      "io.github.miniplaceholders.fabric.FabricMod"
+    "server": [
+      "io.github.miniplaceholders.fabric.FabricServerMod"
+    ],
+    "client": [
+      "io.github.miniplaceholders.fabric.FabricClientMod"
     ]
   },
   "depends": {
