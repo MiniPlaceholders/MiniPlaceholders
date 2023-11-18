@@ -4,7 +4,6 @@ metadata.format.version = "1.1"
 
 velocity = "3.2.0-SNAPSHOT"
 paper = "1.20.2-R0.1-SNAPSHOT"
-krypton = "7796647145"
 minecraft = "1.20.2"
 
 runtask = "2.2.2"
@@ -31,7 +30,6 @@ desertwell = "2.0.4"
 
 velocity = { group = "com.velocitypowered", name = "velocity-api", version.ref = "velocity" }
 paper = { group = "io.papermc.paper", name = "paper-api", version.ref = "paper" }
-krypton-server = { group = "org.kryptonmc", name = "krypton-server", version.ref = "krypton" }
 minecraft = { group = "com.mojang", name = "minecraft", version.ref = "minecraft" }
 
 fabric-api = { group = "net.fabricmc.fabric-api", name = "fabric-api", version.ref = "fabric-api" }
@@ -53,8 +51,6 @@ cloud-sponge = { group = "cloud.commandframework", name = "cloud-sponge", versio
 cloud-extras = { group = "cloud.commandframework", name = "cloud-minecraft-extras", version.ref = "cloud" }
 
 brigadier = { group = "com.mojang", name = "brigadier", version.ref = "brigadier" }
-
-krypton-annotation = { group = "org.kryptonmc", name = "krypton-annotation-processor", version.ref = "krypton" }
 
 plugin-shadow = { group = "com.github.johnrengelman", name = "shadow", version.ref = "shadow" }
 plugin-kotlin =  { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
