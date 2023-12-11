@@ -21,7 +21,7 @@ adventurefabric = "5.10.1"
 brigadier = "1.0.500"
 kotlin="1.9.21"
 
-fabric-api = "0.90.1+1.20.3"
+fabric-api = "0.91.2+1.20.4"
 fabric-loader = "0.14.25"
 
 desertwell = "2.0.4"
