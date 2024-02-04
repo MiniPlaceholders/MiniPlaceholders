@@ -41,6 +41,7 @@ public final class TagsUtils {
      * @return a new basic self closing Tag of a string
      * @since 1.1.0
      */
+    @Deprecated
     public static @NotNull Tag staticTag(@NotNull String string) {
         return Tag.selfClosingInserting(Component.text(string));
     }
@@ -51,6 +52,7 @@ public final class TagsUtils {
      * @return a new basic self closing Tag of a component
      * @since 1.1.0
      */
+    @Deprecated
     public static @NotNull Tag staticTag(@NotNull Component component) {
         return Tag.selfClosingInserting(component);
     }
