@@ -219,8 +219,27 @@ public sealed interface Expansion permits ExpansionImpl {
         @Contract("_ -> this")
         @NotNull Builder filter(final @Nullable Predicate<@NotNull Audience> predicate);
 
+        // TODO: javadocs
+
+        /**
+         * stuff here or something
+         *
+         * @param author the author of this expansion
+         * @return the {@link Builder} itself
+         * @since 2.2.5
+         */
+        @Contract("_ -> this")
         @NotNull Builder author(final @Nullable String author);
 
+        // TODO: javadocs
+        /**
+         * stuff here or something
+         *
+         * @param version the version of this expansion
+         * @return the {@link Builder} itself
+         * @since 2.2.5
+         */
+        @Contract("_ -> this")
         @NotNull Builder version(final @Nullable String version);
     }
 }
