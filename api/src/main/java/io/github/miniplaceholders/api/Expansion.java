@@ -46,14 +46,14 @@ public sealed interface Expansion permits ExpansionImpl {
     /**
      * Get the author of this expansion
      * @return the author or null
-     * @since 2.2.5
+     * @since 2.3.0
      */
     @Nullable String author();
 
     /**
      * Get the version of this expansion
      * @return the version or null
-     * @since 2.2.5
+     * @since 2.3.0
      */
     @Nullable String version();
 
@@ -237,7 +237,7 @@ public sealed interface Expansion permits ExpansionImpl {
          *
          * @param author the author of this expansion
          * @return the {@link Builder} itself
-         * @since 2.2.5
+         * @since 2.3.0
          */
         @Contract("_ -> this")
         @NotNull Builder author(final @Nullable String author);
@@ -247,7 +247,7 @@ public sealed interface Expansion permits ExpansionImpl {
          *
          * @param version the version of this expansion
          * @return the {@link Builder} itself
-         * @since 2.2.5
+         * @since 2.3.0
          */
         @Contract("_ -> this")
         @NotNull Builder version(final @Nullable String version);
