@@ -3,6 +3,7 @@ package io.github.miniplaceholders.api;
 import io.github.miniplaceholders.api.placeholder.AudiencePlaceholder;
 import io.github.miniplaceholders.api.placeholder.RelationalPlaceholder;
 import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -217,5 +218,9 @@ public sealed interface Expansion permits ExpansionImpl {
          */
         @Contract("_ -> this")
         @NotNull Builder filter(final @Nullable Predicate<@NotNull Audience> predicate);
+
+        @NotNull Builder author(final @Nullable String author);
+
+        @NotNull Builder version(final @Nullable String version);
     }
 }

@@ -27,6 +27,8 @@ final class ExpansionImpl implements Expansion {
     private final TagResolver globalPlaceholders;
     private final Class<? extends Audience> filterClass;
     private final Predicate<Audience> predicateFilter;
+    private final String author;
+    private final String version;
 
     ExpansionImpl(
         @NotNull final String expansionName,
@@ -34,7 +36,10 @@ final class ExpansionImpl implements Expansion {
         @Nullable final Collection<Tags.Relational> relationalPlaceholders,
         @Nullable final TagResolver globalPlaceholders,
         @Nullable final Class<? extends Audience> filterClass,
-        @Nullable final Predicate<Audience> predicateFilter){
+        @Nullable final Predicate<Audience> predicateFilter,
+        @Nullable final String author,
+        @Nullable final String version
+        ) {
             this.name = expansionName+"-";
             this.audiencePlaceholders = audiencePlaceholders != null
                 ? audiencePlaceholders.toArray(EMPTY_SINGLE_AUDIENCE)
@@ -45,6 +50,8 @@ final class ExpansionImpl implements Expansion {
             this.globalPlaceholders = globalPlaceholders;
             this.filterClass = filterClass;
             this.predicateFilter = predicateFilter;
+            this.author = author;
+            this.version = version;
     }
 
     @Override
@@ -136,6 +143,8 @@ final class ExpansionImpl implements Expansion {
         private TagResolver.Builder globalPlaceholders;
         private Class<? extends Audience> filterClass;
         private Predicate<Audience> predicateFilter;
+        private String author;
+        private String version;
 
         Builder(@NotNull final String name){
             this.expansionName = nonNullOrEmptyString(name, "Expansion name")
@@ -199,6 +208,18 @@ final class ExpansionImpl implements Expansion {
         }
 
         @Override
+        public Expansion.@NotNull Builder author(@Nullable final String author) {
+            this.author = author;
+            return this;
+        }
+
+        @Override
+        public Expansion.@NotNull Builder version(@Nullable final String version) {
+            this.version = version;
+            return this;
+        }
+
+        @Override
         public @NotNull Expansion build(){
             return new ExpansionImpl(
                 this.expansionName,
@@ -206,7 +227,9 @@ final class ExpansionImpl implements Expansion {
                 this.relationalPlaceholders,
                 this.globalPlaceholders != null ? this.globalPlaceholders.build() : TagResolver.empty(),
                 this.filterClass,
-                this.predicateFilter
+                this.predicateFilter,
+                    this.version,
+                    this.author
             );
         }
     }
