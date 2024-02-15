@@ -233,10 +233,8 @@ public sealed interface Expansion permits ExpansionImpl {
         @Contract("_ -> this")
         @NotNull Builder filter(final @Nullable Predicate<@NotNull Audience> predicate);
 
-        // TODO: javadocs
-
         /**
-         * stuff here or something
+         * Sets the author of this expansion
          *
          * @param author the author of this expansion
          * @return the {@link Builder} itself
@@ -245,9 +243,8 @@ public sealed interface Expansion permits ExpansionImpl {
         @Contract("_ -> this")
         @NotNull Builder author(final @Nullable String author);
 
-        // TODO: javadocs
         /**
-         * stuff here or something
+         * Sets the version of this expansion
          *
          * @param version the version of this expansion
          * @return the {@link Builder} itself
