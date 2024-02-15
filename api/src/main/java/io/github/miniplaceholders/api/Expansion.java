@@ -45,6 +45,20 @@ public sealed interface Expansion permits ExpansionImpl {
     @NotNull String name();
 
     /**
+     * Get the author of this expansion
+     * @return the author or null
+     * @since 2.2.5
+     */
+    @Nullable String author();
+
+    /**
+     * Get the version of this expansion
+     * @return the version or null
+     * @since 2.2.5
+     */
+    @Nullable String version();
+
+    /**
      * Get the {@link TagResolver} of the desired {@link Audience}
      * @param audience the audience
      * @return A TagResolver with variable placeholders of an Audience

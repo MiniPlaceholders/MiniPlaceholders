@@ -60,6 +60,16 @@ final class ExpansionImpl implements Expansion {
     }
 
     @Override
+    public @Nullable String author(){
+        return this.author;
+    }
+
+    @Override
+    public @Nullable String version(){
+        return this.version;
+    }
+
+    @Override
     public @NotNull TagResolver audiencePlaceholders(@NotNull Audience audience) {
         if (audiencePlaceholders.length == 0) return TagResolver.empty();
 
