@@ -3,7 +3,6 @@ package io.github.miniplaceholders.api;
 import io.github.miniplaceholders.api.placeholder.AudiencePlaceholder;
 import io.github.miniplaceholders.api.placeholder.RelationalPlaceholder;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
