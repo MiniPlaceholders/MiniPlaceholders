@@ -44,6 +44,20 @@ public sealed interface Expansion permits ExpansionImpl {
     @NotNull String name();
 
     /**
+     * Get the author of this expansion
+     * @return the author or null
+     * @since 2.3.0
+     */
+    @Nullable String author();
+
+    /**
+     * Get the version of this expansion
+     * @return the version or null
+     * @since 2.3.0
+     */
+    @Nullable String version();
+
+    /**
      * Get the {@link TagResolver} of the desired {@link Audience}
      * @param audience the audience
      * @return A TagResolver with variable placeholders of an Audience
@@ -217,5 +231,25 @@ public sealed interface Expansion permits ExpansionImpl {
          */
         @Contract("_ -> this")
         @NotNull Builder filter(final @Nullable Predicate<@NotNull Audience> predicate);
+
+        /**
+         * Sets the author of this expansion
+         *
+         * @param author the author of this expansion
+         * @return the {@link Builder} itself
+         * @since 2.3.0
+         */
+        @Contract("_ -> this")
+        @NotNull Builder author(final @Nullable String author);
+
+        /**
+         * Sets the version of this expansion
+         *
+         * @param version the version of this expansion
+         * @return the {@link Builder} itself
+         * @since 2.3.0
+         */
+        @Contract("_ -> this")
+        @NotNull Builder version(final @Nullable String version);
     }
 }
