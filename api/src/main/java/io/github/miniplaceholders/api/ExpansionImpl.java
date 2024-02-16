@@ -1,5 +1,6 @@
 package io.github.miniplaceholders.api;
 
+import io.github.miniplaceholders.api.enums.DisplayType;
 import io.github.miniplaceholders.api.placeholder.AudiencePlaceholder;
 import io.github.miniplaceholders.api.placeholder.RelationalPlaceholder;
 import net.kyori.adventure.audience.Audience;
@@ -144,6 +145,29 @@ final class ExpansionImpl implements Expansion {
     @Override
     public boolean registered() {
         return MiniPlaceholders.expansions.contains(this);
+    }
+
+    @Override
+    public Collection<String> audiencePlaceholdersByName() {
+        final List<String> list = new ArrayList<>(audiencePlaceholders.length);
+        for (final Tags.Single audience : this.audiencePlaceholders) {
+            list.add(Tags.formatPlaceholder(audience.key));
+        }
+
+        return list;
+    }
+
+    @Override
+    public Collection<String> audiencePlaceholders(final DisplayType displayType) {
+        final List<String> list = new ArrayList<>(audiencePlaceholders.length);
+        for (final Tags.Single audience : this.audiencePlaceholders) {
+            switch(displayType) {
+                case RAW -> list.add(audience.key);
+                case PLACEHOLDER ->  list.add(Tags.formatPlaceholder(audience.key));
+            }
+        }
+
+        return list;
     }
 
     static final class Builder implements Expansion.Builder {

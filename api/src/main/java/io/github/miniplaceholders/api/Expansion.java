@@ -1,11 +1,13 @@
 package io.github.miniplaceholders.api;
 
+import io.github.miniplaceholders.api.enums.DisplayType;
 import io.github.miniplaceholders.api.placeholder.AudiencePlaceholder;
 import io.github.miniplaceholders.api.placeholder.RelationalPlaceholder;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 
@@ -107,6 +109,11 @@ public sealed interface Expansion permits ExpansionImpl {
      * @since 2.1.0
      */
     boolean registered();
+
+    // Start get by name - https://github.com/MiniPlaceholders/MiniPlaceholders/issues/174
+    Collection<String> audiencePlaceholdersByName();
+
+    Collection<String> audiencePlaceholders(final DisplayType type); // different name?
 
     /**
      * Creates a new Expansion Builder

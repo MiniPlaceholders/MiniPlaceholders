@@ -25,9 +25,13 @@ final class Tags {
         return new Single(name, audiencePlaceholder);
     }
 
+    static String formatPlaceholder(@NotNull final String key) {
+        return "<%s>".formatted(key);
+    }
+
     static final class Relational {
         private final RelationalPlaceholder relationalPlaceholder;
-        private final String key;
+        final String key;
 
         Relational(final String key, final RelationalPlaceholder relationalPlaceholder){
             this.relationalPlaceholder = relationalPlaceholder;
@@ -67,7 +71,7 @@ final class Tags {
 
     static final class Single {
         private final AudiencePlaceholder audiencePlaceholder;
-        private final String key;
+        final String key;
 
         private Single(@NotNull final String key, @NotNull final AudiencePlaceholder audiencePlaceholder){
             this.key = key;
