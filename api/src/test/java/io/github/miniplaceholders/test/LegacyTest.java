@@ -22,9 +22,9 @@ class LegacyTest {
     }
 
     @Test
-    void testIfLegacyOrElse() {
+    void testMapLegacyOrElse() {
         final String legacyInput = "&fhi <red>aaaa";
-        Tag legacyProcessedTag = LegacyUtils.ifLegacyOrElse(
+        Tag legacyProcessedTag = LegacyUtils.mapLegacyOrElse(
                 legacyInput,
                 legacy -> Tag.inserting(LegacyUtils.parsePossibleLegacy(legacy)),
                 Tag::preProcessParsed
@@ -32,7 +32,7 @@ class LegacyTest {
         assertInstanceOf(Inserting.class, legacyProcessedTag);
 
         final String modernInput = "<rainbow>aaaaaaaaaaaaa";
-        Tag modernProcessedTag = LegacyUtils.ifLegacyOrElse(
+        Tag modernProcessedTag = LegacyUtils.mapLegacyOrElse(
                 modernInput,
                 __ -> fail(),
                 Tag::preProcessParsed

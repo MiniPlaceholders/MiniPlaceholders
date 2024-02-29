@@ -6,7 +6,6 @@ import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jetbrains.annotations.UnknownNullability;
 
 import java.util.function.Function;
 
@@ -142,8 +141,8 @@ public final class LegacyUtils {
      * Maps the input to a type depending on whether it contains legacy formatting or not.
      *
      * @param string the string input
-     * @param hasLegacy the mapping function in case the string contains legacy formatting
-     * @param modernInput the mapping function in case the string does not contain any legacy character type,
+     * @param legacyMapping the mapping function in case the string contains legacy formatting
+     * @param modernMapping the mapping function in case the string does not contain any legacy character type,
      *                    being safe to use with MiniMessage
      * @return the mapped result
      * @param <R> the result type
@@ -152,17 +151,17 @@ public final class LegacyUtils {
      * @see #hasLegacyFormat(String)
      * @since 2.3.0
      */
-    public static <R> R ifLegacyOrElse(
+    public static <R> R mapLegacyOrElse(
             final @NotNull String string,
-            final @NotNull Function<@UnknownNullability String, R> hasLegacy,
-            final @NotNull Function<@UnknownNullability String, R> modernInput
+            final @NotNull Function<String, R> legacyMapping,
+            final @NotNull Function<String, R> modernMapping
     ) {
-        requireNonNull(hasLegacy, "hasLegacy");
-        requireNonNull(modernInput, "modernInput");
+        requireNonNull(legacyMapping, "legacyMapping");
+        requireNonNull(modernMapping, "modernInput");
         if (hasLegacyFormat(string)) {
-            return hasLegacy.apply(string);
+            return legacyMapping.apply(string);
         } else {
-            return modernInput.apply(string);
+            return modernMapping.apply(string);
         }
     }
 }
