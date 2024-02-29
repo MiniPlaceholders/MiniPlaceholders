@@ -2,10 +2,13 @@ package io.github.miniplaceholders.test;
 
 import io.github.miniplaceholders.api.utils.LegacyUtils;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.tag.Inserting;
+import net.kyori.adventure.text.minimessage.tag.PreProcess;
+import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 class LegacyTest {
     @Test
@@ -16,5 +19,24 @@ class LegacyTest {
         final String expected = "hello... i hate legacy format so much";
 
         assertEquals(expected, result);
+    }
+
+    @Test
+    void testIfLegacyOrElse() {
+        final String legacyInput = "&fhi <red>aaaa";
+        Tag legacyProcessedTag = LegacyUtils.ifLegacyOrElse(
+                legacyInput,
+                legacy -> Tag.inserting(LegacyUtils.parsePossibleLegacy(legacy)),
+                Tag::preProcessParsed
+        );
+        assertInstanceOf(Inserting.class, legacyProcessedTag);
+
+        final String modernInput = "<rainbow>aaaaaaaaaaaaa";
+        Tag modernProcessedTag = LegacyUtils.ifLegacyOrElse(
+                modernInput,
+                __ -> fail(),
+                Tag::preProcessParsed
+        );
+        assertInstanceOf(PreProcess.class, modernProcessedTag);
     }
 }
