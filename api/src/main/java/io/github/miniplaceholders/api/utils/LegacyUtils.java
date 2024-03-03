@@ -7,6 +7,9 @@ import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.function.Function;
+
+import static java.util.Objects.requireNonNull;
 import static net.kyori.adventure.text.minimessage.MiniMessage.miniMessage;
 
 /**
@@ -68,7 +71,10 @@ public final class LegacyUtils {
      * @return a parsed string
      * @since 2.2.1
      */
-    public static @NotNull Component parsePossibleLegacy(@Nullable String string, @NotNull final Context context) {
+    public static @NotNull Component parsePossibleLegacy(
+            @Nullable String string,
+            final @NotNull Context context
+    ) {
         if (string == null || string.isEmpty()) return Component.empty();
         if (string.indexOf(LegacyComponentSerializer.SECTION_CHAR) != -1) {
             string = string.replace(LegacyComponentSerializer.SECTION_CHAR, LegacyComponentSerializer.AMPERSAND_CHAR);
@@ -97,7 +103,10 @@ public final class LegacyUtils {
      * @return a parsed string
      * @since 2.2.1
      */
-    public static @NotNull Component parsePossibleLegacy(@Nullable String string, @NotNull final TagResolver resolver) {
+    public static @NotNull Component parsePossibleLegacy(
+            @Nullable String string,
+            final @NotNull TagResolver resolver
+    ) {
         if (string == null || string.isEmpty()) return Component.empty();
         if (string.indexOf(LegacyComponentSerializer.SECTION_CHAR) != -1) {
             string = string.replace(LegacyComponentSerializer.SECTION_CHAR, LegacyComponentSerializer.AMPERSAND_CHAR);
@@ -111,5 +120,48 @@ public final class LegacyUtils {
                         .replace("\\>", ">"),
                 resolver
         );
+    }
+
+    /**
+     * Checks if the provided string contains legacy formatting.
+     *
+     * @param string the string input
+     * @return whether the string has legacy content
+     * @see LegacyComponentSerializer#AMPERSAND_CHAR
+     * @see LegacyComponentSerializer#SECTION_CHAR
+     * @since 2.3.0
+     */
+    public static boolean hasLegacyFormat(final String string) {
+        requireNonNull(string, "string");
+        return string.indexOf(LegacyComponentSerializer.SECTION_CHAR) != -1
+                || string.indexOf(LegacyComponentSerializer.AMPERSAND_CHAR) != -1;
+    }
+
+    /**
+     * Maps the input to a type depending on whether it contains legacy formatting or not.
+     *
+     * @param string the string input
+     * @param legacyMapping the mapping function in case the string contains legacy formatting
+     * @param modernMapping the mapping function in case the string does not contain any legacy character type,
+     *                    being safe to use with MiniMessage
+     * @return the mapped result
+     * @param <R> the result type
+     * @see LegacyComponentSerializer#AMPERSAND_CHAR
+     * @see LegacyComponentSerializer#SECTION_CHAR
+     * @see #hasLegacyFormat(String)
+     * @since 2.3.0
+     */
+    public static <R> R mapLegacyOrElse(
+            final @NotNull String string,
+            final @NotNull Function<String, R> legacyMapping,
+            final @NotNull Function<String, R> modernMapping
+    ) {
+        requireNonNull(legacyMapping, "legacyMapping");
+        requireNonNull(modernMapping, "modernInput");
+        if (hasLegacyFormat(string)) {
+            return legacyMapping.apply(string);
+        } else {
+            return modernMapping.apply(string);
+        }
     }
 }
