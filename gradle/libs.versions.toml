@@ -15,7 +15,7 @@ shadow = "8.1.1"
 jmh = "0.7.2"
 dokka = "1.9.10"
 
-cloud = "1.8.4"
+cloud = "2.0.0-beta.4"
 adventure = "4.15.0"
 adventurefabric = "5.12.0"
 brigadier = "1.0.500"
@@ -42,13 +42,13 @@ adventure-platform-fabric = { group = "net.kyori", name = "adventure-platform-fa
 adventure-serializer-legacy = { group = "net.kyori", name = "adventure-text-serializer-legacy", version.ref = "adventure" }
 adventure-serializer-plain = { group = "net.kyori", name = "adventure-text-serializer-plain", version.ref = "adventure" }
 
-cloud-core = { group = "cloud.commandframework", name = "cloud-core", version.ref = "cloud" }
-cloud-annotations = { group = "cloud.commandframework", name = "cloud-annotations", version.ref = "cloud" }
-cloud-velocity = { group = "cloud.commandframework", name = "cloud-velocity", version.ref = "cloud" }
-cloud-paper = { group = "cloud.commandframework", name = "cloud-paper", version.ref = "cloud" }
-cloud-fabric = { group = "cloud.commandframework", name = "cloud-fabric", version.ref = "cloud" }
-cloud-sponge = { group = "cloud.commandframework", name = "cloud-sponge", version = "1.8.0-SNAPSHOT" }
-cloud-extras = { group = "cloud.commandframework", name = "cloud-minecraft-extras", version.ref = "cloud" }
+cloud-core = { group = "org.incendo", name = "cloud-core", version.ref = "cloud" }
+cloud-annotations = { group = "org.incendo", name = "cloud-annotations", version.ref = "cloud" }
+cloud-velocity = { group = "org.incendo", name = "cloud-velocity", version.ref = "cloud" }
+cloud-paper = { group = "org.incendo", name = "cloud-paper", version.ref = "cloud" }
+cloud-fabric = { group = "org.incendo", name = "cloud-fabric", version.ref = "cloud" }
+cloud-sponge = { group = "org.incendo", name = "cloud-sponge7", version = "2.0.0-beta.5" }
+cloud-extras = { group = "org.incendo", name = "cloud-minecraft-extras", version.ref = "cloud" }
 
 brigadier = { group = "com.mojang", name = "brigadier", version.ref = "brigadier" }
 
