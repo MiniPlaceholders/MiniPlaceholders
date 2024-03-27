@@ -1,7 +1,5 @@
 package io.github.miniplaceholders.fabric;
 
-import cloud.commandframework.execution.AsynchronousCommandExecutionCoordinator;
-import cloud.commandframework.fabric.FabricServerCommandManager;
 import io.github.miniplaceholders.api.Expansion;
 import io.github.miniplaceholders.common.PlaceholdersCommand;
 import io.github.miniplaceholders.common.PlaceholdersPlugin;
@@ -16,13 +14,15 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.packs.PackResources;
 import net.minecraft.world.entity.Entity;
+import org.incendo.cloud.SenderMapper;
+import org.incendo.cloud.execution.ExecutionCoordinator;
+import org.incendo.cloud.fabric.FabricServerCommandManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
 
 public class FabricMod implements ModInitializer, PlaceholdersPlugin {
     private final Logger logger = LoggerFactory.getLogger("miniplaceholders");
@@ -97,9 +97,8 @@ public class FabricMod implements ModInitializer, PlaceholdersPlugin {
     @Override
     public void registerPlatformCommand() {
         final FabricServerCommandManager<CommandSourceStack> commandManager = new FabricServerCommandManager<>(
-                AsynchronousCommandExecutionCoordinator.simpleCoordinator(),
-                Function.identity(),
-                Function.identity()
+                ExecutionCoordinator.simpleCoordinator(),
+                SenderMapper.identity()
         );
         PlaceholdersCommand.<CommandSourceStack>builder()
                 .hasPermissionCheck((source, permission) -> Permissions.check(source, permission, 4))

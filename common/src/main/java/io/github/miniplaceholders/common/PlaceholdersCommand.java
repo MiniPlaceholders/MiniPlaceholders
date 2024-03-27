@@ -1,12 +1,5 @@
 package io.github.miniplaceholders.common;
 
-import cloud.commandframework.ArgumentDescription;
-import cloud.commandframework.Command;
-import cloud.commandframework.CommandManager;
-import cloud.commandframework.arguments.CommandArgument;
-import cloud.commandframework.arguments.standard.StringArgument;
-import cloud.commandframework.minecraft.extras.AudienceProvider;
-import cloud.commandframework.minecraft.extras.MinecraftExceptionHandler;
 import io.github.miniplaceholders.api.MiniPlaceholders;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.builder.AbstractBuilder;
@@ -17,6 +10,17 @@ import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.kyori.adventure.util.TriState;
 import net.william278.desertwell.about.AboutMenu;
 import net.william278.desertwell.util.Version;
+import org.incendo.cloud.Command;
+import org.incendo.cloud.CommandManager;
+import org.incendo.cloud.component.CommandComponent;
+import org.incendo.cloud.component.TypedCommandComponent;
+import org.incendo.cloud.description.Description;
+import org.incendo.cloud.minecraft.extras.AudienceProvider;
+import org.incendo.cloud.minecraft.extras.MinecraftExceptionHandler;
+import org.incendo.cloud.parser.standard.StringParser;
+import org.incendo.cloud.permission.Permission;
+import org.incendo.cloud.permission.PermissionResult;
+import org.incendo.cloud.suggestion.SuggestionProvider;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -85,34 +89,34 @@ public final class PlaceholdersCommand<A extends Audience> {
     }
 
     public void register() {
-        new MinecraftExceptionHandler<A>()
-                .withDefaultHandlers()
-                .withDecorator(component -> Component.text().append(TITLE).appendSpace().append(component).build())
-                .apply(commandManager, AudienceProvider.nativeAudience());
+        MinecraftExceptionHandler.create(AudienceProvider.nativeAudience())
+                .defaultHandlers()
+                .decorator(component -> Component.text().append(TITLE).appendSpace().append(component).build());
 
         commandManager.command(rootBuilder()
                 .permission(src -> {
                     if (hasPermission != null) {
-                        return hasPermission.test(src, "miniplaceholders.command");
+                        return PermissionResult.of(hasPermission.test(src, "miniplaceholders.command"), Permission.permission("miniplaceholders.command"));
                     }
-                    return src
-                            .get(PermissionChecker.POINTER)
-                            .map(checker -> checker.value("miniplaceholders.command"))
-                            .orElse(TriState.FALSE) != TriState.FALSE;
+                    return PermissionResult.of(src.get(PermissionChecker.POINTER)
+                                    .map(checker -> checker.value("miniplaceholders.command"))
+                                    .orElse(TriState.FALSE) != TriState.FALSE,
+                            Permission.permission("miniplaceholders.command")
+                    );
                 })
-                .handler(handler -> handler.getSender().sendMessage(INFO)));
-        final CommandArgument<A, String> sourceArgument = StringArgument.<A>builder("source")
-                .single()
-                .withDefaultDescription(ArgumentDescription.of("The source from which the message will be parsed"))
-                .withSuggestionsProvider((ctx, st) -> {
+                .handler(handler -> handler.sender().sendMessage(INFO)));
+        final TypedCommandComponent<A, String> sourceArgument = CommandComponent.<A, String>ofType(String.class, "source")
+                .parser(StringParser.stringParser())
+                .description(Description.of("The source from which the message will be parsed"))
+                .suggestionProvider(SuggestionProvider.blockingStrings((ctx, st) -> {
                     final List<String> suggestions = playersSuggestions.get();
                     suggestions.add("me");
                     return suggestions;
-                })
+                }))
                 .build();
-        final CommandArgument<A, String> stringArgument = StringArgument.<A>builder("message")
-                .greedy()
-                .withDefaultDescription(ArgumentDescription.of("Message to be parsed"))
+        final TypedCommandComponent<A, String> stringArgument = CommandComponent.<A, String>ofType(String.class, "message")
+                .parser(StringParser.greedyStringParser())
+                .description(Description.of("Message to be parsed"))
                 .build();
 
         commandManager.command(
@@ -124,10 +128,10 @@ public final class PlaceholdersCommand<A extends Audience> {
                             final String source = handler.get(sourceArgument);
 
                             final Audience objective = "me".equals(source)
-                                    ? handler.getSender()
+                                    ? handler.sender()
                                     : toAudience.apply(source);
                             if (objective == null){
-                                handler.getSender().sendMessage(text("You must specify a valid player", RED));
+                                handler.sender().sendMessage(text("You must specify a valid player", RED));
                                 return;
                             }
                             final String toParse = handler.get(stringArgument);
@@ -136,13 +140,13 @@ public final class PlaceholdersCommand<A extends Audience> {
                                     toParse,
                                     MiniPlaceholders.getAudienceGlobalPlaceholders(objective)
                             );
-                            handler.getSender().sendMessage(parsed);
+                            handler.sender().sendMessage(parsed);
                         })
         );
         commandManager.command(
                 rootBuilder().literal("help")
                         .permission("miniplaceholders.command.help")
-                        .handler(handler -> handler.getSender().sendMessage(HELP))
+                        .handler(handler -> handler.sender().sendMessage(HELP))
         );
     }
 

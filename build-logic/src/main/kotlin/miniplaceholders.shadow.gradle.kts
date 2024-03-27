@@ -9,7 +9,7 @@ tasks {
         archiveClassifier.set("")
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
         relocate("net.william278.desertwell", "io.github.miniplaceholders.libs.desertwell")
-        relocate("cloud.commandframework", "io.github.miniplaceholders.libs.cloud")
+        relocate("org.incendo.cloud", "io.github.miniplaceholders.libs.cloud")
         if (project.simpleName() != "sponge") {
             relocate("io.leangen.geantyref", "io.github.miniplaceholders.libs.geantyref")
         }
