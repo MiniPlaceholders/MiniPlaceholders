@@ -42,7 +42,6 @@ arrayOf(
     "common",
     "paper",
     "velocity",
-    //"krypton",
     "fabric",
     "sponge"
 ).forEach {
