@@ -73,7 +73,7 @@ public class FabricMod implements ModInitializer, PlaceholdersPlugin {
                     }
                     return Tag.preProcessParsed(Integer.toString(entities));
                 })
-                .globalPlaceholder("mspt", (queue, ctx) -> Tag.preProcessParsed(MSPT_FORMAT.format(this.minecraftServer.getAverageTickTime())))
+                .globalPlaceholder("mspt", (queue, ctx) -> Tag.preProcessParsed(MSPT_FORMAT.format(this.minecraftServer.getAverageTickTimeNanos())))
                 .globalPlaceholder("datapack_list", (queue, ctx) ->
                     Tag.selfClosingInserting(this.minecraftServer.getResourceManager()
                             .listPacks()

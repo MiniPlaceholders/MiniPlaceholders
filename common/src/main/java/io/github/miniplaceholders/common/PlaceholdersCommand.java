@@ -15,8 +15,8 @@ import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.component.CommandComponent;
 import org.incendo.cloud.component.TypedCommandComponent;
 import org.incendo.cloud.description.Description;
-import org.incendo.cloud.minecraft.extras.AudienceProvider;
-import org.incendo.cloud.minecraft.extras.MinecraftExceptionHandler;
+//import org.incendo.cloud.minecraft.extras.AudienceProvider;
+//import org.incendo.cloud.minecraft.extras.MinecraftExceptionHandler;
 import org.incendo.cloud.parser.standard.StringParser;
 import org.incendo.cloud.permission.Permission;
 import org.incendo.cloud.permission.PermissionResult;
@@ -75,7 +75,7 @@ public final class PlaceholdersCommand<A extends Audience> {
             .title(TITLE)
             .description(text("MiniMessage Component-based Placeholders for Paper, Folia, Fabric, Velocity, Sponge and Krypton platforms"))
             .credits("Author", AboutMenu.Credit.of("4drian3d").url("https://github.com/4drian3d"))
-            .credits("Contributors", AboutMenu.Credit.of("Sliman4"))
+            .credits("Contributors", AboutMenu.Credit.of("Sliman4"), AboutMenu.Credit.of("Stampede2011"))
             .buttons(
                     AboutMenu.Link.of("https://github.com/MiniPlaceholders/MiniPlaceholders/wiki/User-Getting-Started").text("Documentation").icon("⛏"),
                     AboutMenu.Link.of("https://discord.gg/5NMMzK5mAn").text("Discord").color(TextColor.color(0x7289da)).icon("⭐"),
@@ -89,9 +89,9 @@ public final class PlaceholdersCommand<A extends Audience> {
     }
 
     public void register() {
-        MinecraftExceptionHandler.create(AudienceProvider.nativeAudience())
-                .defaultHandlers()
-                .decorator(component -> Component.text().append(TITLE).appendSpace().append(component).build());
+//        MinecraftExceptionHandler.create(AudienceProvider.nativeAudience())
+//                .defaultHandlers()
+//                .decorator(component -> Component.text().append(TITLE).appendSpace().append(component).build());
 
         commandManager.command(rootBuilder()
                 .permission(src -> {

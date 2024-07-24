@@ -1,7 +1,6 @@
 package io.github.miniplaceholders.paper;
 
 import io.github.miniplaceholders.api.Expansion;
-import io.github.miniplaceholders.common.PlaceholdersCommand;
 import io.github.miniplaceholders.common.PlaceholdersPlugin;
 import io.github.miniplaceholders.connect.InternalPlatform;
 import io.papermc.paper.datapack.Datapack;
@@ -9,18 +8,10 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import org.bukkit.World;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.permissions.Permissible;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.incendo.cloud.SenderMapper;
-import org.incendo.cloud.execution.ExecutionCoordinator;
-import org.incendo.cloud.paper.PaperCommandManager;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.stream.Collectors;
 
 @SuppressWarnings("unused")
 public final class PaperPlugin extends JavaPlugin implements PlaceholdersPlugin {
@@ -37,7 +28,6 @@ public final class PaperPlugin extends JavaPlugin implements PlaceholdersPlugin 
     public void onEnable(){
         this.getSLF4JLogger().info("Starting MiniPlaceholders Paper");
         this.loadDefaultExpansions();
-        this.registerPlatformCommand();
     }
 
     @Override
@@ -80,29 +70,6 @@ public final class PaperPlugin extends JavaPlugin implements PlaceholdersPlugin 
     }
 
     @Override
-    @SuppressWarnings({"sonarlint(java:s1874)"})
     public void registerPlatformCommand() {
-        try {
-            PaperCommandManager<CommandSender> commandManager = new PaperCommandManager<>(
-                    this,
-                    ExecutionCoordinator.simpleCoordinator(),
-                    SenderMapper.identity()
-            );
-            commandManager.registerBrigadier();
-
-            PlaceholdersCommand.<CommandSender>builder()
-                    .playerSuggestions(() -> getServer().getOnlinePlayers()
-                            .stream()
-                            .map(Player::getName)
-                            .collect(Collectors.toCollection(ArrayList::new)))
-                    .toAudience(st -> getServer().getPlayer(st))
-                    .hasPermissionCheck(Permissible::hasPermission)
-                    .manager(commandManager)
-                    .command("miniplaceholders")
-                    .build()
-                    .register();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 }
