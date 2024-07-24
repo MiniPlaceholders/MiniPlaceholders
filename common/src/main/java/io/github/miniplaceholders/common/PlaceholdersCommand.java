@@ -73,7 +73,7 @@ public final class PlaceholdersCommand<A extends Audience> {
 
     private static final Component INFO = AboutMenu.builder()
             .title(TITLE)
-            .description(text("MiniMessage Component-based Placeholders for Paper, Folia, Fabric, Velocity, Sponge and Krypton platforms"))
+            .description(text("MiniMessage Component-based Placeholders for Paper, Folia, Fabric, Velocity and Sponge platforms"))
             .credits("Author", AboutMenu.Credit.of("4drian3d").url("https://github.com/4drian3d"))
             .credits("Contributors", AboutMenu.Credit.of("Sliman4"), AboutMenu.Credit.of("Stampede2011"))
             .buttons(

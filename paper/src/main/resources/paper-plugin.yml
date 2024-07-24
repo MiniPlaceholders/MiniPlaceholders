@@ -2,6 +2,6 @@ name: MiniPlaceholders
 version: '${version}'
 main: io.github.miniplaceholders.paper.PaperPlugin
 bootstrapper: io.github.miniplaceholders.paper.PaperBootstrap
-description: MiniMessage Component-based Placeholders for PaperMC, Krypton and Velocity platforms
+description: MiniMessage Component-based Placeholders for Paper, Fabric, Sponge, Folia and Velocity platforms
 api-version: '1.21'
 folia-supported: true

@@ -21,7 +21,7 @@ MiniMessage Component-based Placeholders for Paper, Fabric, Sponge, Folia and Ve
 - `/vminiplaceholders parse me "[message with placeholders]"`
 - `/vminiplaceholders parse player [some-player] "[message with placeholders]"`
 
-### Paper | Folia | Fabric | Krypton
+### Paper | Folia | Fabric
 
 - `/miniplaceholders <parse|help> player [some-player] "[message with placeholders]`
 - `/miniplaceholders parse player [some-player] "[message with placeholders]"`
