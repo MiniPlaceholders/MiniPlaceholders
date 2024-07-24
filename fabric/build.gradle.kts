@@ -17,7 +17,7 @@ dependencies {
     includeDependency(libs.luckopermissionsapi)
     includeDependency(libs.cloud.fabric)
     includeDependency(libs.cloud.core)
-    includeDependency(libs.cloud.extras)
+    //includeDependency(libs.cloud.extras)
     includeDependency(libs.desertwell)
 
     shadeModule(projects.miniplaceholdersApi)

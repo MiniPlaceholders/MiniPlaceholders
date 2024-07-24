@@ -10,9 +10,9 @@ dependencies {
         exclude("org.json")
     }
     implementation(libs.cloud.core)
-    implementation(libs.cloud.extras) {
-        isTransitive = false
-    }
+//    implementation(libs.cloud.extras) {
+//        isTransitive = false
+//    }
     compileOnly(libs.adventure.api)
     compileOnly(libs.adventure.minimesssage)
 }

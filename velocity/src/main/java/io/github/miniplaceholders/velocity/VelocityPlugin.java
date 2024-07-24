@@ -1,8 +1,5 @@
 package io.github.miniplaceholders.velocity;
 
-import cloud.commandframework.execution.CommandExecutionCoordinator;
-import cloud.commandframework.velocity.CloudInjectionModule;
-import cloud.commandframework.velocity.VelocityCommandManager;
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.google.inject.Key;
@@ -20,6 +17,10 @@ import io.github.miniplaceholders.common.PlaceholdersPlugin;
 import io.github.miniplaceholders.common.PluginConstants;
 import io.github.miniplaceholders.connect.InternalPlatform;
 import net.kyori.adventure.text.minimessage.tag.Tag;
+import org.incendo.cloud.SenderMapper;
+import org.incendo.cloud.execution.ExecutionCoordinator;
+import org.incendo.cloud.velocity.CloudInjectionModule;
+import org.incendo.cloud.velocity.VelocityCommandManager;
 import org.slf4j.Logger;
 
 import java.util.ArrayList;
@@ -82,9 +83,8 @@ public final class VelocityPlugin implements PlaceholdersPlugin {
         injector = injector.createChildInjector(
             new CloudInjectionModule<>(
                     CommandSource.class,
-                    CommandExecutionCoordinator.simpleCoordinator(),
-                    Function.identity(),
-                    Function.identity()
+                    ExecutionCoordinator.simpleCoordinator(),
+                    SenderMapper.identity()
             )
         );
         final VelocityCommandManager<CommandSource> commandManager = injector.getInstance(
