@@ -37,6 +37,8 @@ class MiniPlaceholdersTest {
                 .build();
         expansion.register();
 
+        assertNotNull(MiniPlaceholders.getExpansionByName("testregistration"));
+
         assertTrue(expansion.registered());
         assertThrows(IllegalStateException.class, expansion::register);
 

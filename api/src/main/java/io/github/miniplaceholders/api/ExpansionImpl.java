@@ -8,6 +8,7 @@ import net.kyori.adventure.text.minimessage.Context;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.ArgumentQueue;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import org.intellij.lang.annotations.Subst;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -40,7 +41,7 @@ final class ExpansionImpl implements Expansion {
         @Nullable final String author,
         @Nullable final String version
         ) {
-            this.name = expansionName+"-";
+            this.name = expansionName;
             this.audiencePlaceholders = audiencePlaceholders != null
                 ? audiencePlaceholders.toArray(EMPTY_SINGLE_AUDIENCE)
                 : EMPTY_SINGLE_AUDIENCE;
@@ -148,6 +149,8 @@ final class ExpansionImpl implements Expansion {
 
     static final class Builder implements Expansion.Builder {
         private final String expansionName;
+        @Subst("server")
+        private final String expansionPrefix;
         private Set<Tags.Single> audiencePlaceholders;
         private Set<Tags.Relational> relationalPlaceholders;
         private TagResolver.Builder globalPlaceholders;
@@ -157,8 +160,8 @@ final class ExpansionImpl implements Expansion {
         private String version;
 
         Builder(@NotNull final String name){
-            this.expansionName = nonNullOrEmptyString(name, "Expansion name")
-                .toLowerCase(Locale.ROOT).concat("_");
+            this.expansionName = nonNullOrEmptyString(name, "Expansion name");
+            this.expansionPrefix = name.toLowerCase(Locale.ROOT).concat("_");
         }
 
         @Override
@@ -168,7 +171,7 @@ final class ExpansionImpl implements Expansion {
 
             if (this.audiencePlaceholders == null) this.audiencePlaceholders = new HashSet<>();
 
-            this.audiencePlaceholders.add(Tags.single(expansionName+key, audiencePlaceholder));
+            this.audiencePlaceholders.add(Tags.single(expansionPrefix+key, audiencePlaceholder));
             return this;
         }
 
@@ -179,7 +182,7 @@ final class ExpansionImpl implements Expansion {
 
             if (this.relationalPlaceholders == null) this.relationalPlaceholders = new HashSet<>();
 
-            this.relationalPlaceholders.add(Tags.relational(expansionName+"rel_"+key, relationalPlaceholder));
+            this.relationalPlaceholders.add(Tags.relational(expansionPrefix+"rel_"+key, relationalPlaceholder));
             return this;
         }
 
@@ -190,7 +193,7 @@ final class ExpansionImpl implements Expansion {
 
             if (this.globalPlaceholders == null) this.globalPlaceholders = TagResolver.builder();
 
-            this.globalPlaceholders.tag(expansionName+key, function);
+            this.globalPlaceholders.tag(expansionPrefix+key, function);
             return this;
         }
 
@@ -201,7 +204,7 @@ final class ExpansionImpl implements Expansion {
 
             if (this.globalPlaceholders == null) this.globalPlaceholders = TagResolver.builder();
 
-            this.globalPlaceholders.tag(expansionName+key, tag);
+            this.globalPlaceholders.tag(expansionPrefix+key, tag);
             return this;
         }
 
