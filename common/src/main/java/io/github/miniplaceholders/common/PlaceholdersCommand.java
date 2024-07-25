@@ -15,8 +15,8 @@ import org.incendo.cloud.CommandManager;
 import org.incendo.cloud.component.CommandComponent;
 import org.incendo.cloud.component.TypedCommandComponent;
 import org.incendo.cloud.description.Description;
-//import org.incendo.cloud.minecraft.extras.AudienceProvider;
-//import org.incendo.cloud.minecraft.extras.MinecraftExceptionHandler;
+import org.incendo.cloud.minecraft.extras.AudienceProvider;
+import org.incendo.cloud.minecraft.extras.MinecraftExceptionHandler;
 import org.incendo.cloud.parser.standard.StringParser;
 import org.incendo.cloud.permission.Permission;
 import org.incendo.cloud.permission.PermissionResult;
@@ -89,9 +89,11 @@ public final class PlaceholdersCommand<A extends Audience> {
     }
 
     public void register() {
-//        MinecraftExceptionHandler.create(AudienceProvider.nativeAudience())
-//                .defaultHandlers()
-//                .decorator(component -> Component.text().append(TITLE).appendSpace().append(component).build());
+      //noinspection unchecked
+      MinecraftExceptionHandler.create(AudienceProvider.nativeAudience())
+                .defaultHandlers()
+                .decorator(component -> Component.text().append(TITLE).appendSpace().append(component))
+                .registerTo((CommandManager<Audience>) commandManager);
 
         commandManager.command(rootBuilder()
                 .permission(src -> {

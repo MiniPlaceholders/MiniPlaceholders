@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 @SuppressWarnings({"unused", "UnstableApiUsage"})
-public class PaperBootstrap implements PluginBootstrap {
+public final class PaperBootstrap implements PluginBootstrap {
   @Override
   public void bootstrap(@NotNull BootstrapContext bootstrapContext) {
     PaperCommandManager<SourceWrapper> commandManager = PaperCommandManager
