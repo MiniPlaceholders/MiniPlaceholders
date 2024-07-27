@@ -47,7 +47,7 @@ cloud-annotations = { group = "org.incendo", name = "cloud-annotations", version
 cloud-velocity = { group = "org.incendo", name = "cloud-velocity", version.ref = "cloud" }
 cloud-paper = { group = "org.incendo", name = "cloud-paper", version = "2.0.0-beta.9" }
 cloud-fabric = { group = "org.incendo", name = "cloud-fabric", version.ref = "cloud" }
-cloud-sponge = { group = "org.incendo", name = "cloud-sponge7", version = "2.0.0-beta.5" }
+cloud-sponge = { group = "org.incendo", name = "cloud-sponge7", version = "2.0.0-SNAPSHOT" }
 cloud-extras = { group = "org.incendo", name = "cloud-minecraft-extras", version.ref = "cloud" }
 
 brigadier = { group = "com.mojang", name = "brigadier", version.ref = "brigadier" }
