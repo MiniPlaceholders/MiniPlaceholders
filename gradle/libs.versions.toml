@@ -42,7 +42,7 @@ adventure-platform-fabric = { group = "net.kyori", name = "adventure-platform-fa
 adventure-serializer-legacy = { group = "net.kyori", name = "adventure-text-serializer-legacy", version.ref = "adventure" }
 adventure-serializer-plain = { group = "net.kyori", name = "adventure-text-serializer-plain", version.ref = "adventure" }
 
-cloud-core = { group = "org.incendo", name = "cloud-core", version = "2.0.0-rc.2" }
+cloud-core = { group = "org.incendo", name = "cloud-core", version = "2.0.0" }
 cloud-annotations = { group = "org.incendo", name = "cloud-annotations", version.ref = "cloud" }
 cloud-velocity = { group = "org.incendo", name = "cloud-velocity", version.ref = "cloud" }
 cloud-paper = { group = "org.incendo", name = "cloud-paper", version = "2.0.0-beta.9" }
