@@ -42,7 +42,7 @@ arrayOf(
     "common",
     "paper",
     "velocity",
-    "fabric", // Waiting on 1.21.2
+    "fabric",
     //"sponge"
 ).forEach {
     include("miniplaceholders-$it")

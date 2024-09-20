@@ -14,7 +14,7 @@ dependencies {
         isTransitive = false
     }
     compileOnly(libs.adventure.api)
-    compileOnly(libs.adventure.minimesssage)
+    compileOnly(libs.adventure.minimessage)
 }
 
 sourceSets {

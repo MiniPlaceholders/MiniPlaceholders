@@ -38,7 +38,7 @@ fabric-loader = { group = "net.fabricmc", name = "fabric-loader", version.ref = 
 luckopermissionsapi = { group = "me.lucko", name = "fabric-permissions-api", version = "0.3.1" }
 
 adventure-api = { group = "net.kyori", name = "adventure-api", version.ref = "adventure" }
-adventure-minimesssage = { group = "net.kyori", name = "adventure-text-minimessage", version.ref = "adventure" }
+adventure-minimessage = { group = "net.kyori", name = "adventure-text-minimessage", version.ref = "adventure" }
 adventure-platform-fabric = { group = "net.kyori", name = "adventure-platform-fabric", version.ref = "adventurefabric" }
 adventure-platform-fabric-repack = { group = "net.kyori", name = "adventure-platform-mod-shared-fabric-repack", version.ref = "adventurefabric" }
 adventure-serializer-legacy = { group = "net.kyori", name = "adventure-text-serializer-legacy", version.ref = "adventure" }

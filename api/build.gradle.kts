@@ -6,7 +6,7 @@ plugins {
 
 dependencies {
     compileOnly(libs.adventure.api)
-    compileOnly(libs.adventure.minimesssage)
+    compileOnly(libs.adventure.minimessage)
     compileOnly(libs.adventure.serializer.legacy)
     compileOnly(projects.miniplaceholdersConnect)
 
@@ -14,7 +14,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     testImplementation(libs.adventure.api)
-    testImplementation(libs.adventure.minimesssage)
+    testImplementation(libs.adventure.minimessage)
     testImplementation(libs.adventure.serializer.plain)
     testImplementation(libs.adventure.serializer.legacy)
 }
