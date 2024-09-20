@@ -12,8 +12,9 @@ dependencies {
     modImplementation(libs.fabric.loader)
     modImplementation(libs.fabric.api)
 
-    includeDependency(libs.adventure.platform.fabric)
+    includeDependency(libs.adventure.platform.fabric.repack)
     includeDependency(libs.adventure.serializer.legacy)
+    includeDependency(libs.adventure.minimesssage)
     includeDependency(libs.luckopermissionsapi)
     includeDependency(libs.cloud.fabric)
     includeDependency(libs.cloud.core)

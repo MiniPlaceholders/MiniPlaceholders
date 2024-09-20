@@ -30,7 +30,7 @@ dependencyResolutionManagement {
 }
 
 plugins {
-    id("fabric-loom") version "1.7.2"
+    id("fabric-loom") version "1.7.3"
     id("org.spongepowered.gradle.plugin") version "2.2.0"
     id("org.gradle.toolchains.foojay-resolver-convention") version "0.8.0"
 }
@@ -42,7 +42,7 @@ arrayOf(
     "common",
     "paper",
     "velocity",
-    "fabric",
+//    "fabric", // Waiting on 1.21.2
     //"sponge"
 ).forEach {
     include("miniplaceholders-$it")

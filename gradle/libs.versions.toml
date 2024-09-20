@@ -2,27 +2,27 @@ metadata.format.version = "1.1"
 
 [versions]
 
-velocity = "3.2.0-SNAPSHOT"
-paper = "1.21-R0.1-SNAPSHOT"
-minecraft = "1.21"
+velocity = "3.3.0-SNAPSHOT"
+paper = "1.21.1-R0.1-SNAPSHOT"
+minecraft = "1.21.1"
 
-runtask = "2.3.0"
+runtask = "2.3.1"
 pluginyml = "0.6.0"
-userdev = "1.7.1"
+userdev = "1.7.2"
 blossom = "2.1.0"
 indra = "3.1.3"
-shadow = "8.1.1"
+shadow = "8.3.2"
 jmh = "0.7.2"
 dokka = "1.9.20"
 
 cloud = "2.0.0-beta.7"
 adventure = "4.17.0"
-adventurefabric = "5.14.1"
+adventurefabric = "6.0.0"
 brigadier = "1.0.500"
 kotlin="2.0.0"
 
-fabric-api = "0.100.7+1.21"
-fabric-loader = "0.16.0"
+fabric-api = "0.104.0+1.21.1"
+fabric-loader = "0.16.5"
 
 desertwell = "2.0.4"
 
@@ -39,20 +39,21 @@ luckopermissionsapi = { group = "me.lucko", name = "fabric-permissions-api", ver
 adventure-api = { group = "net.kyori", name = "adventure-api", version.ref = "adventure" }
 adventure-minimesssage = { group = "net.kyori", name = "adventure-text-minimessage", version.ref = "adventure" }
 adventure-platform-fabric = { group = "net.kyori", name = "adventure-platform-fabric", version.ref = "adventurefabric" }
+adventure-platform-fabric-repack = { group = "net.kyori", name = "adventure-platform-mod-shared-fabric-repack", version.ref = "adventurefabric" }
 adventure-serializer-legacy = { group = "net.kyori", name = "adventure-text-serializer-legacy", version.ref = "adventure" }
 adventure-serializer-plain = { group = "net.kyori", name = "adventure-text-serializer-plain", version.ref = "adventure" }
 
-cloud-core = { group = "org.incendo", name = "cloud-core", version = "2.0.0-rc.2" }
+cloud-core = { group = "org.incendo", name = "cloud-core", version = "2.0.0" }
 cloud-annotations = { group = "org.incendo", name = "cloud-annotations", version.ref = "cloud" }
 cloud-velocity = { group = "org.incendo", name = "cloud-velocity", version.ref = "cloud" }
-cloud-paper = { group = "org.incendo", name = "cloud-paper", version = "2.0.0-beta.9" }
+cloud-paper = { group = "org.incendo", name = "cloud-paper", version = "2.0.0-beta.10" }
 cloud-fabric = { group = "org.incendo", name = "cloud-fabric", version.ref = "cloud" }
-cloud-sponge = { group = "org.incendo", name = "cloud-sponge7", version = "2.0.0-beta.5" }
+cloud-sponge = { group = "org.incendo", name = "cloud-sponge7", version = "2.0.0-beta.10" }
 cloud-extras = { group = "org.incendo", name = "cloud-minecraft-extras", version.ref = "cloud" }
 
 brigadier = { group = "com.mojang", name = "brigadier", version.ref = "brigadier" }
 
-plugin-shadow = { group = "com.github.johnrengelman", name = "shadow", version.ref = "shadow" }
+plugin-shadow = { module = "com.gradleup.shadow:shadow-gradle-plugin", version.ref = "shadow" }
 plugin-kotlin =  { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 plugin-indra-common = { module = "net.kyori:indra-common", version.ref = "indra" }
 plugin-indra-spotless = { module = "net.kyori:indra-licenser-spotless", version.ref = "indra" }
@@ -69,7 +70,7 @@ userdev = { id = "io.papermc.paperweight.userdev", version.ref = "userdev" }
 runpaper = { id = "xyz.jpenilla.run-paper", version.ref = "runtask" }
 runvelocity = { id = "xyz.jpenilla.run-velocity", version.ref = "runtask" }
 blossom = { id = "net.kyori.blossom", version.ref = "blossom" }
-shadow = { id = "com.github.johnrengelman.shadow", version.ref = "shadow" }
+shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }
 jmh = { id = "me.champeau.jmh", version.ref = "jmh" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 idea-ext = { id = "org.jetbrains.gradle.plugin.idea-ext", version = "1.1.8" }
