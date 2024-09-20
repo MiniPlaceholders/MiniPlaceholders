@@ -17,7 +17,7 @@ pluginManagement {
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
-        maven("https://papermc.io/repo/repository/maven-public/")
+        maven("https://repo.papermc.io/repository/maven-public/")
         maven("https://repo.maven.apache.org/maven2/")
         maven("https://jitpack.io") {
             mavenContent {
@@ -42,7 +42,7 @@ arrayOf(
     "common",
     "paper",
     "velocity",
-//    "fabric", // Waiting on 1.21.2
+    "fabric", // Waiting on 1.21.2
     //"sponge"
 ).forEach {
     include("miniplaceholders-$it")
