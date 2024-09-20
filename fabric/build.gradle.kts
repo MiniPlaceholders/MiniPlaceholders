@@ -12,7 +12,6 @@ dependencies {
     modImplementation(libs.fabric.loader)
     modImplementation(libs.fabric.api)
 
-//    includeDependency(libs.adventure.platform.fabric.repack)
     includeDependency(libs.adventure.platform.fabric)
     includeDependency(libs.adventure.serializer.legacy)
     includeDependency(libs.adventure.minimessage)

@@ -7,7 +7,6 @@ paper = "1.21.1-R0.1-SNAPSHOT"
 minecraft = "1.21.1"
 
 runtask = "2.3.1"
-pluginyml = "0.6.0"
 userdev = "1.7.2"
 blossom = "2.1.0"
 indra = "3.1.3"
@@ -49,7 +48,7 @@ cloud-annotations = { group = "org.incendo", name = "cloud-annotations", version
 cloud-velocity = { group = "org.incendo", name = "cloud-velocity", version.ref = "cloud-minecraft" }
 cloud-paper = { group = "org.incendo", name = "cloud-paper", version.ref = "cloud-minecraft" }
 cloud-fabric = { group = "org.incendo", name = "cloud-fabric", version.ref = "cloud-minecraft-modded" }
-cloud-sponge = { group = "org.incendo", name = "cloud-sponge7", version.ref = "cloud-minecraft" }
+cloud-sponge7 = { group = "org.incendo", name = "cloud-sponge7", version.ref = "cloud-minecraft" }
 cloud-extras = { group = "org.incendo", name = "cloud-minecraft-extras", version.ref = "cloud-minecraft" }
 
 plugin-shadow = { module = "com.gradleup.shadow:shadow-gradle-plugin", version.ref = "shadow" }
@@ -64,7 +63,6 @@ junit-bom = "org.junit:junit-bom:5.11.0"
 
 [plugins]
 
-pluginyml = { id = "net.minecrell.plugin-yml.bukkit", version.ref = "pluginyml" }
 userdev = { id = "io.papermc.paperweight.userdev", version.ref = "userdev" }
 runpaper = { id = "xyz.jpenilla.run-paper", version.ref = "runtask" }
 runvelocity = { id = "xyz.jpenilla.run-velocity", version.ref = "runtask" }
