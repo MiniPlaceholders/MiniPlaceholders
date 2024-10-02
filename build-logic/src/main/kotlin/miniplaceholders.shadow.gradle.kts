@@ -1,6 +1,6 @@
 plugins {
     id("miniplaceholders.base")
-    id("com.github.johnrengelman.shadow")
+    id("com.gradleup.shadow")
 }
 
 tasks {

@@ -6,7 +6,7 @@ plugins {
 dependencies {
     compileOnly(kotlin("stdlib"))
     compileOnly(libs.adventure.api)
-    compileOnly(libs.adventure.minimesssage)
+    compileOnly(libs.adventure.minimessage)
     compileOnlyApi(projects.miniplaceholdersApi)
 }
 

@@ -17,7 +17,7 @@ pluginManagement {
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
-        maven("https://papermc.io/repo/repository/maven-public/")
+        maven("https://repo.papermc.io/repository/maven-public/")
         maven("https://repo.maven.apache.org/maven2/")
         maven("https://jitpack.io") {
             mavenContent {
@@ -30,7 +30,7 @@ dependencyResolutionManagement {
 }
 
 plugins {
-    id("fabric-loom") version "1.7.2"
+    id("fabric-loom") version "1.7.3"
     id("org.spongepowered.gradle.plugin") version "2.2.0"
     id("org.gradle.toolchains.foojay-resolver-convention") version "0.8.0"
 }

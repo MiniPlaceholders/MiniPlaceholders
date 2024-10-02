@@ -14,10 +14,11 @@ dependencies {
 
     includeDependency(libs.adventure.platform.fabric)
     includeDependency(libs.adventure.serializer.legacy)
+    includeDependency(libs.adventure.minimessage)
     includeDependency(libs.luckopermissionsapi)
     includeDependency(libs.cloud.fabric)
     includeDependency(libs.cloud.core)
-    //includeDependency(libs.cloud.extras)
+    includeDependency(libs.cloud.extras)
     includeDependency(libs.desertwell)
 
     shadeModule(projects.miniplaceholdersApi)
