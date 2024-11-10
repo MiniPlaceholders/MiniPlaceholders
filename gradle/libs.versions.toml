@@ -15,7 +15,7 @@ jmh = "0.7.2"
 dokka = "1.9.20"
 
 cloud = "2.0.0"
-cloud-minecraft = "2.0.0-beta.10"
+cloud-minecraft = "2.0.0-SNAPSHOT"
 cloud-minecraft-modded = "2.0.0-SNAPSHOT"
 adventure = "4.17.0"
 adventurefabric = "5.14.2"
