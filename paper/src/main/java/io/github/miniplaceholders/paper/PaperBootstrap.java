@@ -1,6 +1,6 @@
 package io.github.miniplaceholders.paper;
 
-import io.github.miniplaceholders.common.PlaceholdersCommand;
+import io.github.miniplaceholders.common.command.PlaceholdersCommand;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.bootstrap.PluginBootstrap;

@@ -4,12 +4,14 @@ import io.github.miniplaceholders.api.enums.Platform;
 import io.github.miniplaceholders.connect.InternalPlatform;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Stream;
 
 import static io.github.miniplaceholders.api.utils.Resolvers.applyIfNotEmpty;
 import static java.util.Objects.requireNonNull;
@@ -35,6 +37,7 @@ public final class MiniPlaceholders {
      * @return the platform
      * @since 1.0.0
      */
+    @SuppressWarnings("removal")
     public static @NotNull Platform getPlatform() {
         return switch (InternalPlatform.platform()) {
             case PAPER -> Platform.PAPER;
@@ -207,5 +210,16 @@ public final class MiniPlaceholders {
             }
         }
         return null;
+    }
+
+    /**
+     * Obtain all available registered expansions
+     *
+     * @return all available registered expansions
+     * @since 2.3.0
+     */
+    @ApiStatus.Experimental
+    public static Stream<Expansion> getExpansionsAvailable() {
+        return expansions.stream();
     }
 }
