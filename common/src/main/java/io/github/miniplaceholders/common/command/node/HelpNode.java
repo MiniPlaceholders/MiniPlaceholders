@@ -19,6 +19,8 @@ public final class HelpNode<S extends Audience> implements Node<S> {
                   "<gradient:aqua:#94d1ff>/miniplaceholders</gradient> <aqua>help</aqua>"))
           .append(newline(), miniMessage().deserialize(
                   "<gradient:aqua:#94d1ff>/miniplaceholders</gradient> <aqua>parse</aqua> <#8fadff><player | me></#8fadff> <#99ffb6><player></#99ffb6>"))
+          .append(newline(), miniMessage().deserialize(
+                  "<gradient:aqua:#94d1ff>/miniplaceholders</gradient> <aqua>expansions</aqua>"))
           .append(newline(), FOOTER)
           .build();
 
