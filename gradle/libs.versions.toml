@@ -22,7 +22,7 @@ adventurefabric = "5.14.1"
 kotlin = "2.0.20"
 
 fabric-api = "0.104.0+1.21.1"
-fabric-loader = "0.16.5"
+fabric-loader = "0.16.9"
 
 desertwell = "2.0.4"
 
