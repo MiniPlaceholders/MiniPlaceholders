@@ -34,7 +34,7 @@ minecraft = { group = "com.mojang", name = "minecraft", version.ref = "minecraft
 
 fabric-api = { group = "net.fabricmc.fabric-api", name = "fabric-api", version.ref = "fabric-api" }
 fabric-loader = { group = "net.fabricmc", name = "fabric-loader", version.ref = "fabric-loader" }
-luckopermissionsapi = { group = "me.lucko", name = "fabric-permissions-api", version = "0.3.1" }
+luckopermissionsapi = { group = "me.lucko", name = "fabric-permissions-api", version = "0.3.3" }
 
 adventure-api = { group = "net.kyori", name = "adventure-api", version.ref = "adventure" }
 adventure-minimessage = { group = "net.kyori", name = "adventure-text-minimessage", version.ref = "adventure" }
