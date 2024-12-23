@@ -18,7 +18,7 @@ cloud = "2.0.0"
 cloud-minecraft = "2.0.0-SNAPSHOT"
 cloud-minecraft-modded = "2.0.0-SNAPSHOT"
 adventure = "4.17.0"
-adventurefabric = "5.14.2"
+adventurefabric = "6.2.0"
 kotlin = "2.0.21"
 
 fabric-api = "0.104.0+1.21.1"
