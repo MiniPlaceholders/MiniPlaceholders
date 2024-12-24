@@ -2,26 +2,27 @@ metadata.format.version = "1.1"
 
 [versions]
 
-velocity = "3.3.0-SNAPSHOT"
-paper = "1.21.1-R0.1-SNAPSHOT"
-minecraft = "1.21.1"
+velocity = "3.4.0-SNAPSHOT"
+paper = "1.21.4-R0.1-SNAPSHOT"
+minecraft = "1.21.4"
 
 runtask = "2.3.1"
-userdev = "1.7.4"
+userdev = "2.0.0-beta.8"
 blossom = "2.1.0"
 indra = "3.1.3"
-shadow = "8.3.5"
+shadow = "9.0.0-beta4"
 jmh = "0.7.2"
 dokka = "1.9.20"
 
 cloud = "2.0.0"
-cloud-minecraft = "2.0.0-SNAPSHOT"
-cloud-minecraft-modded = "2.0.0-SNAPSHOT"
-adventure = "4.17.0"
+cloud-minecraft = "2.0.0-beta.10"
+cloud-minecraft-modded = "2.0.0-beta.10"
+adventure = "4.18.0"
 adventurefabric = "5.14.2"
+adventureModded = "6.2.0"
 kotlin = "2.0.21"
 
-fabric-api = "0.104.0+1.21.1"
+fabric-api = "0.113.0+1.21.4"
 fabric-loader = "0.16.9"
 
 desertwell = "2.0.4"
@@ -38,7 +39,7 @@ luckopermissionsapi = { group = "me.lucko", name = "fabric-permissions-api", ver
 
 adventure-api = { group = "net.kyori", name = "adventure-api", version.ref = "adventure" }
 adventure-minimessage = { group = "net.kyori", name = "adventure-text-minimessage", version.ref = "adventure" }
-adventure-platform-fabric = { group = "net.kyori", name = "adventure-platform-fabric", version.ref = "adventurefabric" }
+adventure-platform-fabric = { group = "net.kyori", name = "adventure-platform-fabric", version.ref = "adventureModded" }
 adventure-platform-fabric-repack = { group = "net.kyori", name = "adventure-platform-mod-shared-fabric-repack", version.ref = "adventurefabric" }
 adventure-serializer-legacy = { group = "net.kyori", name = "adventure-text-serializer-legacy", version.ref = "adventure" }
 adventure-serializer-plain = { group = "net.kyori", name = "adventure-text-serializer-plain", version.ref = "adventure" }
