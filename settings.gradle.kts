@@ -11,6 +11,7 @@ pluginManagement {
         mavenCentral()
         maven("https://maven.fabricmc.net/")
         maven("https://maven.quiltmc.org/repository/release/")
+        maven("https://repo.jpenilla.xyz/snapshots/")
     }
 }
 
@@ -30,9 +31,9 @@ dependencyResolutionManagement {
 }
 
 plugins {
-    id("fabric-loom") version "1.8.12"
-    id("org.spongepowered.gradle.plugin") version "2.2.0"
-    id("org.gradle.toolchains.foojay-resolver-convention") version "0.8.0"
+    id("quiet-fabric-loom") version "1.9-SNAPSHOT"
+//    id("org.spongepowered.gradle.plugin") version "2.3.0" // sponge is disabled
+    id("org.gradle.toolchains.foojay-resolver-convention") version "0.9.0"
 }
 
 arrayOf(
