@@ -21,7 +21,7 @@ adventureModded = "6.2.0"
 kotlin = "2.0.21"
 
 fabric-api = "0.114.3+1.21.5"
-fabric-loader = "0.16.9"
+fabric-loader = "0.16.10"
 
 desertwell = "2.0.4"
 
