@@ -8,10 +8,12 @@ plugins {
 }
 
 dependencies {
-    implementation(projects.miniplaceholdersCommon)
+    implementation(projects.miniplaceholdersCommon) {
+        exclude(group = "org.incendo")
+    }
     implementation(projects.miniplaceholdersApi)
     implementation(projects.miniplaceholdersConnect)
-    implementation(libs.cloud.sponge)
+    //implementation(libs.cloud.sponge)
 }
 
 sponge {
@@ -40,8 +42,8 @@ sponge {
     }
 }
 
-tasks {
-    shadowJar {
-        exclude("io/leangen/geantyref/**")
-    }
-}
+//tasks {
+//    shadowJar {
+//        exclude("io/leangen/geantyref/**")
+//    }
+//}
