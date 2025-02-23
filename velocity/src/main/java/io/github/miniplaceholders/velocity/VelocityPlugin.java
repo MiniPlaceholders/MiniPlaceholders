@@ -12,7 +12,7 @@ import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 import io.github.miniplaceholders.api.Expansion;
 import io.github.miniplaceholders.api.utils.Components;
-import io.github.miniplaceholders.common.PlaceholdersCommand;
+import io.github.miniplaceholders.common.command.PlaceholdersCommand;
 import io.github.miniplaceholders.common.PlaceholdersPlugin;
 import io.github.miniplaceholders.common.PluginConstants;
 import io.github.miniplaceholders.connect.InternalPlatform;
@@ -24,14 +24,13 @@ import org.incendo.cloud.velocity.VelocityCommandManager;
 import org.slf4j.Logger;
 
 import java.util.ArrayList;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Plugin(
         name = "MiniPlaceholders",
         id = "miniplaceholders",
         version = PluginConstants.VERSION,
-        authors = {"4drian3d"}
+        authors = {"MiniPlaceholders Contributors", "4drian3d"}
 )
 public final class VelocityPlugin implements PlaceholdersPlugin {
     private final Logger logger;
@@ -58,6 +57,8 @@ public final class VelocityPlugin implements PlaceholdersPlugin {
     @Override
     public void loadDefaultExpansions() {
         Expansion.builder("proxy")
+                .author("MiniPlaceholders Contributors")
+                .version(PluginConstants.VERSION)
                 .globalPlaceholder("online_players", (queue, ctx) -> {
                     if (queue.hasNext()) {
                         String server = queue.pop().value();

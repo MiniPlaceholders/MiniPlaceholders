@@ -1,7 +1,8 @@
 package io.github.miniplaceholders.fabric;
 
 import io.github.miniplaceholders.api.Expansion;
-import io.github.miniplaceholders.common.PlaceholdersCommand;
+import io.github.miniplaceholders.common.PluginConstants;
+import io.github.miniplaceholders.common.command.PlaceholdersCommand;
 import io.github.miniplaceholders.common.PlaceholdersPlugin;
 import io.github.miniplaceholders.connect.InternalPlatform;
 import me.lucko.fabric.api.permissions.v0.Permissions;
@@ -47,11 +48,19 @@ public class FabricMod implements ModInitializer, PlaceholdersPlugin {
     @Override
     public void loadDefaultExpansions() {
         Expansion.builder("server")
+                .author("MiniPlaceholders Contributors")
+                .version(PluginConstants.VERSION)
                 .globalPlaceholder("name", Tag.preProcessParsed(this.minecraftServer.getServerModName()))
                 .globalPlaceholder("online", (queue, ctx) -> Tag.preProcessParsed(Integer.toString(this.minecraftServer.getPlayerCount())))
                 .globalPlaceholder("version", (ctx, queue) -> Tag.preProcessParsed(this.minecraftServer.getServerVersion()))
                 .globalPlaceholder("max_players", (ctx, queue) -> Tag.preProcessParsed(Integer.toString(this.minecraftServer.getMaxPlayers())))
-                .globalPlaceholder("unique_joins", (queue, ctx) -> Tag.preProcessParsed(Integer.toString(this.minecraftServer.getProfileCache().load().size())))
+                .globalPlaceholder("unique_joins", (queue, ctx) -> {
+                  final var profileCache = this.minecraftServer.getProfileCache();
+                  if (profileCache == null) {
+                    return Tag.preProcessParsed("0");
+                  }
+                  return Tag.preProcessParsed(Integer.toString(profileCache.load().size()));
+                })
                 .globalPlaceholder("tps_1m", (ctx, queue) -> Tag.preProcessParsed(tickManager.getTps1m().formattedAverage()))
                 .globalPlaceholder("tps_5m", (ctx, queue) -> Tag.preProcessParsed(tickManager.getTps5m().formattedAverage()))
                 //.globalPlaceholder("tps_15m", (ctx, queue) -> Tag.preProcessParsed(tickManager.getTps15m().formattedAverage()))

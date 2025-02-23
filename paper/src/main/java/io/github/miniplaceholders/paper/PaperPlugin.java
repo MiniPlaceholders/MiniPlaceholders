@@ -2,6 +2,7 @@ package io.github.miniplaceholders.paper;
 
 import io.github.miniplaceholders.api.Expansion;
 import io.github.miniplaceholders.common.PlaceholdersPlugin;
+import io.github.miniplaceholders.common.PluginConstants;
 import io.github.miniplaceholders.connect.InternalPlatform;
 import io.papermc.paper.datapack.Datapack;
 import net.kyori.adventure.text.Component;
@@ -33,6 +34,8 @@ public final class PaperPlugin extends JavaPlugin implements PlaceholdersPlugin 
     @Override
     public void loadDefaultExpansions() {
         Expansion.builder("server")
+            .version(PluginConstants.VERSION)
+            .author("MiniPlaceholders Contributors")
             .globalPlaceholder("name", Tag.preProcessParsed(this.getServer().getName()))
             .globalPlaceholder("online", (queue, ctx) -> Tag.preProcessParsed(Integer.toString(this.getServer().getOnlinePlayers().size())))
             .globalPlaceholder("version", Tag.preProcessParsed(this.getServer().getVersion()))
