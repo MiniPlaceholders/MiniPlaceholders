@@ -3,7 +3,7 @@ package io.github.miniplaceholders.connect;
 public enum InternalPlatform {
 
     PAPER, VELOCITY,
-    @Deprecated(forRemoval = true, since = "1.3.0")
+    @Deprecated(forRemoval = true, since = "2.3.0")
     KRYPTON,
     FABRIC, SPONGE;
 

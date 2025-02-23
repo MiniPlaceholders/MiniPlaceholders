@@ -1,6 +1,6 @@
 plugins {
     id("miniplaceholders.auto.module")
-    id("fabric-loom")
+    id("quiet-fabric-loom")
     alias(libs.plugins.shadow)
 }
 
