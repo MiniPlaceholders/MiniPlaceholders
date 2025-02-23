@@ -1,6 +1,7 @@
 package io.github.miniplaceholders.fabric;
 
 import io.github.miniplaceholders.api.Expansion;
+import io.github.miniplaceholders.common.PluginConstants;
 import io.github.miniplaceholders.common.command.PlaceholdersCommand;
 import io.github.miniplaceholders.common.PlaceholdersPlugin;
 import io.github.miniplaceholders.connect.InternalPlatform;
@@ -47,6 +48,8 @@ public class FabricMod implements ModInitializer, PlaceholdersPlugin {
     @Override
     public void loadDefaultExpansions() {
         Expansion.builder("server")
+                .author("MiniPlaceholders Contributors")
+                .version(PluginConstants.VERSION)
                 .globalPlaceholder("name", Tag.preProcessParsed(this.minecraftServer.getServerModName()))
                 .globalPlaceholder("online", (queue, ctx) -> Tag.preProcessParsed(Integer.toString(this.minecraftServer.getPlayerCount())))
                 .globalPlaceholder("version", (ctx, queue) -> Tag.preProcessParsed(this.minecraftServer.getServerVersion()))

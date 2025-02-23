@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
         name = "MiniPlaceholders",
         id = "miniplaceholders",
         version = PluginConstants.VERSION,
-        authors = {"4drian3d"}
+        authors = {"MiniPlaceholders Contributors", "4drian3d"}
 )
 public final class VelocityPlugin implements PlaceholdersPlugin {
     private final Logger logger;
@@ -57,6 +57,8 @@ public final class VelocityPlugin implements PlaceholdersPlugin {
     @Override
     public void loadDefaultExpansions() {
         Expansion.builder("proxy")
+                .author("MiniPlaceholders Contributors")
+                .version(PluginConstants.VERSION)
                 .globalPlaceholder("online_players", (queue, ctx) -> {
                     if (queue.hasNext()) {
                         String server = queue.pop().value();

@@ -57,6 +57,8 @@ public class SpongePlugin implements PlaceholdersPlugin {
     @Override
     public void loadDefaultExpansions() {
         Expansion.builder("server")
+                .version(PluginConstants.VERSION)
+                .author("MiniPlaceholders Contributors")
                 .globalPlaceholder("name", Tag.preProcessParsed("Sponge"))
                 .globalPlaceholder("online", (queue, ctx) -> Tag.preProcessParsed(Integer.toString(server.onlinePlayers().size())))
                 .globalPlaceholder("max_players", (queue, ctx) -> Tag.preProcessParsed(Integer.toString(server.maxPlayers())))
