@@ -49,7 +49,6 @@ public final class ExpansionsNode<S extends Audience> implements Node<S> {
                       .appendNewline()
                       .append(FOOTER);
               handler.sender().sendMessage(builder.build());
-            })
-            ;
+            });
   }
 }

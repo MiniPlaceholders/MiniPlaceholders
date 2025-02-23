@@ -21,7 +21,11 @@ public record RootNode<S extends Audience>(PermissionTester<S> hasPermission) im
           .title(TITLE)
           .description(text("MiniMessage Component-based Placeholders for Paper, Folia, Fabric, Velocity and Sponge platforms"))
           .credits("Author", AboutMenu.Credit.of("4drian3d").url("https://github.com/4drian3d"))
-          .credits("Contributors", AboutMenu.Credit.of("Sliman4"), AboutMenu.Credit.of("Stampede2011"))
+          .credits("Contributors",
+                  AboutMenu.Credit.of("Sliman4"),
+                  AboutMenu.Credit.of("Stampede2011"),
+                  AboutMenu.Credit.of("powercasgamer")
+          )
           .buttons(
                   AboutMenu.Link.of("https://github.com/MiniPlaceholders/MiniPlaceholders/wiki/User-Getting-Started").text("Documentation").icon("⛏"),
                   AboutMenu.Link.of("https://discord.gg/5NMMzK5mAn").text("Discord").color(TextColor.color(0x7289da)).icon("⭐"),

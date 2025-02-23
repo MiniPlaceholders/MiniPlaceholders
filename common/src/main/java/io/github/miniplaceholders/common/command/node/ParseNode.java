@@ -25,7 +25,7 @@ public record ParseNode<S extends Audience>(
   @Override
   public Command.Builder<S> apply(Command.Builder<S> rootBuilder) {
     final TypedCommandComponent<S, String> sourceArgument = CommandComponent.<S, String>ofType(String.class, "source")
-            .parser(StringParser.stringParser())
+            .parser(StringParser.stringParser(StringParser.StringMode.SINGLE))
             .description(Description.of("The source from which the message will be parsed"))
             .suggestionProvider(SuggestionProvider.blockingStrings((ctx, st) -> {
               final List<String> suggestions = playerSuggestions.suggest();
