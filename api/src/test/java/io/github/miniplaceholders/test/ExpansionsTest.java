@@ -1,7 +1,7 @@
 package io.github.miniplaceholders.test;
 
 import io.github.miniplaceholders.api.Expansion;
-import io.github.miniplaceholders.api.utils.TagsUtils;
+import io.github.miniplaceholders.api.utils.Tags;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -12,10 +12,10 @@ class ExpansionsTest {
     @DisplayName("Expansion Equality")
     void equalsExpansions(){
         final Expansion firstExpansion = Expansion.builder("equals")
-            .audiencePlaceholder("test", TagsUtils.NULL_AUDIENCE_PLACEHOLDER)
+            .audiencePlaceholder("test", Tags.NULL_AUDIENCE_PLACEHOLDER)
             .build();
         final Expansion secondExpansion = Expansion.builder("equals")
-            .audiencePlaceholder("test", TagsUtils.NULL_AUDIENCE_PLACEHOLDER)
+            .audiencePlaceholder("test", Tags.NULL_AUDIENCE_PLACEHOLDER)
             .build();
 
         assertEquals(firstExpansion, secondExpansion);

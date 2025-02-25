@@ -1,6 +1,6 @@
 package io.github.miniplaceholders.api;
 
-import io.github.miniplaceholders.api.placeholder.RelationalPlaceholder;
+import io.github.miniplaceholders.api.resolver.RelationalTagResolver;
 import io.github.miniplaceholders.api.relational.RelationalAudience;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.pointer.Pointered;
@@ -16,16 +16,25 @@ import java.util.Objects;
 
 import static java.util.Objects.requireNonNull;
 
+// TODO: DOCS
+/**
+ * Relational Placeholder
+ *
+ * @param targetClass the
+ * @param key the key
+ * @param resolver relational resolver
+ * @param <A> the audience type
+ */
 @NullMarked
-record RelationalAudiencePlaceholder<A extends Audience>(
+public record RelationalPlaceholder<A extends Audience>(
         @Nullable Class<A> targetClass,
         String key,
-        RelationalPlaceholder<A> relationalPlaceholder
+        RelationalTagResolver<A> resolver
 ) implements TagResolver {
 
-  static <A extends Audience> RelationalAudiencePlaceholder<A> relational(
-          @Nullable Class<A> targetClass, String key, RelationalPlaceholder<A> placeholder) {
-    return new RelationalAudiencePlaceholder<>(targetClass, requireNonNull(key), requireNonNull(placeholder));
+  static <A extends Audience> RelationalPlaceholder<A> relational(
+          @Nullable Class<A> targetClass, String key, RelationalTagResolver<A> resolver) {
+    return new RelationalPlaceholder<>(targetClass, requireNonNull(key), requireNonNull(resolver));
   }
 
   @Override
@@ -57,7 +66,7 @@ record RelationalAudiencePlaceholder<A extends Audience>(
           Context ctx
   ) {
     return this.has(name)
-            ? relationalPlaceholder.tag(audience, relationalAudience, arguments, ctx)
+            ? resolver.tag(audience, relationalAudience, arguments, ctx)
             : null;
   }
 
@@ -69,7 +78,7 @@ record RelationalAudiencePlaceholder<A extends Audience>(
   @Override
   public boolean equals(final Object o) {
     if (o == this) return true;
-    if (!(o instanceof final RelationalAudiencePlaceholder<?> that)) return false;
+    if (!(o instanceof final RelationalPlaceholder<?> that)) return false;
     return that.key.equalsIgnoreCase(this.key);
   }
 

@@ -2,7 +2,7 @@ package io.github.miniplaceholders.test;
 
 import io.github.miniplaceholders.api.Expansion;
 import io.github.miniplaceholders.api.MiniPlaceholders;
-import io.github.miniplaceholders.api.utils.TagsUtils;
+import io.github.miniplaceholders.api.utils.Tags;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -14,8 +14,8 @@ class MiniPlaceholdersTest {
     @Disabled("Cannot correctly calculate the equity of 2 TagResolvers obtained in different ways")
     void methodEquality(){
         Expansion.builder("equality")
-            .audiencePlaceholder("audience", TagsUtils.NULL_AUDIENCE_PLACEHOLDER)
-            .globalPlaceholder("global", TagsUtils.EMPTY_TAG)
+            .audiencePlaceholder("audience", Tags.NULL_AUDIENCE_PLACEHOLDER)
+            .globalPlaceholder("global", Tags.EMPTY_TAG)
             .build()
         .register();
 

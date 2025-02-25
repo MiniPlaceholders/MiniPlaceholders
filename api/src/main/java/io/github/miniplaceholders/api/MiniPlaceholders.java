@@ -1,17 +1,18 @@
 package io.github.miniplaceholders.api;
 
-import io.github.miniplaceholders.api.enums.Platform;
+import io.github.miniplaceholders.api.types.PlaceholderType;
+import io.github.miniplaceholders.api.types.Platform;
 import io.github.miniplaceholders.connect.InternalPlatform;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
-import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Stream;
 
 import static io.github.miniplaceholders.api.utils.Resolvers.applyIfNotEmpty;
 
@@ -34,7 +35,7 @@ public final class MiniPlaceholders {
     /**
      * Get the platform
      * @return the platform
-     * @since 1.0.0
+     * @since 3.0.0
      */
     public static @NotNull Platform platform() {
         return switch (InternalPlatform.platform()) {
@@ -53,7 +54,7 @@ public final class MiniPlaceholders {
      *
      * @return global placeholders independent of any audience
      * @see TagResolver
-     * @since 1.0.0
+     * @since 3.0.0
      */
     public static @NotNull TagResolver globalPlaceholders() {
         final TagResolver.Builder builder = TagResolver.builder();
@@ -72,7 +73,7 @@ public final class MiniPlaceholders {
      * Component messageParsed = MiniMessage.miniMessage().deserialize({@link String}, {@link Audience}, resolver);</pre>
      *
      * @return {@link TagResolver} with placeholders based on an audience
-     * @since 1.0.0
+     * @since 3.0.0
      */
     public static @NotNull TagResolver audiencePlaceholders() {
         final TagResolver.Builder resolvers = TagResolver.builder();
@@ -90,7 +91,7 @@ public final class MiniPlaceholders {
      * Component messageParsed = MiniMessage.miniMessage().deserialize({@link String}, {@link io.github.miniplaceholders.api.relational.RelationalAudience}, resolver);</pre>
      *
      * @return placeholders based on two audiences
-     * @since 1.0.0
+     * @since 3.0.0
      */
     public static @NotNull TagResolver relationalPlaceholders() {
         final TagResolver.Builder builder = TagResolver.builder();
@@ -146,7 +147,7 @@ public final class MiniPlaceholders {
      * </pre>
      *
      * @return the placeholders based on two audiences, placeholders based on the first audience and the global placeholders
-     * @since 1.1.0
+     * @since 3.0.0
      */
     public static @NotNull TagResolver relationalGlobalPlaceholders() {
         final TagResolver.Builder builder = TagResolver.builder();
@@ -159,10 +160,20 @@ public final class MiniPlaceholders {
         return builder.build();
     }
 
+    //TODO: DOCS
+
+    public static TagResolver placeholdersByType(PlaceholderType type) {
+        return switch (type) {
+            case GLOBAL -> globalPlaceholders();
+            case AUDIENCE -> audiencePlaceholders();
+            case RELATIONAL -> relationalPlaceholders();
+        };
+    }
+
     /**
      * Get the amount of expansion registered
      * @return the amount of expansions registered
-     * @since 1.0.0
+     * @since 3.0.0
      */
     public static int expansionCount(){
         return expansions.size();
@@ -180,7 +191,7 @@ public final class MiniPlaceholders {
      * @param name the name of the required expansion
      * @return the required expansion, if not present, will return null
      * @see Expansion#builder(String)
-     * @since 2.1.0
+     * @since 3.0.0
      */
     public static @Nullable Expansion expansionByName(final @NotNull String name) {
         for (final Expansion expansion : expansions) {
@@ -195,10 +206,9 @@ public final class MiniPlaceholders {
      * Obtain all available registered expansions
      *
      * @return all available registered expansions
-     * @since 2.3.0
+     * @since 3.0.0
      */
-    @ApiStatus.Experimental
-    public static Stream<Expansion> expansionsAvailable() {
-        return expansions.stream();
+    public static Collection<Expansion> expansionsAvailable() {
+        return Collections.unmodifiableSet(expansions);
     }
 }

@@ -13,7 +13,7 @@ open module io.github.miniplaceholders.api {
   requires static org.jspecify;
 
   exports io.github.miniplaceholders.api;
-  exports io.github.miniplaceholders.api.enums;
+  exports io.github.miniplaceholders.api.types;
   exports io.github.miniplaceholders.api.utils;
-  exports io.github.miniplaceholders.api.placeholder;
+  exports io.github.miniplaceholders.api.resolver;
 }

@@ -23,7 +23,7 @@ public final class ExpansionsNode<S extends Audience> implements Node<S> {
                               "<gradient:aqua:white:aqua><st><b>          </st> <gradient:#4d8bff:#a4ff96>MiniPlaceholders</gradient> Expansions <st><b>          </gradient>"
                       ))
                       .appendNewline()
-                      .append(MiniPlaceholders.expansionsAvailable()
+                      .append(MiniPlaceholders.expansionsAvailable().stream()
                               .map(expansion -> {
                                 final TextComponent.Builder expansionMetaBuilder = Component.text();
                                 final String expansionName = expansion.name();

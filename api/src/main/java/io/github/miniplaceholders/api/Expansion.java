@@ -1,11 +1,13 @@
 package io.github.miniplaceholders.api;
 
-import io.github.miniplaceholders.api.placeholder.AudiencePlaceholder;
-import io.github.miniplaceholders.api.placeholder.RelationalPlaceholder;
+import io.github.miniplaceholders.api.resolver.AudienceTagResolver;
+import io.github.miniplaceholders.api.resolver.RelationalTagResolver;
+import io.github.miniplaceholders.api.types.PlaceholderType;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.function.BiFunction;
 
 import net.kyori.adventure.audience.Audience;
@@ -23,13 +25,13 @@ import org.jspecify.annotations.NullMarked;
  * <pre>
  *  Player player = event.getPlayer();
  *  Expansion.Builder builder = Expansion.builder("player")
- *      .audiencePlaceholder(Player.class, "name", (p, queue, ctx) -> Tag.selfClosingInserting(Component.text(p.getUsername()))
+ *      .resolver(Player.class, "name", (p, queue, ctx) -> Tag.selfClosingInserting(Component.text(p.getUsername()))
  *      .build();
  *  Expansion expansion = builder.build();
  *  // You can also call the {@link Expansion#register} method to register
  *  // the {@link Expansion} in the {@link MiniPlaceholders} global Extensions and
  *  // use it in {@link MiniPlaceholders#audiencePlaceholders()} e.g.
- *  TagResolver resolver = expansion.audiencePlaceholder();
+ *  TagResolver resolver = expansion.resolver();
  *  player.sendMessage(MiniMessage.miniMessage().deserialize("Hello {@literal <luckperms_prefix> <player_name>}", player, resolver));
  * </pre>
  * 
@@ -106,6 +108,18 @@ public sealed interface Expansion permits ExpansionImpl {
      */
     boolean registered();
 
+    // TODO: Docs and Tests
+
+    Collection<AudiencePlaceholder<?>> registeredAudiencePlaceholders();
+
+    Collection<RelationalPlaceholder<?>> registeredRelationalPlaceholders();
+
+    @Nullable AudiencePlaceholder<?> audiencePlaceholderByName(final String name);
+
+    @Nullable RelationalPlaceholder<?> relationalPlaceholderByName(final String name);
+
+    TagResolver placeholdersByType(PlaceholderType type);
+
     /**
      * Creates a new Expansion Builder
      * @param name the expansion name
@@ -124,7 +138,7 @@ public sealed interface Expansion permits ExpansionImpl {
      *  builder
      *      // Thanks to this filter, a cast can be performed without the probability of a ClassCastException
      *      .filter(Player.class)
-     *      .audiencePlaceholder("name", (audience, queue, ctx) -> Tag.selfClosingInserting(Component.text(((Player)audience).getUsername())));
+     *      .resolver("name", (audience, queue, ctx) -> Tag.selfClosingInserting(Component.text(((Player)audience).getUsername())));
      *  Expansion expansion = builder.build();
      * </pre>
      *
@@ -132,7 +146,7 @@ public sealed interface Expansion permits ExpansionImpl {
      *
      * <pre>
      *  Player player = event.getPlayer();
-     *  TagResolver resolver = expansion.audiencePlaceholder(player);
+     *  TagResolver resolver = expansion.resolver(player);
      *  Component messageReplaced = MiniMessage.deserialize({@link String}, resolver);
      * </pre>
      * 
@@ -157,7 +171,7 @@ public sealed interface Expansion permits ExpansionImpl {
         <A extends Audience> Builder audiencePlaceholder(
                 final @Nullable Class<A> targetClass,
                 final String key,
-                final AudiencePlaceholder<A> audiencePlaceholder
+                final AudienceTagResolver<A> audiencePlaceholder
         );
 
         /**
@@ -173,7 +187,7 @@ public sealed interface Expansion permits ExpansionImpl {
          * @return the {@link Builder} itself
          * @since 1.0.0
          */
-        default Builder audiencePlaceholder(final String key, final AudiencePlaceholder<Audience> audiencePlaceholder) {
+        default Builder audiencePlaceholder(final String key, final AudienceTagResolver<Audience> audiencePlaceholder) {
             return this.audiencePlaceholder(null, key, audiencePlaceholder);
         }
 
@@ -197,7 +211,7 @@ public sealed interface Expansion permits ExpansionImpl {
         <A extends Audience> Builder relationalPlaceholder(
                 final @Nullable Class<A> targetClass,
                 final String key,
-                final RelationalPlaceholder<A> relationalPlaceholder
+                final RelationalTagResolver<A> relationalPlaceholder
         );
 
         /**
@@ -217,9 +231,9 @@ public sealed interface Expansion permits ExpansionImpl {
          * @return the {@link Builder} itself
          * @since 1.0.0
          */
-        default <A extends Audience> Builder relationalPlaceholder(
+        default Builder relationalPlaceholder(
                 final String key,
-                final RelationalPlaceholder<Audience> relationalPlaceholder
+                final RelationalTagResolver<Audience> relationalPlaceholder
         ) {
             return this.relationalPlaceholder(null, key, relationalPlaceholder);
         }

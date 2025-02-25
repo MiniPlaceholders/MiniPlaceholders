@@ -9,7 +9,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import io.github.miniplaceholders.api.Expansion;
-import io.github.miniplaceholders.api.utils.TagsUtils;
+import io.github.miniplaceholders.api.utils.Tags;
 import net.kyori.adventure.text.minimessage.Context;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.ArgumentQueue;
@@ -24,7 +24,7 @@ class ThrowableTest {
 
         Expansion.Builder expansionTest = assertDoesNotThrow(() -> Expansion.builder("throwable"));
 
-        assertThrows(NullPointerException.class, () -> expansionTest.audiencePlaceholder(null, (aud, queue, ctx) -> TagsUtils.EMPTY_TAG));
+        assertThrows(NullPointerException.class, () -> expansionTest.audiencePlaceholder(null, (aud, queue, ctx) -> Tags.EMPTY_TAG));
         assertThrows(NullPointerException.class, () -> expansionTest.globalPlaceholder("test", (BiFunction<ArgumentQueue, Context, Tag>)null));
     }
 
@@ -33,9 +33,9 @@ class ThrowableTest {
     void throwOnBlankString(){
         Expansion.Builder builder = assertDoesNotThrow(() -> Expansion.builder("hello"));
 
-        assertThrows(IllegalStateException.class, () -> builder.audiencePlaceholder("", (aud, queue, ctx) -> TagsUtils.EMPTY_TAG));
-        assertThrows(IllegalStateException.class, () -> builder.globalPlaceholder("     ", (queue, ctx) -> TagsUtils.EMPTY_TAG));
+        assertThrows(IllegalStateException.class, () -> builder.audiencePlaceholder("", (aud, queue, ctx) -> Tags.EMPTY_TAG));
+        assertThrows(IllegalStateException.class, () -> builder.globalPlaceholder("     ", (queue, ctx) -> Tags.EMPTY_TAG));
 
-        assertDoesNotThrow(() -> builder.globalPlaceholder("hehe", (queue, ctx) -> TagsUtils.EMPTY_TAG));
+        assertDoesNotThrow(() -> builder.globalPlaceholder("hehe", (queue, ctx) -> Tags.EMPTY_TAG));
     }
 }

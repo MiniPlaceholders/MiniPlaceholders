@@ -1,6 +1,6 @@
 package io.github.miniplaceholders.api;
 
-import io.github.miniplaceholders.api.placeholder.AudiencePlaceholder;
+import io.github.miniplaceholders.api.resolver.AudienceTagResolver;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.pointer.Pointered;
 import net.kyori.adventure.text.minimessage.Context;
@@ -14,19 +14,20 @@ import java.util.Objects;
 
 import static java.util.Objects.requireNonNull;
 
+
 @NullMarked
-record SingleAudiencePlaceholder<A extends Audience>(
+public record AudiencePlaceholder<A extends Audience>(
         @Nullable Class<A> targetClass,
         String key,
-        AudiencePlaceholder<A> audiencePlaceholder
+        AudienceTagResolver<A> resolver
 ) implements TagResolver {
 
-  static <A extends Audience> SingleAudiencePlaceholder<A> single(
+  static <A extends Audience> AudiencePlaceholder<A> single(
           @Nullable Class<A> targetClass,
           String key,
-          AudiencePlaceholder<A> placeholder
+          AudienceTagResolver<A> placeholder
   ) {
-    return new SingleAudiencePlaceholder<>(targetClass, requireNonNull(key), requireNonNull(placeholder));
+    return new AudiencePlaceholder<>(targetClass, requireNonNull(key), requireNonNull(placeholder));
   }
 
   @Override
@@ -45,7 +46,7 @@ record SingleAudiencePlaceholder<A extends Audience>(
 
   private @Nullable Tag resolveA(String key, A audience, ArgumentQueue queue, Context ctx) {
     return this.has(key)
-            ? audiencePlaceholder.tag(audience, queue, ctx)
+            ? resolver.tag(audience, queue, ctx)
             : null;
   }
 
@@ -57,7 +58,7 @@ record SingleAudiencePlaceholder<A extends Audience>(
   @Override
   public boolean equals(final Object o) {
     if (o == this) return true;
-    if (!(o instanceof SingleAudiencePlaceholder<?> that)) return false;
+    if (!(o instanceof AudiencePlaceholder<?> that)) return false;
     return that.key.equalsIgnoreCase(this.key);
   }
 

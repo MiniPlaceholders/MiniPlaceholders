@@ -1,4 +1,4 @@
-package io.github.miniplaceholders.api.placeholder;
+package io.github.miniplaceholders.api.resolver;
 
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.minimessage.Context;
@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 
 /**Relational Placeholder based on two Audiences*/
 @FunctionalInterface
-public interface RelationalPlaceholder<A extends Audience> {
+public interface RelationalTagResolver<A extends Audience> {
     /**
      * A Tag based on two audiences
      * @param audience the principal audience

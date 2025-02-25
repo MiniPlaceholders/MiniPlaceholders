@@ -1,4 +1,4 @@
-package io.github.miniplaceholders.api.enums;
+package io.github.miniplaceholders.api.types;
 
 /**Platforms on which MiniPlaceholders can be used */
 public enum Platform {

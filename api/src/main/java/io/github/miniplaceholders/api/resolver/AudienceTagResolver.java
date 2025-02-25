@@ -1,4 +1,4 @@
-package io.github.miniplaceholders.api.placeholder;
+package io.github.miniplaceholders.api.resolver;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -10,7 +10,7 @@ import net.kyori.adventure.text.minimessage.tag.resolver.ArgumentQueue;
 
 /**Audience Placeholder based on an Audience */
 @FunctionalInterface
-public interface AudiencePlaceholder<A extends Audience> {
+public interface AudienceTagResolver<A extends Audience> {
     /**
      * A Tag based on an Audience
      * @param audience the audience
