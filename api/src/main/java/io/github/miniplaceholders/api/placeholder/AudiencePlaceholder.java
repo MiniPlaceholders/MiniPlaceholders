@@ -10,7 +10,7 @@ import net.kyori.adventure.text.minimessage.tag.resolver.ArgumentQueue;
 
 /**Audience Placeholder based on an Audience */
 @FunctionalInterface
-public interface AudiencePlaceholder {
+public interface AudiencePlaceholder<A extends Audience> {
     /**
      * A Tag based on an Audience
      * @param audience the audience
@@ -20,7 +20,7 @@ public interface AudiencePlaceholder {
      * @since 1.0.0
      */
     @Nullable Tag tag(
-        @NotNull final Audience audience,
+        @NotNull final A audience,
         @NotNull final ArgumentQueue queue,
         @NotNull final Context ctx
     );

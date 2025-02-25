@@ -6,9 +6,6 @@ public enum Platform {
     PAPER,
     /**Velocity Platform */
     VELOCITY,
-    /**Krypton Platform */
-    @Deprecated(forRemoval = true, since = "2.3.0")
-    KRYPTON,
     /**Fabric Platform */
     FABRIC,
     /**Sponge Platform */

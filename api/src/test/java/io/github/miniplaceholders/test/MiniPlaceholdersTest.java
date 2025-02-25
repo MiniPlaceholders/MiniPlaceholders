@@ -1,13 +1,11 @@
 package io.github.miniplaceholders.test;
 
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
-
 import io.github.miniplaceholders.api.Expansion;
 import io.github.miniplaceholders.api.MiniPlaceholders;
 import io.github.miniplaceholders.api.utils.TagsUtils;
-import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -23,10 +21,10 @@ class MiniPlaceholdersTest {
 
 
         assertEquals(
-            MiniPlaceholders.getAudienceGlobalPlaceholders(Audience.empty()),
+            MiniPlaceholders.audienceGlobalPlaceholders(),
             TagResolver.resolver(
-                MiniPlaceholders.getAudiencePlaceholders(Audience.empty()),
-                MiniPlaceholders.getGlobalPlaceholders()
+                MiniPlaceholders.audiencePlaceholders(),
+                MiniPlaceholders.globalPlaceholders()
             )
         );
     }
@@ -37,7 +35,7 @@ class MiniPlaceholdersTest {
                 .build();
         expansion.register();
 
-        assertNotNull(MiniPlaceholders.getExpansionByName("testregistration"));
+        assertNotNull(MiniPlaceholders.expansionByName("testregistration"));
 
         assertTrue(expansion.registered());
         assertThrows(IllegalStateException.class, expansion::register);

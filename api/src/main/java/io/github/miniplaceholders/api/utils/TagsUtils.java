@@ -2,6 +2,7 @@ package io.github.miniplaceholders.api.utils;
 
 import io.github.miniplaceholders.api.placeholder.AudiencePlaceholder;
 import io.github.miniplaceholders.api.placeholder.RelationalPlaceholder;
+import net.kyori.adventure.audience.Audience;
 import org.jetbrains.annotations.NotNull;
 
 import net.kyori.adventure.text.Component;
@@ -27,13 +28,13 @@ public final class TagsUtils {
      * An Audience placeholder that returns a null Tag
      * @since 1.1.0
      */
-    public static final AudiencePlaceholder NULL_AUDIENCE_PLACEHOLDER = (aud, queue, ctx) -> NULL_TAG;
+    public static final AudiencePlaceholder<Audience> NULL_AUDIENCE_PLACEHOLDER = (aud, queue, ctx) -> NULL_TAG;
 
     /**
      * A Relational placeholder that returns a null tag
      * @since 1.1.0
      */
-    public static final RelationalPlaceholder NULL_RELATIONAL_PLACEHOLDER = (aud, otheraud, queue, ctx) -> NULL_TAG;
+    public static final RelationalPlaceholder<Audience> NULL_RELATIONAL_PLACEHOLDER = (aud, relational, queue, ctx) -> NULL_TAG;
 
     /**
      * Creates a new Tag based on a String

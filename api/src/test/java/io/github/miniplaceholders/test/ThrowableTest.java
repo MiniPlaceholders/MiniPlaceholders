@@ -9,7 +9,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import io.github.miniplaceholders.api.Expansion;
-import io.github.miniplaceholders.api.MiniPlaceholders;
 import io.github.miniplaceholders.api.utils.TagsUtils;
 import net.kyori.adventure.text.minimessage.Context;
 import net.kyori.adventure.text.minimessage.tag.Tag;
@@ -27,15 +26,6 @@ class ThrowableTest {
 
         assertThrows(NullPointerException.class, () -> expansionTest.audiencePlaceholder(null, (aud, queue, ctx) -> TagsUtils.EMPTY_TAG));
         assertThrows(NullPointerException.class, () -> expansionTest.globalPlaceholder("test", (BiFunction<ArgumentQueue, Context, Tag>)null));
-
-        Expansion.builder("testThrows")
-            .audiencePlaceholder("test", (aud, queue, ctx) -> TagsUtils.EMPTY_TAG)
-            .relationalPlaceholder("test2", (aud, aud2, queue, ctx) -> TagsUtils.EMPTY_TAG)
-            .build()
-            .register();
-
-        assertThrows(NullPointerException.class, () -> MiniPlaceholders.getAudiencePlaceholders(null));
-        assertThrows(NullPointerException.class, () -> MiniPlaceholders.getRelationalPlaceholders(null, null));
     }
 
     @Test

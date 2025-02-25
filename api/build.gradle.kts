@@ -17,6 +17,8 @@ dependencies {
     testImplementation(libs.adventure.minimessage)
     testImplementation(libs.adventure.serializer.plain)
     testImplementation(libs.adventure.serializer.legacy)
+
+    compileOnly(libs.jspecify)
 }
 
 jmh {

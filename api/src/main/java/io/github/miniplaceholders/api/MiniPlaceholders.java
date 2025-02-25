@@ -14,7 +14,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
 
 import static io.github.miniplaceholders.api.utils.Resolvers.applyIfNotEmpty;
-import static java.util.Objects.requireNonNull;
 
 /**
  * MiniPlaceholders
@@ -37,12 +36,10 @@ public final class MiniPlaceholders {
      * @return the platform
      * @since 1.0.0
      */
-    @SuppressWarnings("removal")
-    public static @NotNull Platform getPlatform() {
+    public static @NotNull Platform platform() {
         return switch (InternalPlatform.platform()) {
             case PAPER -> Platform.PAPER;
             case VELOCITY -> Platform.VELOCITY;
-            case KRYPTON -> Platform.KRYPTON;
             case FABRIC -> Platform.FABRIC;
             case SPONGE -> Platform.SPONGE;
         };
@@ -51,14 +48,14 @@ public final class MiniPlaceholders {
     /**
      * Get the global placeholders
      *
-     * <pre>TagResolver resolver = MiniPlaceholders.getGlobalPlaceholders();
+     * <pre>TagResolver resolver = MiniPlaceholders.globalPlaceholders();
      * Component messageParsed = MiniMessage.miniMessage().deserialize({@link String}, resolver);</pre>
      *
      * @return global placeholders independent of any audience
      * @see TagResolver
      * @since 1.0.0
      */
-    public static @NotNull TagResolver getGlobalPlaceholders() {
+    public static @NotNull TagResolver globalPlaceholders() {
         final TagResolver.Builder builder = TagResolver.builder();
         for (final Expansion expansion : expansions) {
             final TagResolver resolver = expansion.globalPlaceholders();
@@ -71,19 +68,16 @@ public final class MiniPlaceholders {
     /**
      * Get the TagResolver based on an Audience
      *
-     * <pre>TagResolver resolver = MiniPlaceholders.getAudiencePlaceholders({@link Audience});
-     * Component messageParsed = MiniMessage.miniMessage().deserialize({@link String}, resolver);</pre>
+     * <pre>TagResolver resolver = MiniPlaceholders.audiencePlaceholders();
+     * Component messageParsed = MiniMessage.miniMessage().deserialize({@link String}, {@link Audience}, resolver);</pre>
      *
-     * @param audience the audience
      * @return {@link TagResolver} with placeholders based on an audience
      * @since 1.0.0
      */
-    public static @NotNull TagResolver getAudiencePlaceholders(final @NotNull Audience audience) {
-        requireNonNull(audience, "audience cannot be null");
-
+    public static @NotNull TagResolver audiencePlaceholders() {
         final TagResolver.Builder resolvers = TagResolver.builder();
         for (Expansion expansion : expansions) {
-            final TagResolver resolver = expansion.audiencePlaceholders(audience);
+            final TagResolver resolver = expansion.audiencePlaceholders();
             applyIfNotEmpty(resolver, resolvers);
         }
         return resolvers.build();
@@ -92,24 +86,16 @@ public final class MiniPlaceholders {
     /**
      * Get the relational placeholders based on two audiences
      *
-     * <pre>TagResolver resolver = MiniPlaceholders.getRelationalPlaceholders({@link Audience}, {@link Audience});
-     * Component messageParsed = MiniMessage.miniMessage().deserialize({@link String}, resolver);</pre>
+     * <pre>TagResolver resolver = MiniPlaceholders.relationalPlaceholders();
+     * Component messageParsed = MiniMessage.miniMessage().deserialize({@link String}, {@link io.github.miniplaceholders.api.relational.RelationalAudience}, resolver);</pre>
      *
-     * @param audience an audience
-     * @param otherAudience another audience
      * @return placeholders based on two audiences
      * @since 1.0.0
      */
-    public static @NotNull TagResolver getRelationalPlaceholders(final @NotNull Audience audience, final @NotNull Audience otherAudience) {
-        requireNonNull(audience, "audience cannot be null");
-        requireNonNull(otherAudience, "otherAudience cannot be null");
-
+    public static @NotNull TagResolver relationalPlaceholders() {
         final TagResolver.Builder builder = TagResolver.builder();
         for (final Expansion expansion : expansions) {
-            applyIfNotEmpty(
-                expansion.relationalPlaceholders(audience, otherAudience),
-                builder
-            );
+            applyIfNotEmpty(expansion.relationalPlaceholders(), builder);
         }
 
         return builder.build();
@@ -129,16 +115,14 @@ public final class MiniPlaceholders {
      * Component messageParsed = MiniMessage.miniMessage().deserialize({@link String}, resolver);
      * </pre>
      *
-     * @param audience the audience
      * @return {@link TagResolver} with placeholders based on an audience and the global placeholders
      * @since 1.1.0
      */
-    public static @NotNull TagResolver getAudienceGlobalPlaceholders(final @NotNull Audience audience) {
-        requireNonNull(audience, "audience cannot be null");
+    public static @NotNull TagResolver audienceGlobalPlaceholders() {
         final TagResolver.Builder builder = TagResolver.builder();
 
         for (final Expansion expansion : expansions) {
-            applyIfNotEmpty(expansion.audiencePlaceholders(audience), builder);
+            applyIfNotEmpty(expansion.audiencePlaceholders(), builder);
             applyIfNotEmpty(expansion.globalPlaceholders(), builder);
         }
 
@@ -150,30 +134,25 @@ public final class MiniPlaceholders {
      * and the global placeholders
      *
      * <pre>
-     * TagResolver resolver = MiniPlaceholders.getRelationalGlobalPlaceholders({@link Audience}, {@link Audience});
+     * TagResolver resolver = MiniPlaceholders.relationalGlobalPlaceholders();
      * TagResolver resolver2 = TagResolver.resolver(
-     *  MiniPlaceholders.getRelationalPlaceholders(audience1, audience2),
-     *  MiniPlaceholders.getAudiencePlaceholders(audience1),
-     *  MiniPlaceholders.getGlobalPlaceholders()
+     *  MiniPlaceholders.relationalPlaceholders(),
+     *  MiniPlaceholders.audiencePlaceholders(),
+     *  MiniPlaceholders.globalPlaceholders()
      * );
      * // This methods should return the same TagResolver
      * assertEquals(resolver, resolver2);
      * Component messageParsed = MiniMessage.miniMessage().deserialize({@link String}, resolver);
      * </pre>
      *
-     * @param audience an audience
-     * @param otherAudience another audience
      * @return the placeholders based on two audiences, placeholders based on the first audience and the global placeholders
      * @since 1.1.0
      */
-    public static @NotNull TagResolver getRelationalGlobalPlaceholders(final @NotNull Audience audience, final @NotNull Audience otherAudience) {
-        requireNonNull(audience, "audience cannot be null");
-        requireNonNull(otherAudience, "otherAudience cannot be null");
-
+    public static @NotNull TagResolver relationalGlobalPlaceholders() {
         final TagResolver.Builder builder = TagResolver.builder();
         for (final Expansion expansion : expansions) {
-            applyIfNotEmpty(expansion.audiencePlaceholders(audience), builder);
-            applyIfNotEmpty(expansion.relationalPlaceholders(audience, otherAudience), builder);
+            applyIfNotEmpty(expansion.audiencePlaceholders(), builder);
+            applyIfNotEmpty(expansion.relationalPlaceholders(), builder);
             applyIfNotEmpty(expansion.globalPlaceholders(), builder);
         }
 
@@ -185,7 +164,7 @@ public final class MiniPlaceholders {
      * @return the amount of expansions registered
      * @since 1.0.0
      */
-    public static int getExpansionCount(){
+    public static int expansionCount(){
         return expansions.size();
     }
 
@@ -203,7 +182,7 @@ public final class MiniPlaceholders {
      * @see Expansion#builder(String)
      * @since 2.1.0
      */
-    public static @Nullable Expansion getExpansionByName(final @NotNull String name) {
+    public static @Nullable Expansion expansionByName(final @NotNull String name) {
         for (final Expansion expansion : expansions) {
             if (Objects.equals(expansion.name(), name)) {
                 return expansion;
@@ -219,7 +198,7 @@ public final class MiniPlaceholders {
      * @since 2.3.0
      */
     @ApiStatus.Experimental
-    public static Stream<Expansion> getExpansionsAvailable() {
+    public static Stream<Expansion> expansionsAvailable() {
         return expansions.stream();
     }
 }
