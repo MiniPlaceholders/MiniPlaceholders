@@ -8,6 +8,8 @@ import net.kyori.adventure.text.minimessage.tag.resolver.ArgumentQueue;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
+
 
 public record GlobalPlaceholder(@TagPattern String key, GlobalTagResolver resolver) implements Placeholder {
   @Override
@@ -18,5 +20,16 @@ public record GlobalPlaceholder(@TagPattern String key, GlobalTagResolver resolv
   @Override
   public boolean has(@NotNull String name) {
     return key.equalsIgnoreCase(name);
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj instanceof GlobalPlaceholder(var oKey, var __)) {
+      return Objects.equals(oKey, this.key);
+    }
+    return false;
   }
 }
