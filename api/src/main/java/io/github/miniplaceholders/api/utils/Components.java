@@ -8,23 +8,27 @@ import net.kyori.adventure.text.format.NamedTextColor;
 public final class Components {
     private Components(){}
     /**
-     * "True" Component
+     * "True" Component.
+     *
      * @since 1.1.0
      */
     public static final TextComponent TRUE_COMPONENT = Component.text("true", NamedTextColor.GREEN);
     /**
-     * False Component
+     * "False" Component.
+     *
      * @since 1.1.0
      */
     public static final TextComponent FALSE_COMPONENT = Component.text("false", NamedTextColor.RED);
 
     /**
-     * "Yes" Component
+     * "Yes" Component.
+     *
      * @since 1.1.0
      */
     public static final TextComponent YES_COMPONENT = Component.text("yes", NamedTextColor.GREEN);
     /**
-     * "No" Component
+     * "No" Component.
+     *
      * @since 1.1.0
      */
     public static final TextComponent NO_COMPONENT = Component.text("no", NamedTextColor.RED);

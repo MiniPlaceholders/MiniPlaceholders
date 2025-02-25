@@ -199,7 +199,7 @@ public sealed interface Expansion permits ExpansionImpl {
          * @param key the placeholder key, cannot be an empty or black string
          * @param audiencePlaceholder the single placeholder
          * @return the {@link Builder} itself
-         * @since 1.0.0
+         * @since 3.0.0
          */
         default Builder audiencePlaceholder(final String key, final AudienceTagResolver<Audience> audiencePlaceholder) {
             return this.audiencePlaceholder(null, key, audiencePlaceholder);
@@ -220,7 +220,7 @@ public sealed interface Expansion permits ExpansionImpl {
          * @param key the placeholder key, cannot be an empty or black string
          * @param relationalPlaceholder the relational placeholder
          * @return the {@link Builder} itself
-         * @since 1.0.0
+         * @since 3.0.0
          */
         <A extends Audience> Builder relationalPlaceholder(
                 final @Nullable Class<A> targetClass,
@@ -243,7 +243,7 @@ public sealed interface Expansion permits ExpansionImpl {
          * @param key the placeholder key, cannot be an empty or black string
          * @param relationalResolver the relational placeholder
          * @return the {@link Builder} itself
-         * @since 1.0.0
+         * @since 3.0.0
          */
         default Builder relationalPlaceholder(
                 final String key,
@@ -260,7 +260,7 @@ public sealed interface Expansion permits ExpansionImpl {
          * @param key the placeholder key, cannot be an empty or black string
          * @param resolver the function
          * @return the {@link Builder} itself
-         * @since 1.0.0
+         * @since 3.0.0
          */
         Builder globalPlaceholder(final String key, final GlobalTagResolver resolver);
 

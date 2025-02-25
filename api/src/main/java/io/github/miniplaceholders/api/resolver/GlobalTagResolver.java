@@ -8,5 +8,14 @@ import org.jspecify.annotations.Nullable;
 
 @FunctionalInterface
 public interface GlobalTagResolver {
-  @Nullable Tag tag(@NonNull ArgumentQueue queue, @NonNull Context context);
+  /**
+   * A global tag.
+   *
+   * @param queue the argument queue
+   * @param context the parsing context
+   * @return a tag
+   * @since 3.0.0
+   */
+  @Nullable
+  Tag tag(@NonNull ArgumentQueue queue, @NonNull Context context);
 }
