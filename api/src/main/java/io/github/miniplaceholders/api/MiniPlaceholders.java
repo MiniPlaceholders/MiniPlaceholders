@@ -2,6 +2,7 @@ package io.github.miniplaceholders.api;
 
 import io.github.miniplaceholders.api.types.PlaceholderType;
 import io.github.miniplaceholders.api.types.Platform;
+import io.github.miniplaceholders.api.types.RelationalAudience;
 import io.github.miniplaceholders.connect.InternalPlatform;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
@@ -88,7 +89,7 @@ public final class MiniPlaceholders {
      * Get the relational placeholders based on two audiences
      *
      * <pre>TagResolver resolver = MiniPlaceholders.relationalPlaceholders();
-     * Component messageParsed = MiniMessage.miniMessage().deserialize({@link String}, {@link io.github.miniplaceholders.api.relational.RelationalAudience}, resolver);</pre>
+     * Component messageParsed = MiniMessage.miniMessage().deserialize({@link String}, {@link RelationalAudience}, resolver);</pre>
      *
      * @return placeholders based on two audiences
      * @since 3.0.0

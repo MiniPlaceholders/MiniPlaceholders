@@ -2,6 +2,7 @@ package io.github.miniplaceholders.api.placeholder;
 
 import io.github.miniplaceholders.api.resolver.AudienceTagResolver;
 import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.audience.ForwardingAudience;
 import net.kyori.adventure.pointer.Pointered;
 import net.kyori.adventure.text.minimessage.Context;
 import net.kyori.adventure.text.minimessage.tag.Tag;
@@ -36,11 +37,14 @@ public record AudiencePlaceholder<A extends Audience>(
     if (targetRaw == null) {
       return null;
     }
-    if (targetClass == null || !(targetClass.isInstance(targetRaw))) {
+    if (targetClass == null) {
       //noinspection unchecked
       return this.resolveA(name, (A) targetRaw, arguments, ctx);
     }
-    final A audience = targetClass.cast(targetRaw);
+    final @Nullable A audience = forwardingFilter(targetRaw);
+    if (audience == null) {
+      return null;
+    }
     return resolveA(name, audience, arguments, ctx);
   }
 
@@ -48,6 +52,18 @@ public record AudiencePlaceholder<A extends Audience>(
     return this.has(key)
             ? resolver.tag(audience, queue, ctx)
             : null;
+  }
+
+  @SuppressWarnings("OverrideOnly")
+  private @Nullable A forwardingFilter(final Pointered source) {
+    //noinspection DataFlowIssue
+    if (targetClass.isInstance(source)) {
+      return targetClass.cast(source);
+    }
+    if (source instanceof final ForwardingAudience.Single forward) {
+      return forwardingFilter(forward.audience());
+    }
+    return null;
   }
 
   @Override

@@ -3,10 +3,9 @@ package io.github.miniplaceholders.test;
 import static net.kyori.adventure.text.minimessage.MiniMessage.miniMessage;
 import static org.junit.jupiter.api.Assertions.*;
 
-import io.github.miniplaceholders.api.relational.RelationalAudience;
-import io.github.miniplaceholders.test.testobjects.TestAudience;
-import io.github.miniplaceholders.test.testobjects.TestAudienceHolder;
-import org.junit.jupiter.api.Disabled;
+import io.github.miniplaceholders.api.types.RelationalAudience;
+import io.github.miniplaceholders.test.instances.TestAudience;
+import io.github.miniplaceholders.test.instances.TestAudienceHolder;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
 
@@ -131,7 +130,6 @@ class PlaceholderTest {
 
   @Test
   @DisplayName("Forwarding Audience Parsing Test")
-  @Disabled("NOT IMPLEMENTED YET")
   void forwardingAudienceTest() {
     Expansion expansion = Expansion.builder("test")
             .audiencePlaceholder(TestAudience.class, "testing",
@@ -139,7 +137,6 @@ class PlaceholderTest {
             .build();
 
     TestAudience testAudience = new TestAudience("4drian3d");
-    // TODO: IMPLEMENT FORWARDING AUDIENCE SUPPORT
     Audience forward = new TestAudienceHolder(testAudience);
 
     Component parsed = miniMessage().deserialize("<test_testing>.", forward, expansion.audiencePlaceholders());

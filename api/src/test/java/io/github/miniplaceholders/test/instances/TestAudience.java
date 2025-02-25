@@ -1,4 +1,4 @@
-package io.github.miniplaceholders.test.testobjects;
+package io.github.miniplaceholders.test.instances;
 
 import org.jetbrains.annotations.NotNull;
 

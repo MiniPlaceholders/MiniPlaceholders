@@ -18,7 +18,6 @@ import java.util.*;
 import static io.github.miniplaceholders.api.utils.Conditions.nonNullOrEmptyString;
 import static java.util.Objects.requireNonNull;
 
-// TODO: Support for ForwardingAudience
 @NullMarked
 final class ExpansionImpl implements Expansion {
   private static final AudiencePlaceholder<?>[] EMPTY_SINGLE_AUDIENCE = new AudiencePlaceholder[0];

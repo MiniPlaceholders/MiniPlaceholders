@@ -1,8 +1,9 @@
 package io.github.miniplaceholders.api.placeholder;
 
-import io.github.miniplaceholders.api.relational.RelationalAudience;
+import io.github.miniplaceholders.api.types.RelationalAudience;
 import io.github.miniplaceholders.api.resolver.RelationalTagResolver;
 import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.audience.ForwardingAudience;
 import net.kyori.adventure.pointer.Pointered;
 import net.kyori.adventure.text.minimessage.Context;
 import net.kyori.adventure.text.minimessage.tag.Tag;
@@ -53,11 +54,14 @@ public record RelationalPlaceholder<A extends Audience>(
       //noinspection unchecked
       return this.resolveA(name, (A)a, (A)b, arguments, ctx);
     }
-    if (!targetClass.isInstance(a) || !targetClass.isInstance(b)) {
+    final @Nullable A audience = forwardingFilter(a);
+    if (audience == null) {
       return null;
     }
-    final A audience = targetClass.cast(a);
-    final A relationalAudience = targetClass.cast(b);
+    final @Nullable A relationalAudience = forwardingFilter(b);
+    if (relationalAudience == null) {
+      return null;
+    }
     return this.resolveA(name, audience, relationalAudience, arguments, ctx);
   }
 
@@ -71,6 +75,18 @@ public record RelationalPlaceholder<A extends Audience>(
     return this.has(name)
             ? resolver.tag(audience, relationalAudience, arguments, ctx)
             : null;
+  }
+
+  @SuppressWarnings("OverrideOnly")
+  private @Nullable A forwardingFilter(final Pointered source) {
+    //noinspection DataFlowIssue
+    if (targetClass.isInstance(source)) {
+      return targetClass.cast(source);
+    }
+    if (source instanceof final ForwardingAudience.Single forward) {
+      return forwardingFilter(forward.audience());
+    }
+    return null;
   }
 
   @Override

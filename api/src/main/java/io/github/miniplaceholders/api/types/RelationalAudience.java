@@ -1,4 +1,4 @@
-package io.github.miniplaceholders.api.relational;
+package io.github.miniplaceholders.api.types;
 
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.ForwardingAudience;
