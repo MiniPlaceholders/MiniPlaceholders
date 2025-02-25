@@ -1,18 +1,13 @@
 package io.github.miniplaceholders.test;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
-import java.util.function.BiFunction;
-
+import io.github.miniplaceholders.api.Expansion;
+import io.github.miniplaceholders.api.resolver.GlobalTagResolver;
+import io.github.miniplaceholders.api.utils.Tags;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import io.github.miniplaceholders.api.Expansion;
-import io.github.miniplaceholders.api.utils.Tags;
-import net.kyori.adventure.text.minimessage.Context;
-import net.kyori.adventure.text.minimessage.tag.Tag;
-import net.kyori.adventure.text.minimessage.tag.resolver.ArgumentQueue;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 //yea... it is intended xd
 @SuppressWarnings("DataFlowIssue")
@@ -25,7 +20,7 @@ class ThrowableTest {
         Expansion.Builder expansionTest = assertDoesNotThrow(() -> Expansion.builder("throwable"));
 
         assertThrows(NullPointerException.class, () -> expansionTest.audiencePlaceholder(null, (aud, queue, ctx) -> Tags.EMPTY_TAG));
-        assertThrows(NullPointerException.class, () -> expansionTest.globalPlaceholder("test", (BiFunction<ArgumentQueue, Context, Tag>)null));
+        assertThrows(NullPointerException.class, () -> expansionTest.globalPlaceholder("test", (GlobalTagResolver) null));
     }
 
     @Test

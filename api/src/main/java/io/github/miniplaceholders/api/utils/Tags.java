@@ -1,6 +1,7 @@
 package io.github.miniplaceholders.api.utils;
 
 import io.github.miniplaceholders.api.resolver.AudienceTagResolver;
+import io.github.miniplaceholders.api.resolver.GlobalTagResolver;
 import io.github.miniplaceholders.api.resolver.RelationalTagResolver;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
@@ -40,5 +41,7 @@ public final class Tags {
    * @since 1.1.0
    */
   public static final RelationalTagResolver<Audience> NULL_RELATIONAL_PLACEHOLDER = (aud, relational, queue, ctx) -> NULL_TAG;
+
+  public static final GlobalTagResolver NULL_GLOBAL_PLACEHOLDER = (queue, ctx) -> null;
 
 }

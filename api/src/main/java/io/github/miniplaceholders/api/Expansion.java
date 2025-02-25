@@ -1,22 +1,22 @@
 package io.github.miniplaceholders.api;
 
+import io.github.miniplaceholders.api.placeholder.AudiencePlaceholder;
+import io.github.miniplaceholders.api.placeholder.GlobalPlaceholder;
+import io.github.miniplaceholders.api.placeholder.RelationalPlaceholder;
 import io.github.miniplaceholders.api.resolver.AudienceTagResolver;
+import io.github.miniplaceholders.api.resolver.GlobalTagResolver;
 import io.github.miniplaceholders.api.resolver.RelationalTagResolver;
 import io.github.miniplaceholders.api.types.PlaceholderType;
+import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.builder.AbstractBuilder;
+import net.kyori.adventure.text.minimessage.tag.Tag;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Collection;
-import java.util.function.BiFunction;
-
-import net.kyori.adventure.audience.Audience;
-import net.kyori.adventure.builder.AbstractBuilder;
-import net.kyori.adventure.text.minimessage.Context;
-import net.kyori.adventure.text.minimessage.tag.Tag;
-import net.kyori.adventure.text.minimessage.tag.resolver.ArgumentQueue;
-import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
-import org.jspecify.annotations.NullMarked;
 
 /**
  * Expansion that contains placeholders
@@ -117,6 +117,20 @@ public sealed interface Expansion permits ExpansionImpl {
     @Nullable AudiencePlaceholder<?> audiencePlaceholderByName(final String name);
 
     @Nullable RelationalPlaceholder<?> relationalPlaceholderByName(final String name);
+
+    @Nullable GlobalPlaceholder globalPlaceholderByName(final String name);
+
+    default boolean hasAudiencePlaceholder(final String name) {
+        return audiencePlaceholderByName(name) != null;
+    }
+
+    default boolean hasRelationalPlaceholder(final String name) {
+        return relationalPlaceholderByName(name) != null;
+    }
+
+    default boolean hasGlobalPlaceholder(final String name) {
+        return globalPlaceholderByName(name) != null;
+    }
 
     TagResolver placeholdersByType(PlaceholderType type);
 
@@ -227,15 +241,15 @@ public sealed interface Expansion permits ExpansionImpl {
          * and can mutate depending on when it is invoked</p>
          *
          * @param key the placeholder key, cannot be an empty or black string
-         * @param relationalPlaceholder the relational placeholder
+         * @param relationalResolver the relational placeholder
          * @return the {@link Builder} itself
          * @since 1.0.0
          */
         default Builder relationalPlaceholder(
                 final String key,
-                final RelationalTagResolver<Audience> relationalPlaceholder
+                final RelationalTagResolver<Audience> relationalResolver
         ) {
-            return this.relationalPlaceholder(null, key, relationalPlaceholder);
+            return this.relationalPlaceholder(null, key, relationalResolver);
         }
 
         /**
@@ -244,11 +258,11 @@ public sealed interface Expansion permits ExpansionImpl {
          * <p>The content of this Placeholder is cached
          * and can mutate depending on when it is invoked</p>
          * @param key the placeholder key, cannot be an empty or black string
-         * @param function the function
+         * @param resolver the function
          * @return the {@link Builder} itself
          * @since 1.0.0
          */
-        Builder globalPlaceholder(final String key, final BiFunction<ArgumentQueue, Context, @Nullable Tag> function);
+        Builder globalPlaceholder(final String key, final GlobalTagResolver resolver);
 
         /**
          * Adds a global placeholder
@@ -259,7 +273,9 @@ public sealed interface Expansion permits ExpansionImpl {
          * @return the {@link Builder} itself
          * @since 1.1.0
          */
-        Builder globalPlaceholder(final String key, final Tag tag);
+        default Builder globalPlaceholder(final String key, final Tag tag) {
+            return this.globalPlaceholder(key, (queue, context) -> tag);
+        }
 
         /**
          * Sets the author of this expansion

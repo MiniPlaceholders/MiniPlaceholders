@@ -1,13 +1,13 @@
-package io.github.miniplaceholders.api;
+package io.github.miniplaceholders.api.placeholder;
 
-import io.github.miniplaceholders.api.resolver.RelationalTagResolver;
 import io.github.miniplaceholders.api.relational.RelationalAudience;
+import io.github.miniplaceholders.api.resolver.RelationalTagResolver;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.pointer.Pointered;
 import net.kyori.adventure.text.minimessage.Context;
 import net.kyori.adventure.text.minimessage.tag.Tag;
+import net.kyori.adventure.text.minimessage.tag.TagPattern;
 import net.kyori.adventure.text.minimessage.tag.resolver.ArgumentQueue;
-import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NullMarked;
@@ -28,12 +28,15 @@ import static java.util.Objects.requireNonNull;
 @NullMarked
 public record RelationalPlaceholder<A extends Audience>(
         @Nullable Class<A> targetClass,
-        String key,
+        @TagPattern String key,
         RelationalTagResolver<A> resolver
-) implements TagResolver {
+) implements Placeholder {
 
-  static <A extends Audience> RelationalPlaceholder<A> relational(
-          @Nullable Class<A> targetClass, String key, RelationalTagResolver<A> resolver) {
+  public static <A extends Audience> RelationalPlaceholder<A> relational(
+          @Nullable Class<A> targetClass,
+          @TagPattern String key,
+          RelationalTagResolver<A> resolver
+  ) {
     return new RelationalPlaceholder<>(targetClass, requireNonNull(key), requireNonNull(resolver));
   }
 

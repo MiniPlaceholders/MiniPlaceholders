@@ -15,7 +15,7 @@ class MiniPlaceholdersTest {
     void methodEquality(){
         Expansion.builder("equality")
             .audiencePlaceholder("audience", Tags.NULL_AUDIENCE_PLACEHOLDER)
-            .globalPlaceholder("global", Tags.EMPTY_TAG)
+            .globalPlaceholder("global", (queue, ctx) -> Tags.EMPTY_TAG)
             .build()
         .register();
 

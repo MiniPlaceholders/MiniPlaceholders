@@ -1,12 +1,12 @@
-package io.github.miniplaceholders.api;
+package io.github.miniplaceholders.api.placeholder;
 
 import io.github.miniplaceholders.api.resolver.AudienceTagResolver;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.pointer.Pointered;
 import net.kyori.adventure.text.minimessage.Context;
 import net.kyori.adventure.text.minimessage.tag.Tag;
+import net.kyori.adventure.text.minimessage.tag.TagPattern;
 import net.kyori.adventure.text.minimessage.tag.resolver.ArgumentQueue;
-import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NullMarked;
 
@@ -18,13 +18,13 @@ import static java.util.Objects.requireNonNull;
 @NullMarked
 public record AudiencePlaceholder<A extends Audience>(
         @Nullable Class<A> targetClass,
-        String key,
+        @TagPattern String key,
         AudienceTagResolver<A> resolver
-) implements TagResolver {
+) implements Placeholder {
 
-  static <A extends Audience> AudiencePlaceholder<A> single(
+  public static <A extends Audience> AudiencePlaceholder<A> single(
           @Nullable Class<A> targetClass,
-          String key,
+          @TagPattern String key,
           AudienceTagResolver<A> placeholder
   ) {
     return new AudiencePlaceholder<>(targetClass, requireNonNull(key), requireNonNull(placeholder));
