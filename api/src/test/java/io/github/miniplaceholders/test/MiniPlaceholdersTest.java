@@ -8,11 +8,11 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class MiniPlaceholdersTest {
+class MiniPlaceholdersTest implements MiniTest {
     @Test
     void methodEquality(){
         Expansion.builder("equality")
-            .audiencePlaceholder("audience", Tags.NULL_AUDIENCE_PLACEHOLDER)
+            .audiencePlaceholder("audience", Tags.emptyAudienceResolver())
             .globalPlaceholder("global", (queue, ctx) -> Tags.EMPTY_TAG)
             .build()
         .register();

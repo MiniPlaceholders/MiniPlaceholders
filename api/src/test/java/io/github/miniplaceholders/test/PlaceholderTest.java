@@ -16,9 +16,8 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.Tag;
-import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 
-class PlaceholderTest {
+class PlaceholderTest implements MiniTest {
 
   @Test
   @DisplayName("Audience Placeholder Test")
@@ -143,13 +142,6 @@ class PlaceholderTest {
     Component expected = Component.text("Name: 4drian3d.");
 
     assertContentEquals(parsed, expected);
-  }
-
-  static void assertContentEquals(Component first, Component second) {
-    String firstSerialized = PlainTextComponentSerializer.plainText().serialize(first);
-    String secondSerialized = PlainTextComponentSerializer.plainText().serialize(second);
-
-    assertEquals(firstSerialized, secondSerialized);
   }
 
   private boolean isEnemy(TestAudience a1, TestAudience a2) {

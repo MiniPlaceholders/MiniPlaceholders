@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 //yea... it is intended xd
 @SuppressWarnings("DataFlowIssue")
-class ThrowableTest {
+class ThrowableTest implements MiniTest {
     @Test
     @DisplayName("Nullable Exception")
     void throwOnNull(){
