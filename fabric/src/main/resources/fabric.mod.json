@@ -3,7 +3,7 @@
   "id": "miniplaceholders",
   "version": "${version}",
   "name": "MiniPlaceholders",
-  "description": "MiniMessage Component-based Placeholders for Paper, Fabric, Sponge, Folia and Velocity platforms",
+  "description": "MiniMessage Component-based Placeholders API",
   "authors": [
     "4drian3d"
   ],

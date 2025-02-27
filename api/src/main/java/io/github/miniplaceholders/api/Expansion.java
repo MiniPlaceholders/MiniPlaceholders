@@ -41,6 +41,7 @@ import java.util.Collection;
 public sealed interface Expansion permits ExpansionImpl {
     /**
      * Get the expansion name
+     *
      * @return the expansion name
      * @since 1.0.0
      */
@@ -48,6 +49,7 @@ public sealed interface Expansion permits ExpansionImpl {
 
     /**
      * Get the author of this expansion
+     *
      * @return the author or null
      * @since 2.3.0
      */
@@ -55,6 +57,7 @@ public sealed interface Expansion permits ExpansionImpl {
 
     /**
      * Get the version of this expansion
+     *
      * @return the version or null
      * @since 2.3.0
      */

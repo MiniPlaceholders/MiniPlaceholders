@@ -7,19 +7,24 @@ import net.kyori.adventure.text.minimessage.tag.resolver.ArgumentQueue;
 import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NullMarked;
 
-/**Relational Placeholder based on two Audiences*/
+/**
+ * Relational Placeholder based on two Audiences
+ *
+ * @since 3.0.0
+ */
 @FunctionalInterface
 @NullMarked
 public interface RelationalTagResolver<A extends Audience> {
-    /**
-     * A Tag based on two audiences
-     * @param audience the principal audience
-     * @param relational the another audience
-     * @param queue the argument queue
-     * @param ctx the context
-     * @return a tag
-     * @since 1.0.0
-     */
-    @Nullable
-    Tag tag(final A audience, final A relational, final ArgumentQueue queue, final Context ctx);
+  /**
+   * A Tag based on two audiences
+   *
+   * @param audience   the principal audience
+   * @param relational the another audience
+   * @param queue      the argument queue
+   * @param ctx        the context
+   * @return a tag
+   * @since 3.0.0
+   */
+  @Nullable
+  Tag tag(final A audience, final A relational, final ArgumentQueue queue, final Context ctx);
 }

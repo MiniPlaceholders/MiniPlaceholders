@@ -15,7 +15,6 @@ import java.util.Objects;
 
 import static java.util.Objects.requireNonNull;
 
-
 @NullMarked
 public record AudiencePlaceholder<A extends Audience>(
         @Nullable Class<A> targetClass,

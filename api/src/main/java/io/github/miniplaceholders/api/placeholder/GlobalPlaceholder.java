@@ -10,7 +10,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
-
 public record GlobalPlaceholder(@TagPattern String key, GlobalTagResolver resolver) implements Placeholder {
   @Override
   public @Nullable Tag resolve(@NotNull String name, @NotNull ArgumentQueue arguments, @NotNull Context ctx) {

@@ -18,7 +18,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import static io.github.miniplaceholders.api.utils.Resolvers.applyIfNotEmpty;
 
 /**
- * MiniPlaceholders
+ * MiniPlaceholders, a component-based placeholders API.
  *
  * <p>This class allows you to obtain the {@link TagResolver}
  * that other plugins provide based on single {@link Audience},
@@ -34,7 +34,8 @@ public final class MiniPlaceholders {
     static final Set<Expansion> expansions = ConcurrentHashMap.newKeySet();
 
     /**
-     * Get the platform
+     * Get the platform on which MiniPlaceholders is running.
+     *
      * @return the platform
      * @since 3.0.0
      */
@@ -61,24 +62,26 @@ public final class MiniPlaceholders {
         final TagResolver.Builder builder = TagResolver.builder();
         for (final Expansion expansion : expansions) {
             final TagResolver resolver = expansion.globalPlaceholders();
-            if (resolver != TagResolver.empty())
-                builder.resolver(resolver);
+            applyIfNotEmpty(resolver, builder);
         }
         return builder.build();
     }
 
     /**
-     * Get the TagResolver based on an Audience
+     * Gets the TagResolver that can get data from an Audience.
+     * <br>
+     * The audience is provided at the time of parsing from the respective MiniMessage instance.
      *
      * <pre>TagResolver resolver = MiniPlaceholders.audiencePlaceholders();
-     * Component messageParsed = MiniMessage.miniMessage().deserialize({@link String}, {@link Audience}, resolver);</pre>
+     * Component messageParsed = MiniMessage.miniMessage().deserialize({@link String}, {@link Audience}, resolver);
+     * </pre>
      *
      * @return {@link TagResolver} with placeholders based on an audience
      * @since 3.0.0
      */
     public static @NotNull TagResolver audiencePlaceholders() {
         final TagResolver.Builder resolvers = TagResolver.builder();
-        for (Expansion expansion : expansions) {
+        for (final Expansion expansion : expansions) {
             final TagResolver resolver = expansion.audiencePlaceholders();
             applyIfNotEmpty(resolver, resolvers);
         }
@@ -87,12 +90,17 @@ public final class MiniPlaceholders {
 
     /**
      * Get the relational placeholders based on two audiences
+     * <br>
+     * The audiences are provided at the time of parsing
+     * from the respective MiniMessage instance through the use of a {@link RelationalAudience}.
      *
      * <pre>TagResolver resolver = MiniPlaceholders.relationalPlaceholders();
-     * Component messageParsed = MiniMessage.miniMessage().deserialize({@link String}, {@link RelationalAudience}, resolver);</pre>
+     * Component parsed = MiniMessage.miniMessage().deserialize({@link String}, {@link RelationalAudience}, resolver);
+     * </pre>
      *
      * @return placeholders based on two audiences
      * @since 3.0.0
+     * @see RelationalAudience
      */
     public static @NotNull TagResolver relationalPlaceholders() {
         final TagResolver.Builder builder = TagResolver.builder();
@@ -104,17 +112,20 @@ public final class MiniPlaceholders {
     }
 
     /**
-     * Get the TagResolver based on an Audience and the global placeholders
+     * Get a TagResolver that can obtain data based on a relationship of 2 audiences
+     * and at the same time from the main audience and global placeholders.
+     * <br>
+     * The audience is provided at the time of parsing from the respective MiniMessage instance.
      *
      * <pre>
-     * TagResolver resolver = MiniPlaceholders.getAudienceGlobalPlaceholders({@link Audience});
+     * TagResolver resolver = MiniPlaceholders.audienceGlobalPlaceholders();
      * TagResolver resolver2 = TagResolver.resolver(
-     *  MiniPlaceholders.getAudienceGlobalPlaceholders({@link Audience}),
-     *  MiniPlaceholders.getGlobalPlaceholders()
+     *  MiniPlaceholders.audienceGlobalPlaceholders(),
+     *  MiniPlaceholders.globalPlaceholders()
      * );
      * // This two resolvers returns the same TagResolver
      * assertEquals(resolver, resolver2);
-     * Component messageParsed = MiniMessage.miniMessage().deserialize({@link String}, resolver);
+     * Component parsed = MiniMessage.miniMessage().deserialize({@link String}, {@link Audience}, resolver);
      * </pre>
      *
      * @return {@link TagResolver} with placeholders based on an audience and the global placeholders
@@ -144,11 +155,13 @@ public final class MiniPlaceholders {
      * );
      * // This methods should return the same TagResolver
      * assertEquals(resolver, resolver2);
-     * Component messageParsed = MiniMessage.miniMessage().deserialize({@link String}, resolver);
+     * Component messageParsed = MiniMessage.miniMessage().deserialize({@link String}, {@link RelationalAudience}, resolver);
      * </pre>
      *
      * @return the placeholders based on two audiences, placeholders based on the first audience and the global placeholders
      * @since 3.0.0
+     * @apiNote In the case of audience placeholders, the audience to be used will be the {@link RelationalAudience#audience()}
+     * @see RelationalAudience
      */
     public static @NotNull TagResolver relationalGlobalPlaceholders() {
         final TagResolver.Builder builder = TagResolver.builder();
@@ -161,9 +174,20 @@ public final class MiniPlaceholders {
         return builder.build();
     }
 
-    //TODO: DOCS
-
-    public static TagResolver placeholdersByType(PlaceholderType type) {
+    /**
+     * Get a TagResolver based on the desired placeholder type.
+     * <br>
+     * {@link PlaceholderType#GLOBAL} will return {@link #globalPlaceholders()}
+     * <br>
+     * {@link PlaceholderType#AUDIENCE} will return {@link #audiencePlaceholders()}
+     * <br>
+     * {@link PlaceholderType#RELATIONAL} will return {@link #relationalPlaceholders()}
+     *
+     * @param type the desired type
+     * @return the TagResolvers from the respective type
+     * @see PlaceholderType
+     */
+    public static TagResolver placeholdersByType(final PlaceholderType type) {
         return switch (type) {
             case GLOBAL -> globalPlaceholders();
             case AUDIENCE -> audiencePlaceholders();
@@ -172,7 +196,8 @@ public final class MiniPlaceholders {
     }
 
     /**
-     * Get the amount of expansion registered
+     * Get the amount of expansion registered.
+     *
      * @return the amount of expansions registered
      * @since 3.0.0
      */
@@ -187,8 +212,9 @@ public final class MiniPlaceholders {
      *     Expansion expansion = Expansion.builder("example").build();
      *     expansion.register();
      *
-     *     assertThat(MiniPlaceholders.getExpansionByName("example")).isNotNull();
+     *     assertThat(MiniPlaceholders.expansionByName("example")).isNotNull();
      * </pre>
+     *
      * @param name the name of the required expansion
      * @return the required expansion, if not present, will return null
      * @see Expansion#builder(String)

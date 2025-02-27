@@ -17,14 +17,21 @@ import java.util.Objects;
 
 import static java.util.Objects.requireNonNull;
 
-// TODO: DOCS
 /**
- * Relational Placeholder
+ * Relational Placeholder.
+ * <br>
+ * This placeholder is able to obtain data based on a relationship between 2 audiences
+ * using a type-safe filter and a relational resolver.
  *
- * @param targetClass the
- * @param key the key
- * @param resolver relational resolver
- * @param <A> the audience type
+ * @param targetClass the target class, can be null
+ * @param key the key of the entire placeholder
+ * @param resolver the relational resolver,
+ *                 in charge of obtaining data based on a relationship of 2 audiences
+ * @param <A> the audience type, if not specified, will be a generic {@linkplain Audience}
+ * @see RelationalTagResolver
+ * @apiNote The {@link #key()} method returns the full name of the placeholder,
+ * for example, if the placeholder is {@code <server_name>},
+ * the {@linkplain #key()} method will return {@code server_name}.
  */
 @NullMarked
 public record RelationalPlaceholder<A extends Audience>(
@@ -33,6 +40,17 @@ public record RelationalPlaceholder<A extends Audience>(
         RelationalTagResolver<A> resolver
 ) implements Placeholder {
 
+  /**
+   * Static method capable of creating an instance of a relational placeholder.
+   *
+   * @param targetClass the target class, can be null
+   * @param key the key of the entire placeholder
+   * @param resolver the relational resolver,
+   *                 in charge of obtaining data based on a relationship of 2 audiences
+   * @return a new RelationalPlaceholder
+   * @param <A> the audience type, if not specified, will be a generic {@linkplain Audience}
+   * @since 3.0.0
+   */
   public static <A extends Audience> RelationalPlaceholder<A> relational(
           @Nullable Class<A> targetClass,
           @TagPattern String key,

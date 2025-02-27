@@ -5,7 +5,7 @@
 ![Modrinth Downloads](https://img.shields.io/modrinth/dt/HQyibRsN?logo=Modrinth&style=flat-square)
 ![GitHub Downloads](https://img.shields.io/github/downloads/MiniPlaceholders/MiniPlaceholders/total?logo=GitHub&style=flat-square)
 
-MiniMessage Component-based Placeholders for Paper, Fabric, Sponge, Folia and Velocity platforms
+MiniMessage Component-based Placeholders API for Minecraft Platforms.
 
 ## Compatibility
 - Paper 1.19.3, 1.19.4+
