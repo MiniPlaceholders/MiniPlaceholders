@@ -56,7 +56,8 @@ public record ParseNode<S extends Audience>(
 
               final Component parsed = miniMessage().deserialize(
                       toParse,
-                      MiniPlaceholders.getAudienceGlobalPlaceholders(objective)
+                      objective,
+                      MiniPlaceholders.audienceGlobalPlaceholders()
               );
               handler.sender().sendMessage(parsed);
             });

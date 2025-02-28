@@ -30,7 +30,8 @@ import java.util.stream.Collectors;
         name = "MiniPlaceholders",
         id = "miniplaceholders",
         version = PluginConstants.VERSION,
-        authors = {"MiniPlaceholders Contributors", "4drian3d"}
+        authors = {"MiniPlaceholders Contributors", "4drian3d"},
+        description = "MiniMessage Component-based Placeholders API"
 )
 public final class VelocityPlugin implements PlaceholdersPlugin {
     private final Logger logger;

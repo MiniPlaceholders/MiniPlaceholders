@@ -17,6 +17,8 @@ dependencies {
     testImplementation(libs.adventure.minimessage)
     testImplementation(libs.adventure.serializer.plain)
     testImplementation(libs.adventure.serializer.legacy)
+
+    compileOnly(libs.jspecify)
 }
 
 jmh {
@@ -35,9 +37,15 @@ tasks {
     }
     javadoc {
         options.encoding = Charsets.UTF_8.name()
-        (options as StandardJavadocDocletOptions).links(
+        val o = options as StandardJavadocDocletOptions
+        o.links(
             "https://jd.advntr.dev/api/${libs.versions.adventure.get()}/",
             "https://jd.advntr.dev/text-minimessage/${libs.versions.adventure.get()}/"
+        )
+        o.tags(
+            "apiNote:a:API Note:",
+            "implSpec:a:Implementation Requirements:",
+            "implNote:a:Implementation Note:"
         )
     }
     compileTestJava {
