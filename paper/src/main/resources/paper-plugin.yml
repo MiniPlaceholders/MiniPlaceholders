@@ -7,3 +7,4 @@ bootstrapper: io.github.miniplaceholders.paper.PaperBootstrap
 description: MiniMessage Component-based Placeholders API
 api-version: '1.21'
 folia-supported: true
+has-open-classloader: true

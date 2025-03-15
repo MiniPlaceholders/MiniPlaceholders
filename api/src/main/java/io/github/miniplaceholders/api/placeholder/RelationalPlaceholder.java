@@ -123,4 +123,11 @@ public record RelationalPlaceholder<A extends Audience>(
   public int hashCode() {
     return Objects.hash(key);
   }
+
+  @Override
+  public String toString() {
+    return "RelationalPlaceholder{" +
+            "key='" + key + '\'' +
+            '}';
+  }
 }

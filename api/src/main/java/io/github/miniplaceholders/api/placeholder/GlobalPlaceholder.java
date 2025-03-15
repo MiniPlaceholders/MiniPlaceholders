@@ -31,4 +31,11 @@ public record GlobalPlaceholder(@TagPattern String key, GlobalTagResolver resolv
     }
     return false;
   }
+
+  @Override
+  public String toString() {
+    return "GlobalPlaceholder{" +
+            "key='" + key + '\'' +
+            '}';
+  }
 }

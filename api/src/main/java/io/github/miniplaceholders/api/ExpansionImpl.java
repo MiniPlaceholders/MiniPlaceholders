@@ -183,7 +183,7 @@ final class ExpansionImpl implements Expansion {
     public <A extends Audience> @NotNull Builder audiencePlaceholder(
             final @Nullable Class<A> targetClass,
             @Subst("name") final @NotNull String key,
-            final @NotNull AudienceTagResolver<A> audiencePlaceholder
+            final @NotNull AudienceTagResolver<@NotNull A> audiencePlaceholder
     ) {
       nonNullOrEmptyString(key, "Placeholder key");
       requireNonNull(audiencePlaceholder, "the audience placeholder cannot be null");
@@ -198,7 +198,7 @@ final class ExpansionImpl implements Expansion {
     public <A extends Audience> @NotNull Builder relationalPlaceholder(
             @Nullable Class<A> targetClass,
             @Subst("relation") @NotNull String key,
-            @NotNull RelationalTagResolver<A> relationalPlaceholder
+            @NotNull RelationalTagResolver<@NotNull A> relationalPlaceholder
     ) {
       nonNullOrEmptyString(key, "Placeholder key");
       requireNonNull(relationalPlaceholder, "the relational placeholder cannot be null");
@@ -261,5 +261,17 @@ final class ExpansionImpl implements Expansion {
   @Override
   public int hashCode() {
     return Objects.hash(name.hashCode());
+  }
+
+  @Override
+  public String toString() {
+    return "ExpansionImpl{" +
+            "name='" + name + '\'' +
+            ", audiencePlaceholders=" + audiencePlaceholders +
+            ", relationalPlaceholders=" + relationalPlaceholders +
+            ", globalPlaceholders=" + globalPlaceholders +
+            ", author='" + author + '\'' +
+            ", version='" + version + '\'' +
+            '}';
   }
 }

@@ -17,4 +17,5 @@ open module io.github.miniplaceholders.api {
   exports io.github.miniplaceholders.api.utils;
   exports io.github.miniplaceholders.api.resolver;
   exports io.github.miniplaceholders.api.placeholder;
+  exports io.github.miniplaceholders.api.provider;
 }

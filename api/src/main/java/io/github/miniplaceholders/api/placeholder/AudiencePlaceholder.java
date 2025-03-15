@@ -81,4 +81,11 @@ public record AudiencePlaceholder<A extends Audience>(
   public int hashCode() {
     return Objects.hash(key);
   }
+
+  @Override
+  public String toString() {
+    return "AudiencePlaceholder{" +
+            "key='" + key + '\'' +
+            '}';
+  }
 }

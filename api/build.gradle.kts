@@ -36,10 +36,18 @@ tasks {
         filteringCharset = Charsets.UTF_8.name()
     }
     javadoc {
-        options.encoding = Charsets.UTF_8.name()
-        (options as StandardJavadocDocletOptions).links(
+        val o = options as StandardJavadocDocletOptions
+        o.encoding = Charsets.UTF_8.name()
+        o.links(
             "https://jd.advntr.dev/api/${libs.versions.adventure.get()}/",
             "https://jd.advntr.dev/text-minimessage/${libs.versions.adventure.get()}/"
+        )
+        // Yeah, copied my own Velocity tags impl d:
+        o.tags(
+            "apiNote:a:API Note:",
+            "implSpec:a:Implementation Requirements:",
+            "implNote:a:Implementation Note:",
+            "sinceMinecraft:a:Since Minecraft:"
         )
     }
     compileTestJava {

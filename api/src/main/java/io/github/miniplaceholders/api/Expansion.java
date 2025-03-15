@@ -147,6 +147,21 @@ public sealed interface Expansion permits ExpansionImpl {
         return new ExpansionImpl.Builder(name);
     }
 
+    default String shortToString() {
+        final StringBuilder builder = new StringBuilder(name()).append('[');
+        if (author() != null) {
+            builder.append("Author: ").append(author());
+        }
+        if (version() != null) {
+            if (author() != null) {
+                builder.append(", ");
+            }
+            builder.append("Version: ").append(version());
+        }
+        builder.append(']');
+        return builder.toString();
+    }
+
     /**
      * Expansion Builder
      * <p>Example use:</p>
