@@ -42,7 +42,6 @@ tasks {
             "https://jd.advntr.dev/api/${libs.versions.adventure.get()}/",
             "https://jd.advntr.dev/text-minimessage/${libs.versions.adventure.get()}/"
         )
-        // Yeah, copied my own Velocity tags impl d:
         o.tags(
             "apiNote:a:API Note:",
             "implSpec:a:Implementation Requirements:",
