@@ -241,8 +241,8 @@ final class ExpansionImpl implements Expansion {
                 this.globalPlaceholders != null ? this.globalPlaceholders.build() : TagResolver.empty(),
                 this.filterClass,
                 this.predicateFilter,
-                this.version,
-                this.author
+                this.author,
+                this.version
             );
         }
     }
