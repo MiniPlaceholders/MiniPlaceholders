@@ -1,6 +1,8 @@
 package io.github.miniplaceholders.test;
 
 import io.github.miniplaceholders.api.Expansion;
+import io.github.miniplaceholders.api.enums.DisplayType;
+import io.github.miniplaceholders.api.placeholder.AudiencePlaceholder;
 import io.github.miniplaceholders.api.utils.TagsUtils;
 import io.github.miniplaceholders.test.testobjects.TestAudienceHolder;
 import net.kyori.adventure.text.Component;
@@ -41,5 +43,18 @@ class ExpansionsTest {
         );
 
         assertContentEquals(result, Component.text("<test_testing>"));
+    }
+
+    @Test
+    void testGetAudiencePlaceholdersByName() {
+        TestAudienceHolder audience = new TestAudienceHolder(null);
+
+        final Expansion expansion = Expansion.builder("test")
+                .audiencePlaceholder("test", TagsUtils.NULL_AUDIENCE_PLACEHOLDER)
+                .build();
+
+        System.out.println(expansion.audiencePlaceholdersByName());
+        System.out.println(expansion.audiencePlaceholders(DisplayType.PLACEHOLDER));
+        System.out.println(expansion.audiencePlaceholders(DisplayType.RAW));
     }
 }
