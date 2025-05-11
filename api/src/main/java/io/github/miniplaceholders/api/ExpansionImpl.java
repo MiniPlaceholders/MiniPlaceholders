@@ -244,8 +244,8 @@ final class ExpansionImpl implements Expansion {
               this.audiencePlaceholders,
               this.relationalPlaceholders,
               this.globalPlaceholders,
-              this.version,
-              this.author
+              this.author,
+              this.version
       );
     }
   }
