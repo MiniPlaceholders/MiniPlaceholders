@@ -44,7 +44,8 @@ arrayOf(
     "paper",
     "velocity",
     "fabric",
-    "sponge"
+    "sponge",
+    "example-expansion-provider"
 ).forEach {
     include("miniplaceholders-$it")
     project(":miniplaceholders-$it").projectDir = file(it)

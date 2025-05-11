@@ -12,39 +12,46 @@ import org.openjdk.jmh.annotations.State;
 import io.github.miniplaceholders.api.Expansion;
 import io.github.miniplaceholders.api.MiniPlaceholders;
 
+@SuppressWarnings("unused")
 @State(Scope.Benchmark)
 public class PlaceholderBenchmark {
-    @Benchmark
-    public void placeholderBench(){
-        BenchAudience player = new BenchAudience("4drian3d");
-        Expansion.Builder expansion = Expansion.builder("benchmark")
+  @Benchmark
+  public void placeholderBench() {
+    BenchAudience player = new BenchAudience("4drian3d");
+    Expansion.Builder expansion = Expansion.builder("benchmark")
             .audiencePlaceholder(
-                "name", (aud, queue, ctx) -> Tag.selfClosingInserting(Component.text(((BenchAudience)aud).getName()))
+                    BenchAudience.class,
+                    "name",
+                    (aud, queue, ctx) -> Tag.selfClosingInserting(Component.text(aud.getName()))
             )
             .audiencePlaceholder(
-                "uuid", (aud, queue, ctx) -> Tag.selfClosingInserting(Component.text(((BenchAudience)aud).getUUID().toString()))
+                    BenchAudience.class,
+                    "uuid",
+                    (aud, queue, ctx) -> Tag.selfClosingInserting(Component.text(aud.getUUID().toString()))
             )
             .audiencePlaceholder(
-                "tablistfooter", (aud, queue, ctx) ->Tag.selfClosingInserting(Component.text("footer"))
+                    "tablistfooter",
+                    (aud, queue, ctx) -> Tag.selfClosingInserting(Component.text("footer"))
             );
 
-        Expansion expansionBuilded = expansion.build();
-        expansionBuilded.audiencePlaceholders(player);
-        final TagResolver resolvers = MiniPlaceholders.getAudiencePlaceholders(player);
+    Expansion expansionBuilded = expansion.build();
+    expansionBuilded.register();
+    final TagResolver resolvers = MiniPlaceholders.audiencePlaceholders();
 
-        MiniMessage.miniMessage().deserialize("Player Name: <benchmark-name>", resolvers);
-    }
+    MiniMessage.miniMessage().deserialize("Player Name: <benchmark_name>", player, resolvers);
+  }
 
-    @Benchmark
-    public void singleBench(){
-        Expansion.builder("single")
-            .globalPlaceholder("servername", (queue, ctx) -> Tag.selfClosingInserting(Component.text("Peruviankkit")))
+  @Benchmark
+  public void singleBench() {
+    Expansion.builder("single")
+            .globalPlaceholder("servername",
+                    (queue, ctx) -> Tag.selfClosingInserting(Component.text("Peruviankkit")))
             .build()
             .register();
 
-        TagResolver resolvers = MiniPlaceholders.getGlobalPlaceholders();
+    TagResolver resolvers = MiniPlaceholders.globalPlaceholders();
 
-        MiniMessage.miniMessage().deserialize("Server name: <single-servername>", resolvers);
-    }
+    MiniMessage.miniMessage().deserialize("Server name: <single_servername>", resolvers);
+  }
 
 }
