@@ -11,8 +11,6 @@ import java.nio.file.Path;
 import java.util.List;
 
 public interface PlaceholdersPlugin {
-    void loadDefaultExpansions();
-
     default void registerPlatformCommand() {
     }
 

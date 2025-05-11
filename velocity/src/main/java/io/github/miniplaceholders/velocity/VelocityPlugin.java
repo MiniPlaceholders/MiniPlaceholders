@@ -12,7 +12,6 @@ import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 import io.github.miniplaceholders.api.Expansion;
-import io.github.miniplaceholders.api.utils.Components;
 import io.github.miniplaceholders.common.PlaceholdersPlugin;
 import io.github.miniplaceholders.common.PluginConstants;
 import io.github.miniplaceholders.common.command.PlaceholdersCommand;
@@ -20,7 +19,6 @@ import io.github.miniplaceholders.connect.InternalPlatform;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
-import net.kyori.adventure.text.minimessage.tag.Tag;
 import org.incendo.cloud.SenderMapper;
 import org.incendo.cloud.execution.ExecutionCoordinator;
 import org.incendo.cloud.velocity.CloudInjectionModule;
@@ -55,7 +53,6 @@ public final class VelocityPlugin implements PlaceholdersPlugin {
 
     InternalPlatform.platform(InternalPlatform.VELOCITY);
 
-    this.loadDefaultExpansions();
     this.registerPlatformCommand();
 
     try {
@@ -71,31 +68,6 @@ public final class VelocityPlugin implements PlaceholdersPlugin {
     } catch (Throwable e) {
       componentLogger.error("Unable to load expansion providers", e);
     }
-  }
-
-  @Override
-  public void loadDefaultExpansions() {
-    Expansion.builder("proxy")
-            .author("MiniPlaceholders Contributors")
-            .version(PluginConstants.VERSION)
-            .globalPlaceholder("online_players", (queue, ctx) -> {
-              if (queue.hasNext()) {
-                String server = queue.pop().value();
-                return Tag.preProcessParsed(proxyServer.getServer(server)
-                        .map(sv -> sv.getPlayersConnected().size())
-                        .map(size -> Integer.toString(size))
-                        .orElse("0"));
-              }
-              return Tag.preProcessParsed(Integer.toString(proxyServer.getPlayerCount()));
-            })
-            .globalPlaceholder("server_count", (queue, ctx) -> Tag.preProcessParsed(Integer.toString(proxyServer.getAllServers().size())))
-            .globalPlaceholder("is_player_online", (queue, ctx) -> {
-              String playerName = queue.popOr(() -> "you need to introduce an argument").value();
-              return Tag.selfClosingInserting(proxyServer.getPlayer(playerName).isPresent() ? Components.YES_COMPONENT : Components.NO_COMPONENT);
-            })
-            .globalPlaceholder("version", Tag.preProcessParsed(proxyServer.getVersion().getVersion()))
-            .build()
-            .register();
   }
 
   @Override
