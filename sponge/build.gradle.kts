@@ -4,7 +4,7 @@ import org.spongepowered.plugin.metadata.model.PluginDependency
 plugins {
     id("miniplaceholders.auto.module")
     id("miniplaceholders.shadow")
-    id("org.spongepowered.gradle.plugin")
+    id("org.spongepowered.gradle.plugin") version "2.3.0"
 }
 
 dependencies {
@@ -17,6 +17,7 @@ dependencies {
 }
 
 sponge {
+    injectRepositories(false)
     apiVersion("8.1.0")
     license("GPL-3")
     loader {
