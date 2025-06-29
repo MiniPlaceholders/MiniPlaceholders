@@ -18,21 +18,26 @@ pluginManagement {
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
+        maven("https://central.sonatype.com/repository/maven-snapshots/") {
+            name = "sonatype-snapshots"
+            mavenContent {
+                snapshotsOnly()
+            }
+        }
         maven("https://repo.papermc.io/repository/maven-public/")
         maven("https://repo.maven.apache.org/maven2/")
+        maven("https://repo.spongepowered.org/repository/")
         maven("https://jitpack.io") {
             mavenContent {
                 includeGroup("net.william278")
             }
         }
-        maven("https://oss.sonatype.org/content/repositories/snapshots")
         maven("https://repo.jpenilla.xyz/snapshots/")
     }
 }
 
 plugins {
     id("quiet-fabric-loom") version "1.10.316"
-    id("org.spongepowered.gradle.plugin") version "2.3.0" // sponge is disabled
     id("org.gradle.toolchains.foojay-resolver-convention") version "0.9.0"
 }
 
