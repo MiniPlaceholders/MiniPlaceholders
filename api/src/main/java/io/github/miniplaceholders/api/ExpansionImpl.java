@@ -126,7 +126,7 @@ final class ExpansionImpl implements Expansion {
   public @Nullable AudiencePlaceholder<?> audiencePlaceholderByName(String name) {
     requireNonNull(name);
     for (Placeholder audiencePlaceholder : audiencePlaceholders.placeholders()) {
-      if (Objects.equals(audiencePlaceholder.key(), name)) {
+      if (Objects.equals(audiencePlaceholder.name(), name)) {
         return (AudiencePlaceholder<?>) audiencePlaceholder;
       }
     }
@@ -137,7 +137,7 @@ final class ExpansionImpl implements Expansion {
   public @Nullable RelationalPlaceholder<?> relationalPlaceholderByName(String name) {
     requireNonNull(name);
     for (Placeholder relationalPlaceholder : relationalPlaceholders.placeholders()) {
-      if (Objects.equals(relationalPlaceholder.key(), name)) {
+      if (Objects.equals(relationalPlaceholder.name(), name)) {
         return (RelationalPlaceholder<?>) relationalPlaceholder;
       }
     }
@@ -147,7 +147,7 @@ final class ExpansionImpl implements Expansion {
   @Override
   public @Nullable GlobalPlaceholder globalPlaceholderByName(String name) {
     for (Placeholder placeholder : globalPlaceholders.placeholders()) {
-      if (Objects.equals(placeholder.key(), name)) {
+      if (Objects.equals(placeholder.name(), name)) {
         return (GlobalPlaceholder) placeholder;
       }
     }
@@ -190,7 +190,7 @@ final class ExpansionImpl implements Expansion {
 
       if (this.audiencePlaceholders == null) this.audiencePlaceholders = new HashSet<>();
 
-      this.audiencePlaceholders.add(AudiencePlaceholder.single(targetClass, expansionPrefix + key, audiencePlaceholder));
+      this.audiencePlaceholders.add(AudiencePlaceholder.single(targetClass, expansionPrefix + key, key, audiencePlaceholder));
       return this;
     }
 
@@ -205,7 +205,7 @@ final class ExpansionImpl implements Expansion {
 
       if (this.relationalPlaceholders == null) this.relationalPlaceholders = new HashSet<>();
 
-      final var relationalTag = RelationalPlaceholder.relational(targetClass, expansionPrefix + "rel_" + key, relationalPlaceholder);
+      final var relationalTag = RelationalPlaceholder.relational(targetClass, expansionPrefix + "rel_" + key, key, relationalPlaceholder);
       this.relationalPlaceholders.add(relationalTag);
       return this;
     }
@@ -220,7 +220,7 @@ final class ExpansionImpl implements Expansion {
 
       if (this.globalPlaceholders == null) this.globalPlaceholders = new HashSet<>();
 
-      final var globalResolver = new GlobalPlaceholder(expansionPrefix + key, function);
+      final var globalResolver = new GlobalPlaceholder(expansionPrefix + key, key, function);
       this.globalPlaceholders.add(globalResolver);
       return this;
     }

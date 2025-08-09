@@ -113,10 +113,30 @@ public sealed interface Expansion permits ExpansionImpl {
 
     // TODO: Docs and Tests
 
+    /**
+     * Get the registered audience placeholders
+     *
+     * @return registered audience placeholders
+     */
     Collection<AudiencePlaceholder<?>> registeredAudiencePlaceholders();
 
+    /**
+     * Get the registered relational placeholders
+     *
+     * @return registered relational placeholders
+     */
     Collection<RelationalPlaceholder<?>> registeredRelationalPlaceholders();
 
+    /**
+     * Get an Audience Placeholder by name
+     *
+     * <pre>{@code
+     *      Expansion expansion = MiniPlaceholders.expansionByName("player")
+     *      AudiencePlaceholder<?> placeholder = expansion.audiencePlaceholderByName("name");
+     * }</pre>
+     * @param name
+     * @return
+     */
     @Nullable AudiencePlaceholder<?> audiencePlaceholderByName(final String name);
 
     @Nullable RelationalPlaceholder<?> relationalPlaceholderByName(final String name);

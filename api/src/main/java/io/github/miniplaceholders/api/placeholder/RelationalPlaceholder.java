@@ -37,6 +37,7 @@ import static java.util.Objects.requireNonNull;
 public record RelationalPlaceholder<A extends Audience>(
         @Nullable Class<A> targetClass,
         @TagPattern String key,
+        String name,
         RelationalTagResolver<A> resolver
 ) implements Placeholder {
 
@@ -54,9 +55,10 @@ public record RelationalPlaceholder<A extends Audience>(
   public static <A extends Audience> RelationalPlaceholder<A> relational(
           @Nullable Class<A> targetClass,
           @TagPattern String key,
+          String name,
           RelationalTagResolver<A> resolver
   ) {
-    return new RelationalPlaceholder<>(targetClass, requireNonNull(key), requireNonNull(resolver));
+    return new RelationalPlaceholder<>(targetClass, requireNonNull(key), name, requireNonNull(resolver));
   }
 
   @Override

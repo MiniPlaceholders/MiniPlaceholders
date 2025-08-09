@@ -94,9 +94,10 @@ public final class MiniPlaceholders {
      * The audiences are provided at the time of parsing
      * from the respective MiniMessage instance through the use of a {@link RelationalAudience}.
      *
-     * <pre>TagResolver resolver = MiniPlaceholders.relationalPlaceholders();
-     * Component parsed = MiniMessage.miniMessage().deserialize({@link String}, {@link RelationalAudience}, resolver);
-     * </pre>
+     * <pre>{@code
+     *      TagResolver resolver = MiniPlaceholders.relationalPlaceholders();
+     *      Component parsed = MiniMessage.miniMessage().deserialize(@link String, {@link RelationalAudience}, resolver);
+     * }</pre>
      *
      * @return placeholders based on two audiences
      * @since 3.0.0

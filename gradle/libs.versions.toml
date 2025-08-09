@@ -3,24 +3,24 @@ metadata.format.version = "1.1"
 [versions]
 
 velocity = "3.4.0-SNAPSHOT"
-paper = "1.21.4-R0.1-SNAPSHOT"
-minecraft = "1.21.4"
+paper = "1.21.8-R0.1-SNAPSHOT"
+minecraft = "1.21.8"
 
 runtask = "2.3.1"
 blossom = "2.1.0"
-shadow = "9.0.0-beta4"
+shadow = "9.0.0-rc2"
 jmh = "0.7.3"
 dokka = "2.0.0"
 
 cloud = "2.0.0"
-cloud-minecraft = "2.0.0-SNAPSHOT"
-cloud-minecraft-modded = "2.0.0-beta.10"
-adventure = "4.19.0"
-adventureModded = "6.2.0"
-kotlin = "2.1.10"
+cloud-minecraft = "2.0.0-beta.11"
+cloud-minecraft-modded = "2.0.0-beta.12"
+adventure = "4.23.0"
+adventureModded = "6.5.1"
+kotlin = "2.2.0"
 
-fabric-api = "0.114.3+1.21.5"
-fabric-loader = "0.16.10"
+fabric-api = "0.130.0+1.21.8"
+fabric-loader = "0.16.14"
 
 desertwell = "2.0.4"
 

@@ -15,19 +15,40 @@ import java.util.Objects;
 
 import static java.util.Objects.requireNonNull;
 
+/**
+ * A placeholder that can be applied based on an audience of the specified type.
+ *
+ * @param targetClass the type of audience from which this placeholder can obtain information
+ * @param key the full placeholder key
+ * @param name the name of this placeholder
+ * @param resolver the object responsible for obtaining audience information
+ * @param <A> the parametrized type
+ */
 @NullMarked
 public record AudiencePlaceholder<A extends Audience>(
         @Nullable Class<A> targetClass,
         @TagPattern String key,
+        String name,
         AudienceTagResolver<A> resolver
 ) implements Placeholder {
 
+  /**
+   * Creates a new AudiencePlaceholder.
+   *
+   * @param targetClass the type of audience from which this placeholder can obtain information
+   * @param key the placeholder key
+   * @param name the name of this placeholder
+   * @param resolver the object responsible for obtaining audience information
+   * @return a new AudiencePlaceholder
+   * @param <A> the parametrized type
+   */
   public static <A extends Audience> AudiencePlaceholder<A> single(
           @Nullable Class<A> targetClass,
           @TagPattern String key,
-          AudienceTagResolver<A> placeholder
+          String name,
+          AudienceTagResolver<A> resolver
   ) {
-    return new AudiencePlaceholder<>(targetClass, requireNonNull(key), requireNonNull(placeholder));
+    return new AudiencePlaceholder<>(targetClass, requireNonNull(key), requireNonNull(name), requireNonNull(resolver));
   }
 
   @Override

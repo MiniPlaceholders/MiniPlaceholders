@@ -31,8 +31,8 @@ class ExpansionsTest implements MiniTest {
                 .globalPlaceholder("some_placeholder", Tag.preProcessParsed("test"))
                 .build();
 
-        assertTrue(expansion.hasGlobalPlaceholder("test_some_placeholder"));
-        final GlobalPlaceholder somePlaceholder = expansion.globalPlaceholderByName("test_some_placeholder");
+        assertTrue(expansion.hasGlobalPlaceholder("some_placeholder"));
+        final GlobalPlaceholder somePlaceholder = expansion.globalPlaceholderByName("some_placeholder");
         assertNotNull(somePlaceholder);
 
         final var expansionResult = parse("Result: <test_some_placeholder>", expansion.globalPlaceholders());
@@ -50,5 +50,16 @@ class ExpansionsTest implements MiniTest {
         var placeholders = expansion.placeholdersByType(PlaceholderType.AUDIENCE);
         assertNotNull(placeholders);
         assertEquals(placeholders, expansion.audiencePlaceholders());
+    }
+
+    @Test
+    void placeholdersByName() {
+        final Expansion expansion = Expansion.builder("test")
+                .globalPlaceholder("someexpansion", Tags.emptyGlobalPlaceholder())
+                .build();
+
+        final GlobalPlaceholder placeholder = expansion.globalPlaceholderByName("someexpansion");
+        assertNotNull(placeholder);
+        assertEquals("someexpansion", placeholder.name());
     }
 }
