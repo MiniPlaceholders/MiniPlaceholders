@@ -29,7 +29,10 @@ public final class ExpansionsNode<S extends Audience> implements Node<S> {
                       .appendNewline();
               final Collection<Expansion> expansions = MiniPlaceholders.expansionsAvailable();
               if (expansions.isEmpty()) {
-                builder.append(miniMessage().deserialize("<aqua>You don't have any <#a1ff4a>Expansion</#a1ff4a> installed yet,\nyou can find the <#a1ff4a>Expansion</#a1ff4a> you want here "))
+                builder.append(miniMessage().deserialize("""
+                        <aqua>It seems that you don't have any <#a1ff4a>Expansion</#a1ff4a> installed yet,
+                        You can find the <#a1ff4a>Expansion</#a1ff4a> you want here"""))
+                        .appendSpace()
                         .append(Component.text()
                                 .content("[MiniPlaceholders Expansions]")
                                 .color(NamedTextColor.BLUE)

@@ -24,8 +24,10 @@ public interface PlaceholdersPlugin {
         final List<Expansion> loadedExpansions = new ArrayList<>();
         for (ExpansionProvider provider : ExpansionProviderLoader.loadProvidersFromFolder(providersFolderDirectory)) {
             ProviderLoadResult loadResult = tryLoad(provider, provider.loadRequirement());
-            if (loadResult.expansion() != null) {
-                loadedExpansions.add(loadResult.expansion());
+            final Expansion loadedExpansion = loadResult.expansion();
+            if (loadedExpansion != null) {
+                loadedExpansions.add(loadedExpansion);
+                loadedExpansion.register();
                 continue;
             }
             final FailedToLoadExpansion failedToLoad = loadResult.failed();

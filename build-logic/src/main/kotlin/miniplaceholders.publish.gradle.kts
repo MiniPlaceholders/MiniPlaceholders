@@ -14,7 +14,7 @@ plugins {
 //                        password = property("sonatypeTokenPassword")?.toString() ?: ""
 //                    }
 //                    val central = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
-//                    val snapshots = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+//                    val snapshots = "https://central.sonatype.com/repository/maven-snapshots/"
 //
 //                    val projectVersion = project.version.toString()
 //                    if (projectVersion.endsWith("SNAPSHOT") || projectVersion.contains("RC")) {
@@ -69,7 +69,7 @@ plugins {
 //    sign(publishing.publications["maven"])
 //
 //}
-
-java {
-    withSourcesJar()
-}
+//
+//java {
+//    withSourcesJar()
+//}
