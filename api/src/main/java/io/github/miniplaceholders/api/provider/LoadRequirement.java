@@ -1,9 +1,12 @@
 package io.github.miniplaceholders.api.provider;
 
 import io.github.miniplaceholders.api.types.Platform;
+import net.kyori.examination.Examinable;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 
@@ -49,6 +52,13 @@ public sealed interface LoadRequirement {
       }
       return false;
     }
+
+      @Override
+      public String toString() {
+          return "AvailableComplementRequirement{" +
+                  "complement='" + name + '\'' +
+                  '}';
+      }
   }
 
   @NullMarked
@@ -56,7 +66,15 @@ public sealed interface LoadRequirement {
   }
 
   @NullMarked
-  record PlatformRequirement(Platform... platform) implements LoadRequirement {
-
+  record PlatformRequirement(Platform... platforms) implements LoadRequirement, Examinable {
+      @Override
+      public String toString() {
+          final String platforms = Stream.of(this.platforms)
+                  .map(Platform::name)
+                  .collect(Collectors.joining(", "));
+          return "PlatformRequirement{" +
+                  "platforms=" + platforms +
+                  '}';
+      }
   }
 }
