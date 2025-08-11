@@ -39,7 +39,8 @@ plugins {
 //                    val central = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
 //                    val snapshots = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
 //
-//                    if (project.version.toString().endsWith("SNAPSHOT")) {
+//                    val projectVersion = project.version.toString()
+//                    if (projectVersion.endsWith("SNAPSHOT") || projectVersion.contains("RC")) {
 //                        name = "SonatypeSnapshots"
 //                        setUrl(snapshots)
 //                    } else {

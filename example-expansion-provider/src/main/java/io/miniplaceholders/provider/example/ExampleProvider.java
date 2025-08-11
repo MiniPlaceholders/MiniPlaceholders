@@ -19,6 +19,6 @@ public final class ExampleProvider implements ExpansionProvider {
 
   @Override
   public LoadRequirement loadRequirement() {
-    return LoadRequirement.allOf(LoadRequirement.platform(Platform.VELOCITY, Platform.PAPER));
+    return LoadRequirement.allOf(LoadRequirement.allOf(LoadRequirement.platform(Platform.VELOCITY)));
   }
 }
