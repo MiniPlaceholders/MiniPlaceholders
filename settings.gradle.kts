@@ -32,8 +32,8 @@ dependencyResolutionManagement {
 
 plugins {
     id("quiet-fabric-loom") version "1.10.316"
-    id("org.spongepowered.gradle.plugin") version "2.3.0" // sponge is disabled
-    id("org.gradle.toolchains.foojay-resolver-convention") version "0.9.0"
+    id("org.spongepowered.gradle.plugin") version "2.3.0"
+    id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
 }
 
 arrayOf(

@@ -11,6 +11,7 @@ import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.builder.AbstractBuilder;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -134,27 +135,73 @@ public sealed interface Expansion permits ExpansionImpl {
      *      Expansion expansion = MiniPlaceholders.expansionByName("player")
      *      AudiencePlaceholder<?> placeholder = expansion.audiencePlaceholderByName("name");
      * }</pre>
-     * @param name
-     * @return
+     * @param name the name of the placeholder to search
+     * @return the desired placeholder or null
      */
     @Nullable AudiencePlaceholder<?> audiencePlaceholderByName(final String name);
 
+    /**
+     * Get a Relational Placeholder by name
+     *
+     * <pre>{@code
+     *      Expansion expansion = MiniPlaceholders.expansionByName("expansion")
+     *      RelationalPlaceholder<?> placeholder = expansion.relationalPlaceholderByName("placeholder");
+     * }</pre>
+     * @param name the name of the placeholder to search
+     * @return the desired placeholder or null
+     * @apiNote The name of a relational placeholder does not contain the prefix “rel”,
+     * just the name assigned when it was created
+     */
     @Nullable RelationalPlaceholder<?> relationalPlaceholderByName(final String name);
 
+    /**
+     * Get a Global Placeholder by name
+     *
+     * <pre>{@code
+     *      Expansion expansion = MiniPlaceholders.expansionByName("player")
+     *      GlobalPlaceholder placeholder = expansion.globalPlaceholderByName("name");
+     * }</pre>
+     * @param name the name of the placeholder to search
+     * @return the desired placeholder or null
+     */
     @Nullable GlobalPlaceholder globalPlaceholderByName(final String name);
 
+    /**
+     * Checks whether an audience placeholder with the specified name has been registered in this expansion.
+     *
+     * @param name the name of the placeholder to check
+     * @return true if the placeholder is registered, else false
+     */
     default boolean hasAudiencePlaceholder(final String name) {
         return audiencePlaceholderByName(name) != null;
     }
 
+    /**
+     * Checks whether a relational placeholder with the specified name has been registered in this expansion.
+     *
+     * @param name the name of the placeholder to check
+     * @return true if the placeholder is registered, else false
+     */
     default boolean hasRelationalPlaceholder(final String name) {
         return relationalPlaceholderByName(name) != null;
     }
 
+    /**
+     * Checks whether a global placeholder with the specified name has been registered in this expansion.
+     *
+     * @param name the name of the placeholder to check
+     * @return true if the placeholder is registered, else false
+     */
     default boolean hasGlobalPlaceholder(final String name) {
         return globalPlaceholderByName(name) != null;
     }
 
+    /**
+     * Get a TagResolver that contains all placeholders of a specific type in this expansion.
+     *
+     * @param type the desired type
+     * @return a TagResolver containing all placeholder of a specific type
+     */
     TagResolver placeholdersByType(PlaceholderType type);
 
     /**
@@ -167,6 +214,11 @@ public sealed interface Expansion permits ExpansionImpl {
         return new ExpansionImpl.Builder(name);
     }
 
+    /**
+     * Get a shorter ToString with the details of this expansion.
+     * @return a shorter ToString
+     */
+    @ApiStatus.Internal
     default String shortToString() {
         final StringBuilder builder = new StringBuilder(name()).append('[');
         if (author() != null) {
@@ -215,8 +267,10 @@ public sealed interface Expansion permits ExpansionImpl {
          * <p>The content of this Placeholder is cached
          * and can mutate depending on when it is invoked</p>
          *
+         * @param targetClass the target class
          * @param key the placeholder key, cannot be an empty or black string
          * @param audiencePlaceholder the single placeholder
+         * @param <A> the type of audience that this placeholder supports, must be the same as targetClass
          * @return the {@link Builder} itself
          * @since 1.0.0
          */
@@ -255,8 +309,10 @@ public sealed interface Expansion permits ExpansionImpl {
          * <p>The content of this Placeholder is cached
          * and can mutate depending on when it is invoked</p>
          *
+         * @param targetClass the target class
          * @param key the placeholder key, cannot be an empty or black string
          * @param relationalPlaceholder the relational placeholder
+         * @param <A> the type of audience that this placeholder supports, must be the same as targetClass
          * @return the {@link Builder} itself
          * @since 3.0.0
          */

@@ -6,6 +6,9 @@ import net.kyori.adventure.text.minimessage.tag.resolver.ArgumentQueue;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
+/**
+ * A GlobalResolver is responsible for providing information regardless of additional conditions such as an audience.
+ */
 @FunctionalInterface
 public interface GlobalTagResolver {
   /**

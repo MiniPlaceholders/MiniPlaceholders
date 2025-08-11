@@ -8,6 +8,10 @@ import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * A TagResolver responsible for containing and processing multiple placeholders.
+ * @param placeholders the placeholders to process
+ */
 public record PlaceholderTagResolver(Placeholder... placeholders) implements TagResolver {
   public static final PlaceholderTagResolver EMPTY = new PlaceholderTagResolver();
 

@@ -25,6 +25,7 @@ import static java.util.Objects.requireNonNull;
  *
  * @param targetClass the target class, can be null
  * @param key the key of the entire placeholder
+ * @param name the name of this placeholder
  * @param resolver the relational resolver,
  *                 in charge of obtaining data based on a relationship of 2 audiences
  * @param <A> the audience type, if not specified, will be a generic {@linkplain Audience}
@@ -46,6 +47,7 @@ public record RelationalPlaceholder<A extends Audience>(
    *
    * @param targetClass the target class, can be null
    * @param key the key of the entire placeholder
+   * @param name the name of this placeholder
    * @param resolver the relational resolver,
    *                 in charge of obtaining data based on a relationship of 2 audiences
    * @return a new RelationalPlaceholder

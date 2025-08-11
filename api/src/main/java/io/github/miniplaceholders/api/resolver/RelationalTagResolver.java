@@ -8,7 +8,9 @@ import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NullMarked;
 
 /**
- * Relational Placeholder based on two Audiences
+ * Relational Placeholder based on two Audiences.
+ *
+ * @param <A> the audiences type
  *
  * @since 3.0.0
  */

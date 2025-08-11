@@ -8,7 +8,11 @@ import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.ArgumentQueue;
 import org.jspecify.annotations.NullMarked;
 
-/**Audience Placeholder based on an Audience */
+/**
+ * Audience Placeholder based on an Audience
+ *
+ * @param <A> the audience type
+ */
 @FunctionalInterface
 @NullMarked
 public interface AudienceTagResolver<A extends Audience> {

@@ -40,17 +40,20 @@ fun DependencyHandlerScope.includeDependency(dependency: Any) {
     include(dependency)
 }
 
+
+
 tasks {
+    val projectVersion = project.version
     processResources {
         filteringCharset = Charsets.UTF_8.name()
         filesMatching("fabric.mod.json") {
-            expand("version" to project.version)
+            expand("version" to projectVersion)
         }
     }
     remapJar {
         inputFile.set(shadowJar.get().archiveFile)
-        archiveFileName.set("MiniPlaceholders-Fabric-${project.version}.jar")
-        destinationDirectory.set(file("${project.rootDir}/jar"))
+        archiveFileName.set("MiniPlaceholders-Fabric-${projectVersion}.jar")
+        destinationDirectory.set(file("${projectVersion}/jar"))
     }
     shadowJar {
         configurations = listOf(shade)

@@ -17,7 +17,7 @@ cloud-minecraft = "2.0.0-beta.11"
 cloud-minecraft-modded = "2.0.0-beta.12"
 adventure = "4.23.0"
 adventureModded = "6.5.1"
-kotlin = "2.2.0"
+kotlin = "2.2.20-Beta2"
 
 fabric-api = "0.130.0+1.21.8"
 fabric-loader = "0.16.14"
