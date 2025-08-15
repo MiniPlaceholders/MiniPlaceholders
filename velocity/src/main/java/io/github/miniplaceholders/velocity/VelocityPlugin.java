@@ -45,14 +45,17 @@ public final class VelocityPlugin implements PlaceholdersPlugin {
     @Inject
     private ComponentLogger componentLogger;
 
-    @Subscribe
-    public void onProxyInitialize(final ProxyInitializeEvent event) {
+    @Subscribe(priority = 999)
+    public void onEarlyProxyInitialize(final ProxyInitializeEvent event) {
         componentLogger.info(Component.text("Starting MiniPlaceholders Velocity", NamedTextColor.GREEN));
 
         InternalPlatform.platform(InternalPlatform.VELOCITY);
 
         this.registerPlatformCommand();
+    }
 
+    @Subscribe(priority = -404)
+    public void onLateProxyInitialize(final ProxyInitializeEvent event) {
         try {
             this.loadProvidedExpansions(dataDirectory.resolve("expansions"));
         } catch (Throwable e) {
@@ -97,5 +100,10 @@ public final class VelocityPlugin implements PlaceholdersPlugin {
     @Override
     public void logInfo(Component component) {
         componentLogger.info(component);
+    }
+
+    @Override
+    public Object platformServerInstance() {
+        return this.proxyServer;
     }
 }

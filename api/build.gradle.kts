@@ -9,6 +9,7 @@ dependencies {
     compileOnly(libs.adventure.minimessage)
     compileOnly(libs.adventure.serializer.legacy)
     compileOnly(projects.miniplaceholdersConnect)
+    compileOnlyApi(libs.unnamedinject)
 
     testImplementation(platform(libs.junit.bom))
     testImplementation("org.junit.jupiter:junit-jupiter")

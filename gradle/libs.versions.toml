@@ -15,12 +15,12 @@ dokka = "2.0.0"
 cloud = "2.0.0"
 cloud-minecraft = "2.0.0-beta.11"
 cloud-minecraft-modded = "2.0.0-beta.12"
-adventure = "4.23.0"
+adventure = "4.24.0"
 adventureModded = "6.5.1"
 kotlin = "2.2.20-Beta2"
 
 fabric-api = "0.130.0+1.21.8"
-fabric-loader = "0.16.14"
+fabric-loader = "0.17.2"
 
 desertwell = "2.0.4"
 
@@ -54,6 +54,8 @@ desertwell = { group = "net.william278", name = "DesertWell", version.ref = "des
 
 junit-bom = "org.junit:junit-bom:5.12.0"
 jspecify = "org.jspecify:jspecify:1.0.0"
+
+unnamedinject = "team.unnamed:inject:2.0.1"
 
 [plugins]
 

@@ -65,4 +65,9 @@ public class SpongePlugin implements PlaceholdersPlugin {
     public void logInfo(Component component) {
         logger.info(PlainTextComponentSerializer.plainText().serialize(component));
     }
+
+    @Override
+    public Object platformServerInstance() {
+        return this.server;
+    }
 }

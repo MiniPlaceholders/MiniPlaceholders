@@ -72,4 +72,9 @@ public class FabricMod implements ModInitializer, PlaceholdersPlugin {
     public void logInfo(Component component) {
         componentLogger.info(component);
     }
+
+    @Override
+    public Object platformServerInstance() {
+        return this.minecraftServer;
+    }
 }

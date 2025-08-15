@@ -4,12 +4,14 @@ import io.github.miniplaceholders.api.Expansion;
 import io.github.miniplaceholders.api.MiniPlaceholders;
 import io.github.miniplaceholders.api.provider.ExpansionProvider;
 import io.github.miniplaceholders.api.provider.LoadRequirement;
+import io.github.miniplaceholders.api.provider.PlatformData;
 import io.github.miniplaceholders.api.types.Platform;
 import io.github.miniplaceholders.common.loader.ExpansionProviderLoader;
 import io.github.miniplaceholders.common.loader.FailedToLoadExpansion;
 import io.github.miniplaceholders.common.loader.ProviderLoadResult;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import team.unnamed.inject.Injector;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -22,7 +24,10 @@ public interface PlaceholdersPlugin {
 
     default void loadProvidedExpansions(Path providersFolderDirectory) throws Exception {
         final List<Expansion> loadedExpansions = new ArrayList<>();
+        final PlatformData platformData = new PlatformData(this.platformServerInstance(), this);
+        final Injector injector = Injector.create(binder -> binder.bind(PlatformData.class).toInstance(platformData));
         for (ExpansionProvider provider : ExpansionProviderLoader.loadProvidersFromFolder(providersFolderDirectory)) {
+            injector.injectMembers(provider);
             ProviderLoadResult loadResult = tryLoad(provider, provider.loadRequirement());
             final Expansion loadedExpansion = loadResult.expansion();
             if (loadedExpansion != null) {
@@ -81,4 +86,6 @@ public interface PlaceholdersPlugin {
     void logError(Component component);
 
     void logInfo(Component component);
+
+    Object platformServerInstance();
 }
