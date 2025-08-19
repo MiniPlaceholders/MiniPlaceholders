@@ -1,45 +1,65 @@
 package io.github.miniplaceholders.test;
 
 import io.github.miniplaceholders.api.Expansion;
-import io.github.miniplaceholders.api.utils.TagsUtils;
-import io.github.miniplaceholders.test.testobjects.TestAudienceHolder;
-import net.kyori.adventure.text.Component;
+import io.github.miniplaceholders.api.placeholder.GlobalPlaceholder;
+import io.github.miniplaceholders.api.types.PlaceholderType;
+import io.github.miniplaceholders.api.utils.Tags;
+import io.github.miniplaceholders.test.instances.TestAudience;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static io.github.miniplaceholders.test.PlaceholderTest.assertContentEquals;
-import static net.kyori.adventure.text.minimessage.MiniMessage.miniMessage;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
-class ExpansionsTest {
+class ExpansionsTest implements MiniTest {
     @Test
     @DisplayName("Expansion Equality")
     void equalsExpansions(){
         final Expansion firstExpansion = Expansion.builder("equals")
-            .audiencePlaceholder("test", TagsUtils.NULL_AUDIENCE_PLACEHOLDER)
+            .audiencePlaceholder("test", Tags.emptyAudienceResolver())
             .build();
         final Expansion secondExpansion = Expansion.builder("equals")
-            .audiencePlaceholder("test", TagsUtils.NULL_AUDIENCE_PLACEHOLDER)
+            .audiencePlaceholder("test", Tags.emptyAudienceResolver())
             .build();
 
         assertEquals(firstExpansion, secondExpansion);
     }
 
     @Test
-    void nullForwardedAudience() {
-        TestAudienceHolder audience = new TestAudienceHolder(null);
-
+    void placeholderRetrievalTest() {
         final Expansion expansion = Expansion.builder("test")
-                .filter(aud -> aud.toString().isBlank())
-                .audiencePlaceholder("testing", (aud, queue, ctx) -> Tag.selfClosingInserting(Component.text(aud.toString())))
+                .globalPlaceholder("some_placeholder", Tag.preProcessParsed("test"))
                 .build();
 
-        Component result = assertDoesNotThrow(
-                () -> miniMessage().deserialize("<test_testing>", expansion.audiencePlaceholders(audience))
-        );
+        assertTrue(expansion.hasGlobalPlaceholder("some_placeholder"));
+        final GlobalPlaceholder somePlaceholder = expansion.globalPlaceholderByName("some_placeholder");
+        assertNotNull(somePlaceholder);
 
-        assertContentEquals(result, Component.text("<test_testing>"));
+        final var expansionResult = parse("Result: <test_some_placeholder>", expansion.globalPlaceholders());
+        final var placeholderResult = parse("Result: <test_some_placeholder>", somePlaceholder);
+        assertSimilarity("Result: test", expansionResult);
+        assertSimilarity("Result: test", placeholderResult);
+    }
+
+    @Test
+    void placeholdersByType() {
+        final Expansion expansion = Expansion.builder("idk")
+                .audiencePlaceholder(TestAudience.class, "test", Tags.emptyAudienceResolver())
+                .build();
+
+        var placeholders = expansion.placeholdersByType(PlaceholderType.AUDIENCE);
+        assertNotNull(placeholders);
+        assertEquals(placeholders, expansion.audiencePlaceholders());
+    }
+
+    @Test
+    void placeholdersByName() {
+        final Expansion expansion = Expansion.builder("test")
+                .globalPlaceholder("someexpansion", Tags.emptyGlobalPlaceholder())
+                .build();
+
+        final GlobalPlaceholder placeholder = expansion.globalPlaceholderByName("someexpansion");
+        assertNotNull(placeholder);
+        assertEquals("someexpansion", placeholder.name());
     }
 }

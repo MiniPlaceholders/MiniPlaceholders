@@ -8,21 +8,22 @@ import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.plugin.Plugin;
+import com.velocitypowered.api.plugin.annotation.DataDirectory;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
-import io.github.miniplaceholders.api.Expansion;
-import io.github.miniplaceholders.api.utils.Components;
-import io.github.miniplaceholders.common.command.PlaceholdersCommand;
 import io.github.miniplaceholders.common.PlaceholdersPlugin;
 import io.github.miniplaceholders.common.PluginConstants;
+import io.github.miniplaceholders.common.command.PlaceholdersCommand;
 import io.github.miniplaceholders.connect.InternalPlatform;
-import net.kyori.adventure.text.minimessage.tag.Tag;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.incendo.cloud.SenderMapper;
 import org.incendo.cloud.execution.ExecutionCoordinator;
 import org.incendo.cloud.velocity.CloudInjectionModule;
 import org.incendo.cloud.velocity.VelocityCommandManager;
-import org.slf4j.Logger;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
@@ -30,75 +31,79 @@ import java.util.stream.Collectors;
         name = "MiniPlaceholders",
         id = "miniplaceholders",
         version = PluginConstants.VERSION,
-        authors = {"MiniPlaceholders Contributors", "4drian3d"}
+        authors = {"MiniPlaceholders Contributors", "4drian3d"},
+        description = "MiniMessage Component-based Placeholders API"
 )
 public final class VelocityPlugin implements PlaceholdersPlugin {
-    private final Logger logger;
-    private final ProxyServer proxy;
     @Inject
     private Injector injector;
-
     @Inject
-    public VelocityPlugin(final Logger logger, final ProxyServer proxy) {
-        this.logger = logger;
-        this.proxy = proxy;
-    }
+    @DataDirectory
+    private Path dataDirectory;
+    @Inject
+    private ProxyServer proxyServer;
+    @Inject
+    private ComponentLogger componentLogger;
 
-    @Subscribe
-    public void onProxyInitialize(final ProxyInitializeEvent event) {
-        logger.info("Starting MiniPlaceholders Velocity");
+    @Subscribe(priority = 999)
+    public void onEarlyProxyInitialize(final ProxyInitializeEvent event) {
+        componentLogger.info(Component.text("Starting MiniPlaceholders Velocity", NamedTextColor.GREEN));
 
         InternalPlatform.platform(InternalPlatform.VELOCITY);
 
-        this.loadDefaultExpansions();
         this.registerPlatformCommand();
     }
 
-    @Override
-    public void loadDefaultExpansions() {
-        Expansion.builder("proxy")
-                .author("MiniPlaceholders Contributors")
-                .version(PluginConstants.VERSION)
-                .globalPlaceholder("online_players", (queue, ctx) -> {
-                    if (queue.hasNext()) {
-                        String server = queue.pop().value();
-                        return Tag.preProcessParsed(proxy.getServer(server)
-                                .map(sv -> sv.getPlayersConnected().size())
-                                .map(size -> Integer.toString(size))
-                                .orElse("0"));
-                    }
-                    return Tag.preProcessParsed(Integer.toString(proxy.getPlayerCount()));
-                })
-                .globalPlaceholder("server_count", (queue, ctx) -> Tag.preProcessParsed(Integer.toString(proxy.getAllServers().size())))
-                .globalPlaceholder("is_player_online", (queue, ctx) -> {
-                    String playerName = queue.popOr(() -> "you need to introduce an argument").value();
-                    return Tag.selfClosingInserting(proxy.getPlayer(playerName).isPresent() ? Components.YES_COMPONENT : Components.NO_COMPONENT);
-                })
-                .globalPlaceholder("version", Tag.preProcessParsed(proxy.getVersion().getVersion()))
-                .build()
-                .register();
+    @Subscribe(priority = -404)
+    public void onLateProxyInitialize(final ProxyInitializeEvent event) {
+        try {
+            this.loadProvidedExpansions(dataDirectory.resolve("expansions"));
+        } catch (Throwable e) {
+            componentLogger.error("Unable to load expansion providers", e);
+        }
     }
 
     @Override
     public void registerPlatformCommand() {
         injector = injector.createChildInjector(
-            new CloudInjectionModule<>(
-                    CommandSource.class,
-                    ExecutionCoordinator.simpleCoordinator(),
-                    SenderMapper.identity()
-            )
+                new CloudInjectionModule<>(
+                        CommandSource.class,
+                        ExecutionCoordinator.simpleCoordinator(),
+                        SenderMapper.identity()
+                )
         );
         final VelocityCommandManager<CommandSource> commandManager = injector.getInstance(
-                Key.get(new TypeLiteral<>() {})
+                Key.get(new TypeLiteral<>() {
+                })
         );
         PlaceholdersCommand.<CommandSource>builder()
-                .playerSuggestions(() -> proxy.getAllPlayers()
+                .playerSuggestions(() -> proxyServer.getAllPlayers()
                         .stream()
                         .map(Player::getUsername)
                         .collect(Collectors.toCollection(ArrayList::new)))
-                .toAudience(st -> proxy.getPlayer(st).orElse(null))
+                .toAudience(st -> proxyServer.getPlayer(st).orElse(null))
                 .command("vminiplaceholders")
                 .manager(commandManager)
                 .build().register();
+    }
+
+    @Override
+    public boolean platformHasComplementLoaded(String complementName) {
+        return this.proxyServer.getPluginManager().isLoaded(complementName);
+    }
+
+    @Override
+    public void logError(Component component) {
+        componentLogger.error(component);
+    }
+
+    @Override
+    public void logInfo(Component component) {
+        componentLogger.info(component);
+    }
+
+    @Override
+    public Object platformServerInstance() {
+        return this.proxyServer;
     }
 }

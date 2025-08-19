@@ -1,7 +1,91 @@
 package io.github.miniplaceholders.common;
 
-public interface PlaceholdersPlugin {
-    void loadDefaultExpansions();
+import io.github.miniplaceholders.api.Expansion;
+import io.github.miniplaceholders.api.MiniPlaceholders;
+import io.github.miniplaceholders.api.provider.ExpansionProvider;
+import io.github.miniplaceholders.api.provider.LoadRequirement;
+import io.github.miniplaceholders.api.provider.PlatformData;
+import io.github.miniplaceholders.api.types.Platform;
+import io.github.miniplaceholders.common.loader.ExpansionProviderLoader;
+import io.github.miniplaceholders.common.loader.FailedToLoadExpansion;
+import io.github.miniplaceholders.common.loader.ProviderLoadResult;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import team.unnamed.inject.Injector;
 
-    void registerPlatformCommand();
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public interface PlaceholdersPlugin {
+    default void registerPlatformCommand() {
+    }
+
+    default void loadProvidedExpansions(Path providersFolderDirectory) throws Exception {
+        final List<Expansion> loadedExpansions = new ArrayList<>();
+        final PlatformData platformData = new PlatformData(this.platformServerInstance(), this);
+        final Injector injector = Injector.create(binder -> binder.bind(PlatformData.class).toInstance(platformData));
+        for (ExpansionProvider provider : ExpansionProviderLoader.loadProvidersFromFolder(providersFolderDirectory)) {
+            injector.injectMembers(provider);
+            ProviderLoadResult loadResult = tryLoad(provider, provider.loadRequirement());
+            final Expansion loadedExpansion = loadResult.expansion();
+            if (loadedExpansion != null) {
+                loadedExpansions.add(loadedExpansion);
+                loadedExpansion.register();
+                continue;
+            }
+            final FailedToLoadExpansion failedToLoad = loadResult.failed();
+            logError(Component.text("The expansion "
+                            + provider.getClass() +
+                            " could not be loaded because the requirement " + failedToLoad.requirement() + " could not be resolved",
+                    NamedTextColor.RED));
+        }
+
+        if (loadedExpansions.isEmpty()) {
+            logInfo(Component.text("Not found expansions", NamedTextColor.GRAY));
+            return;
+        }
+
+        final String expansionsInfo = loadedExpansions.stream()
+                .map(Expansion::shortToString)
+                .collect(Collectors.joining(","));
+        logInfo(Component.text("Loaded expansions: " + expansionsInfo, NamedTextColor.GREEN));
+    }
+
+    default ProviderLoadResult tryLoad(final ExpansionProvider provider, final LoadRequirement loadRequirement) {
+        return switch (loadRequirement) {
+            case LoadRequirement.PlatformRequirement platformRequirement -> {
+                for (final Platform supportedPlatform : platformRequirement.platforms()) {
+                    if (supportedPlatform == MiniPlaceholders.platform()) {
+                        yield ProviderLoadResult.ofLoaded(provider.provideExpansion());
+                    }
+                }
+                yield ProviderLoadResult.ofFailed(platformRequirement);
+            }
+            case LoadRequirement.AvailableComplementRequirement complementRequirement ->
+                complementRequirement.shouldLoad(this::platformHasComplementLoaded)
+                        ? ProviderLoadResult.ofLoaded(provider.provideExpansion())
+                        : ProviderLoadResult.ofFailed(complementRequirement);
+            case LoadRequirement.MultiLoadRequirement multiLoadRequirement -> {
+                ProviderLoadResult loadResult;
+                for (final LoadRequirement requirement : multiLoadRequirement.requirements()) {
+                    if ((loadResult = this.tryLoad(provider, requirement)).failed() != null) {
+                        yield loadResult;
+                    }
+                }
+                yield ProviderLoadResult.ofLoaded(provider.provideExpansion());
+            }
+            // NoneRequirement
+            default -> ProviderLoadResult.ofLoaded(provider.provideExpansion());
+        };
+    }
+
+    boolean platformHasComplementLoaded(String complementName);
+
+    void logError(Component component);
+
+    void logInfo(Component component);
+
+    Object platformServerInstance();
 }

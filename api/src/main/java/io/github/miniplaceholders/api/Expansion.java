@@ -1,20 +1,23 @@
 package io.github.miniplaceholders.api;
 
 import io.github.miniplaceholders.api.placeholder.AudiencePlaceholder;
+import io.github.miniplaceholders.api.placeholder.GlobalPlaceholder;
 import io.github.miniplaceholders.api.placeholder.RelationalPlaceholder;
+import io.github.miniplaceholders.api.resolver.AudienceTagResolver;
+import io.github.miniplaceholders.api.resolver.GlobalTagResolver;
+import io.github.miniplaceholders.api.resolver.RelationalTagResolver;
+import io.github.miniplaceholders.api.types.PlaceholderType;
+import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.builder.AbstractBuilder;
+import net.kyori.adventure.text.minimessage.tag.Tag;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 
-import java.util.function.BiFunction;
-import java.util.function.Predicate;
-
-import net.kyori.adventure.audience.Audience;
-import net.kyori.adventure.builder.AbstractBuilder;
-import net.kyori.adventure.text.minimessage.Context;
-import net.kyori.adventure.text.minimessage.tag.Tag;
-import net.kyori.adventure.text.minimessage.tag.resolver.ArgumentQueue;
-import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import java.util.Collection;
 
 /**
  * Expansion that contains placeholders
@@ -23,28 +26,31 @@ import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
  * <pre>
  *  Player player = event.getPlayer();
  *  Expansion.Builder builder = Expansion.builder("player")
- *      .audiencePlaceholder("name", (p, queue, ctx) -> Tag.selfClosingInserting(Component.text(((Player)p).getUsername()))
+ *      .resolver(Player.class, "name", (p, queue, ctx) -> Tag.selfClosingInserting(Component.text(p.getUsername()))
  *      .build();
  *  Expansion expansion = builder.build();
  *  // You can also call the {@link Expansion#register} method to register
  *  // the {@link Expansion} in the {@link MiniPlaceholders} global Extensions and
- *  // use it in {@link MiniPlaceholders#getAudiencePlaceholders(Audience)} e.g.
- *  TagResolver resolver = expansion.audiencePlaceholder(player);
- *  player.sendMessage(MiniMessage.miniMessage().deserialize("Hello {@literal <luckperms_prefix> <player_name>}", resolver));
+ *  // use it in {@link MiniPlaceholders#audiencePlaceholders()} e.g.
+ *  TagResolver resolver = expansion.resolver();
+ *  player.sendMessage(MiniMessage.miniMessage().deserialize("Hello {@literal <luckperms_prefix> <player_name>}", player, resolver));
  * </pre>
  * 
  * @since 1.0.0
  */
+@NullMarked
 public sealed interface Expansion permits ExpansionImpl {
     /**
      * Get the expansion name
+     *
      * @return the expansion name
      * @since 1.0.0
      */
-    @NotNull String name();
+    String name();
 
     /**
      * Get the author of this expansion
+     *
      * @return the author or null
      * @since 2.3.0
      */
@@ -52,18 +58,18 @@ public sealed interface Expansion permits ExpansionImpl {
 
     /**
      * Get the version of this expansion
+     *
      * @return the version or null
      * @since 2.3.0
      */
     @Nullable String version();
 
     /**
-     * Get the {@link TagResolver} of the desired {@link Audience}
-     * @param audience the audience
+     * Get the {@link TagResolver} of an {@link Audience}
      * @return A TagResolver with variable placeholders of an Audience
      * @since 1.0.0
      */
-    @NotNull TagResolver audiencePlaceholders(final @NotNull Audience audience);
+    TagResolver audiencePlaceholders();
 
     /**
      * Get the relational placeholders based on two audiences
@@ -71,19 +77,17 @@ public sealed interface Expansion permits ExpansionImpl {
      * <p>The resulting TagResolver will give results according
      * to the 2 {@link Audience} provided and when called
      * at any time will retrieve the required values</p>
-     * @param audience the main audience
-     * @param otherAudience the secondary audience
      * @return A TagResolver with variable placeholders between 2 {@link Audience}s
      * @since 1.0.0
      */
-    @NotNull TagResolver relationalPlaceholders(final @NotNull Audience audience, final @NotNull Audience otherAudience);
+    TagResolver relationalPlaceholders();
 
     /**
      * Get global placeholders
      * @return the global placeholders
      * @since 1.0.0
      */
-    @NotNull TagResolver globalPlaceholders();
+    TagResolver globalPlaceholders();
 
     /**
      * Register this expansion
@@ -108,14 +112,126 @@ public sealed interface Expansion permits ExpansionImpl {
      */
     boolean registered();
 
+    // TODO: Docs and Tests
+
+    /**
+     * Get the registered audience placeholders
+     *
+     * @return registered audience placeholders
+     */
+    Collection<AudiencePlaceholder<?>> registeredAudiencePlaceholders();
+
+    /**
+     * Get the registered relational placeholders
+     *
+     * @return registered relational placeholders
+     */
+    Collection<RelationalPlaceholder<?>> registeredRelationalPlaceholders();
+
+    /**
+     * Get an Audience Placeholder by name
+     *
+     * <pre>{@code
+     *      Expansion expansion = MiniPlaceholders.expansionByName("player")
+     *      AudiencePlaceholder<?> placeholder = expansion.audiencePlaceholderByName("name");
+     * }</pre>
+     * @param name the name of the placeholder to search
+     * @return the desired placeholder or null
+     */
+    @Nullable AudiencePlaceholder<?> audiencePlaceholderByName(final String name);
+
+    /**
+     * Get a Relational Placeholder by name
+     *
+     * <pre>{@code
+     *      Expansion expansion = MiniPlaceholders.expansionByName("expansion")
+     *      RelationalPlaceholder<?> placeholder = expansion.relationalPlaceholderByName("placeholder");
+     * }</pre>
+     * @param name the name of the placeholder to search
+     * @return the desired placeholder or null
+     * @apiNote The name of a relational placeholder does not contain the prefix “rel”,
+     * just the name assigned when it was created
+     */
+    @Nullable RelationalPlaceholder<?> relationalPlaceholderByName(final String name);
+
+    /**
+     * Get a Global Placeholder by name
+     *
+     * <pre>{@code
+     *      Expansion expansion = MiniPlaceholders.expansionByName("player")
+     *      GlobalPlaceholder placeholder = expansion.globalPlaceholderByName("name");
+     * }</pre>
+     * @param name the name of the placeholder to search
+     * @return the desired placeholder or null
+     */
+    @Nullable GlobalPlaceholder globalPlaceholderByName(final String name);
+
+    /**
+     * Checks whether an audience placeholder with the specified name has been registered in this expansion.
+     *
+     * @param name the name of the placeholder to check
+     * @return true if the placeholder is registered, else false
+     */
+    default boolean hasAudiencePlaceholder(final String name) {
+        return audiencePlaceholderByName(name) != null;
+    }
+
+    /**
+     * Checks whether a relational placeholder with the specified name has been registered in this expansion.
+     *
+     * @param name the name of the placeholder to check
+     * @return true if the placeholder is registered, else false
+     */
+    default boolean hasRelationalPlaceholder(final String name) {
+        return relationalPlaceholderByName(name) != null;
+    }
+
+    /**
+     * Checks whether a global placeholder with the specified name has been registered in this expansion.
+     *
+     * @param name the name of the placeholder to check
+     * @return true if the placeholder is registered, else false
+     */
+    default boolean hasGlobalPlaceholder(final String name) {
+        return globalPlaceholderByName(name) != null;
+    }
+
+    /**
+     * Get a TagResolver that contains all placeholders of a specific type in this expansion.
+     *
+     * @param type the desired type
+     * @return a TagResolver containing all placeholder of a specific type
+     */
+    TagResolver placeholdersByType(PlaceholderType type);
+
     /**
      * Creates a new Expansion Builder
      * @param name the expansion name
      * @return a new expansion builder
      * @since 1.0.0
      */
-    static @NotNull Expansion.Builder builder(final @NotNull String name){
+    static Expansion.Builder builder(final String name){
         return new ExpansionImpl.Builder(name);
+    }
+
+    /**
+     * Get a shorter ToString with the details of this expansion.
+     * @return a shorter ToString
+     */
+    @ApiStatus.Internal
+    default String shortToString() {
+        final StringBuilder builder = new StringBuilder(name()).append('[');
+        if (author() != null) {
+            builder.append("Author: ").append(author());
+        }
+        if (version() != null) {
+            if (author() != null) {
+                builder.append(", ");
+            }
+            builder.append("Version: ").append(version());
+        }
+        builder.append(']');
+        return builder.toString();
     }
 
     /**
@@ -126,7 +242,7 @@ public sealed interface Expansion permits ExpansionImpl {
      *  builder
      *      // Thanks to this filter, a cast can be performed without the probability of a ClassCastException
      *      .filter(Player.class)
-     *      .audiencePlaceholder("name", (audience, queue, ctx) -> Tag.selfClosingInserting(Component.text(((Player)audience).getUsername())));
+     *      .resolver("name", (audience, queue, ctx) -> Tag.selfClosingInserting(Component.text(((Player)audience).getUsername())));
      *  Expansion expansion = builder.build();
      * </pre>
      *
@@ -134,13 +250,36 @@ public sealed interface Expansion permits ExpansionImpl {
      *
      * <pre>
      *  Player player = event.getPlayer();
-     *  TagResolver resolver = expansion.audiencePlaceholder(player);
+     *  TagResolver resolver = expansion.resolver(player);
      *  Component messageReplaced = MiniMessage.deserialize({@link String}, resolver);
      * </pre>
      * 
      * @since 1.0.0
      */
+    @NullMarked
     interface Builder extends AbstractBuilder<Expansion> {
+
+        /**
+         * Adds an audience placeholder
+         *
+         * <p>This type of Placeholder depends on a specific audience to obtain its values</p>
+         *
+         * <p>The content of this Placeholder is cached
+         * and can mutate depending on when it is invoked</p>
+         *
+         * @param targetClass the target class
+         * @param key the placeholder key, cannot be an empty or black string
+         * @param audiencePlaceholder the single placeholder
+         * @param <A> the type of audience that this placeholder supports, must be the same as targetClass
+         * @return the {@link Builder} itself
+         * @since 1.0.0
+         */
+        <A extends Audience> Builder audiencePlaceholder(
+                final @Nullable Class<A> targetClass,
+                final String key,
+                final AudienceTagResolver<A> audiencePlaceholder
+        );
+
         /**
          * Adds an audience placeholder
          *
@@ -152,9 +291,36 @@ public sealed interface Expansion permits ExpansionImpl {
          * @param key the placeholder key, cannot be an empty or black string
          * @param audiencePlaceholder the single placeholder
          * @return the {@link Builder} itself
-         * @since 1.0.0
+         * @since 3.0.0
          */
-        @NotNull Builder audiencePlaceholder(final @NotNull String key, final @NotNull AudiencePlaceholder audiencePlaceholder);
+        default Builder audiencePlaceholder(final String key, final AudienceTagResolver<Audience> audiencePlaceholder) {
+            return this.audiencePlaceholder(null, key, audiencePlaceholder);
+        }
+
+        /**
+         * Adds a Relational Placeholder based on two audiences
+         *
+         * <p>This type of placeholder allows you to create
+         * components based on a 2-audiences relationship,
+         * one is the one on which the placeholder
+         * is based and the other is the one on which
+         * the placeholder is displayed.</p>
+         *
+         * <p>The content of this Placeholder is cached
+         * and can mutate depending on when it is invoked</p>
+         *
+         * @param targetClass the target class
+         * @param key the placeholder key, cannot be an empty or black string
+         * @param relationalPlaceholder the relational placeholder
+         * @param <A> the type of audience that this placeholder supports, must be the same as targetClass
+         * @return the {@link Builder} itself
+         * @since 3.0.0
+         */
+        <A extends Audience> Builder relationalPlaceholder(
+                final @Nullable Class<A> targetClass,
+                final String key,
+                final RelationalTagResolver<A> relationalPlaceholder
+        );
 
         /**
          * Adds a Relational Placeholder based on two audiences
@@ -169,11 +335,16 @@ public sealed interface Expansion permits ExpansionImpl {
          * and can mutate depending on when it is invoked</p>
          *
          * @param key the placeholder key, cannot be an empty or black string
-         * @param relationalPlaceholder the relational placeholder
+         * @param relationalResolver the relational placeholder
          * @return the {@link Builder} itself
-         * @since 1.0.0
+         * @since 3.0.0
          */
-        @NotNull Builder relationalPlaceholder(final @NotNull String key, final @NotNull RelationalPlaceholder relationalPlaceholder);
+        default Builder relationalPlaceholder(
+                final String key,
+                final RelationalTagResolver<Audience> relationalResolver
+        ) {
+            return this.relationalPlaceholder(null, key, relationalResolver);
+        }
 
         /**
          * Adds a global placeholder
@@ -181,11 +352,11 @@ public sealed interface Expansion permits ExpansionImpl {
          * <p>The content of this Placeholder is cached
          * and can mutate depending on when it is invoked</p>
          * @param key the placeholder key, cannot be an empty or black string
-         * @param function the function
+         * @param resolver the function
          * @return the {@link Builder} itself
-         * @since 1.0.0
+         * @since 3.0.0
          */
-        @NotNull Builder globalPlaceholder(final @NotNull String key, final @NotNull BiFunction<@NotNull ArgumentQueue, @NotNull Context, @Nullable Tag> function);
+        Builder globalPlaceholder(final String key, final GlobalTagResolver resolver);
 
         /**
          * Adds a global placeholder
@@ -196,41 +367,9 @@ public sealed interface Expansion permits ExpansionImpl {
          * @return the {@link Builder} itself
          * @since 1.1.0
          */
-        @NotNull Builder globalPlaceholder(final @NotNull String key, final @NotNull Tag tag);
-
-        /**
-         * Filter the type of Audiences that this expansion can receive
-         * <p>In case the {@link Expansion#audiencePlaceholders(Audience)} or
-         * {@link Expansion#relationalPlaceholders(Audience, Audience)} method is called
-         * and the provided audiences are not instances of
-         * the specified class, a {@link TagResolver#empty} will be returned</p>
-         *
-         * <p>This eliminates the need to perform a manual
-         * <pre>if(!(audience instanceof Player)) return TagResolver.empty();</pre>
-         *
-         * @param clazz the class to filter
-         * @return the {@link Builder} itself
-         * @since 1.0.0
-         */
-        @Contract("_ -> this")
-        @NotNull Builder filter(final @Nullable Class<? extends Audience> clazz);
-
-        /**
-         * Filters the audiences that this expansion can receive through a Predicate
-         * <p>Example:</p>
-         * <pre>
-         *  Expansion.builder("example")
-         *      .filter(aud -> aud instanceof Player player{@literal &&} isInProtectedServer(player)
-         *      .audiencePlaceholder("hello", (aud, queue, ctx) -> Tag.selfInsertingClosing(Component.text("you are in protected server")))
-         *      .build();
-         * </pre>
-         *
-         * @param predicate the check to realize
-         * @return the {@link Builder} itself
-         * @since 1.0.0
-         */
-        @Contract("_ -> this")
-        @NotNull Builder filter(final @Nullable Predicate<@NotNull Audience> predicate);
+        default Builder globalPlaceholder(final String key, final Tag tag) {
+            return this.globalPlaceholder(key, (queue, context) -> tag);
+        }
 
         /**
          * Sets the author of this expansion

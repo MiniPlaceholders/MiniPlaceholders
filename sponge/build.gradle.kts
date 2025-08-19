@@ -13,7 +13,6 @@ dependencies {
     }
     implementation(projects.miniplaceholdersApi)
     implementation(projects.miniplaceholdersConnect)
-    //implementation(libs.cloud.sponge)
 }
 
 sponge {
@@ -42,9 +41,3 @@ sponge {
         }
     }
 }
-
-//tasks {
-//    shadowJar {
-//        exclude("io/leangen/geantyref/**")
-//    }
-//}

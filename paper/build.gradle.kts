@@ -16,9 +16,11 @@ tasks {
     runServer {
         minecraftVersion(libs.versions.minecraft.get())
     }
+    val projectVersion = project.version
     processResources {
+        //val version = project.version
         filesMatching("paper-plugin.yml") {
-            expand("version" to project.version)
+            expand("version" to projectVersion)
         }
     }
 }

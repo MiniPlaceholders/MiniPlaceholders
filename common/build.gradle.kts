@@ -10,6 +10,7 @@ dependencies {
         exclude("org.json")
     }
     implementation(libs.cloud.core)
+    implementation(libs.unnamedinject)
     implementation(libs.cloud.extras) {
         isTransitive = false
     }

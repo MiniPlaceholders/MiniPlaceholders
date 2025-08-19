@@ -1,0 +1,7 @@
+package io.github.miniplaceholders.provider.example;
+
+public final class ExpansionConstants {
+    public static final String VERSION = "{{ version }}";
+
+    private ExpansionConstants() {}
+}
