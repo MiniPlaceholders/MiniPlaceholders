@@ -14,7 +14,7 @@ dokka = "2.0.0"
 
 cloud = "2.0.0"
 cloud-minecraft = "2.0.0-beta.11"
-cloud-minecraft-modded = "2.0.0-beta.12"
+cloud-minecraft-modded = "2.0.0-SNAPSHOT"
 adventure = "4.24.0"
 adventureModded = "6.5.1"
 kotlin = "2.2.20-Beta2"
