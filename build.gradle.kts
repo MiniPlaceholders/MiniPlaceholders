@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version "2.2.20-Beta2" apply false
+    kotlin("jvm") version "2.2.20-RC" apply false
 }
 
 tasks {
