@@ -56,7 +56,7 @@ final class ExpansionImpl implements Expansion {
   }
 
   @Override
-  public @NotNull String name() {
+  public String name() {
     return this.name;
   }
 
@@ -71,21 +71,21 @@ final class ExpansionImpl implements Expansion {
   }
 
   @Override
-  public @NotNull TagResolver audiencePlaceholders() {
+  public TagResolver audiencePlaceholders() {
     if (audiencePlaceholders.placeholders().length == 0) return TagResolver.empty();
 
     return this.audiencePlaceholders;
   }
 
   @Override
-  public @NotNull TagResolver relationalPlaceholders() {
+  public TagResolver relationalPlaceholders() {
     if (relationalPlaceholders.placeholders().length == 0) return TagResolver.empty();
 
     return this.relationalPlaceholders;
   }
 
   @Override
-  public @NotNull TagResolver globalPlaceholders() {
+  public TagResolver globalPlaceholders() {
     if (globalPlaceholders.placeholders().length == 0) return TagResolver.empty();
 
     return this.globalPlaceholders;

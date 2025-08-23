@@ -65,3 +65,4 @@ blossom = { id = "net.kyori.blossom", version.ref = "blossom" }
 shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }
 jmh = { id = "me.champeau.jmh", version.ref = "jmh" }
 idea-ext = { id = "org.jetbrains.gradle.plugin.idea-ext", version = "1.2" }
+dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }

@@ -19,7 +19,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FabricMod implements ModInitializer, PlaceholdersPlugin {
+public final class FabricMod implements ModInitializer, PlaceholdersPlugin {
     private final ComponentLogger componentLogger = ComponentLogger.logger("miniplaceholders");
     private MinecraftServer minecraftServer;
 
