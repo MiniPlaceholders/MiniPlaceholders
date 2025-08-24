@@ -8,38 +8,20 @@
 MiniMessage Component-based Placeholders API for Minecraft Platforms.
 
 ## Compatibility
-- Paper 1.19.3, 1.19.4+
-- Folia 1.19.4+
-- Velocity 3.1.2+
-- Fabric 1.19.4+
-- Sponge API 8+
-
-## Commands
-
-### Velocity
-
-- `/vminiplaceholders parse me "[message with placeholders]"`
-- `/vminiplaceholders parse player [some-player] "[message with placeholders]"`
-
-### Paper | Folia | Fabric
-
-- `/miniplaceholders <parse|help> player [some-player] "[message with placeholders]`
-- `/miniplaceholders parse player [some-player] "[message with placeholders]"`
-
-#### Example:
-
-- `/miniplaceholders parse me "<player_xp>"`
-- `/vminiplaceholders parse player 4drian3d "<player_name>"`
+- Paper 1.21+
+- Velocity 3.4+
+- Fabric 1.21.6+
+- Sponge API 12+
 
 ## User Usage
 
-Check our user usage wiki [here](https://github.com/MiniPlaceholders/MiniPlaceholders/wiki/User-Getting-Started)
+Check our user usage wiki [here]([https://github.com/MiniPlaceholders/MiniPlaceholders/wiki/User-Getting-Started](https://miniplaceholders.github.io/docs/user-guide/User-Getting-Started))
 
 ## API
 
 Check the available [Javadocs](https://javadoc.io/doc/io.github.miniplaceholders/miniplaceholders-api)
 
-Or check the [Developer Wiki](https://github.com/MiniPlaceholders/MiniPlaceholders/wiki/Developer-Getting-Started)
+Or check the [Developer Wiki]([https://github.com/MiniPlaceholders/MiniPlaceholders/wiki/Developer-Getting-Started](https://miniplaceholders.github.io/docs/developer-guide/Developer-Getting-Started))
 
 ### Java
 ```java
