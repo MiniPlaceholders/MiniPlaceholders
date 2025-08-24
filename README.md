@@ -15,7 +15,7 @@ MiniMessage Component-based Placeholders API for Minecraft Platforms.
 
 ## User Usage
 
-Check our user usage wiki [here]([https://github.com/MiniPlaceholders/MiniPlaceholders/wiki/User-Getting-Started](https://miniplaceholders.github.io/docs/user-guide/User-Getting-Started))
+Check our user usage wiki [here](https://miniplaceholders.github.io/docs/user-guide/User-Getting-Started)
 
 ## API
 
