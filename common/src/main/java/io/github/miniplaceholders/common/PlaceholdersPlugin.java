@@ -29,8 +29,9 @@ public interface PlaceholdersPlugin {
         for (ExpansionProvider provider : ExpansionProviderLoader.loadProvidersFromFolder(providersFolderDirectory)) {
             injector.injectMembers(provider);
             ProviderLoadResult loadResult = tryLoad(provider, provider.loadRequirement());
-            final Expansion loadedExpansion = loadResult.expansion();
-            if (loadedExpansion != null) {
+            final ExpansionProvider loadedProvider = loadResult.provider();
+            if (loadedProvider != null) {
+                final Expansion loadedExpansion = loadedProvider.provideExpansion();
                 loadedExpansions.add(loadedExpansion);
                 loadedExpansion.register();
                 continue;
@@ -58,14 +59,14 @@ public interface PlaceholdersPlugin {
             case LoadRequirement.PlatformRequirement platformRequirement -> {
                 for (final Platform supportedPlatform : platformRequirement.platforms()) {
                     if (supportedPlatform == MiniPlaceholders.platform()) {
-                        yield ProviderLoadResult.ofLoaded(provider.provideExpansion());
+                        yield ProviderLoadResult.ofLoaded(provider);
                     }
                 }
                 yield ProviderLoadResult.ofFailed(platformRequirement);
             }
             case LoadRequirement.AvailableComplementRequirement complementRequirement ->
                 complementRequirement.shouldLoad(this::platformHasComplementLoaded)
-                        ? ProviderLoadResult.ofLoaded(provider.provideExpansion())
+                        ? ProviderLoadResult.ofLoaded(provider)
                         : ProviderLoadResult.ofFailed(complementRequirement);
             case LoadRequirement.MultiLoadRequirement multiLoadRequirement -> {
                 ProviderLoadResult loadResult;
@@ -74,10 +75,10 @@ public interface PlaceholdersPlugin {
                         yield loadResult;
                     }
                 }
-                yield ProviderLoadResult.ofLoaded(provider.provideExpansion());
+                yield ProviderLoadResult.ofLoaded(provider);
             }
             // NoneRequirement
-            default -> ProviderLoadResult.ofLoaded(provider.provideExpansion());
+            default -> ProviderLoadResult.ofLoaded(provider);
         };
     }
 
