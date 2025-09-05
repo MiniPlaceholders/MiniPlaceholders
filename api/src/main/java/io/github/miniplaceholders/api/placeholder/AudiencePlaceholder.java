@@ -12,101 +12,148 @@ import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.Objects;
+import java.util.function.Predicate;
 
 import static java.util.Objects.requireNonNull;
 
 /**
  * A placeholder that can be applied based on an audience of the specified type.
  *
- * @param targetClass the type of audience from which this placeholder can obtain information
- * @param key the full placeholder key
- * @param name the name of this placeholder
- * @param resolver the object responsible for obtaining audience information
- * @param <A> the parametrized type
+ * @param targetClass  the type of audience from which this placeholder can obtain information
+ * @param targetFilter the filter that will be applied to the audience before being able to evaluate its return tag
+ * @param key          the full placeholder key
+ * @param name         the name of this placeholder
+ * @param resolver     the object responsible for obtaining audience information
+ * @param <A>          the parametrized type
  */
 @NullMarked
 public record AudiencePlaceholder<A extends Audience>(
         @Nullable Class<A> targetClass,
+        @Nullable Predicate<A> targetFilter,
         @TagPattern String key,
         String name,
         AudienceTagResolver<A> resolver
 ) implements Placeholder {
 
-  /**
-   * Creates a new AudiencePlaceholder.
-   *
-   * @param targetClass the type of audience from which this placeholder can obtain information
-   * @param key the placeholder key
-   * @param name the name of this placeholder
-   * @param resolver the object responsible for obtaining audience information
-   * @return a new AudiencePlaceholder
-   * @param <A> the parametrized type
-   */
-  public static <A extends Audience> AudiencePlaceholder<A> single(
-          @Nullable Class<A> targetClass,
-          @TagPattern String key,
-          String name,
-          AudienceTagResolver<A> resolver
-  ) {
-    return new AudiencePlaceholder<>(targetClass, requireNonNull(key), requireNonNull(name), requireNonNull(resolver));
-  }
-
-  @Override
-  public @Nullable Tag resolve(final String name, final ArgumentQueue arguments, final Context ctx) {
-    final Pointered targetRaw = ctx.target();
-    if (targetRaw == null) {
-      return null;
+    /**
+     * A placeholder that can be applied based on an audience of the specified type.
+     *
+     * @param targetClass the type of audience from which this placeholder can obtain information
+     * @param key         the full placeholder key
+     * @param name        the name of this placeholder
+     * @param resolver    the object responsible for obtaining audience information
+     * @since 3.0.0
+     */
+    public AudiencePlaceholder(
+            final @Nullable Class<A> targetClass,
+            final @TagPattern String key,
+            final String name,
+            final AudienceTagResolver<A> resolver
+    ) {
+        this(targetClass, null, key, name, resolver);
     }
-    if (targetClass == null) {
-      //noinspection unchecked
-      return this.resolveA(name, (A) targetRaw, arguments, ctx);
+
+    /**
+     * Creates a new AudiencePlaceholder.
+     *
+     * @param targetClass the type of audience from which this placeholder can obtain information
+     * @param key         the placeholder key
+     * @param name        the name of this placeholder
+     * @param resolver    the object responsible for obtaining audience information
+     * @param <A>         the parametrized type
+     * @return a new AudiencePlaceholder
+     * @since 3.0.0
+     */
+    public static <A extends Audience> AudiencePlaceholder<A> single(
+            @Nullable Class<A> targetClass,
+            @TagPattern String key,
+            String name,
+            AudienceTagResolver<A> resolver
+    ) {
+        return new AudiencePlaceholder<>(targetClass, null, requireNonNull(key), requireNonNull(name), requireNonNull(resolver));
     }
-    final @Nullable A audience = forwardingFilter(targetRaw);
-    if (audience == null) {
-      return null;
+
+    /**
+     * Creates a new AudiencePlaceholder.
+     *
+     * @param targetClass  the type of audience from which this placeholder can obtain information
+     * @param targetFilter the filter that will be applied to the audience before being able to evaluate its return tag
+     * @param key          the placeholder key
+     * @param name         the name of this placeholder
+     * @param resolver     the object responsible for obtaining audience information
+     * @param <A>          the parametrized type
+     * @return a new AudiencePlaceholder
+     * @since 3.1.0
+     */
+    public static <A extends Audience> AudiencePlaceholder<A> single(
+            @Nullable Class<A> targetClass,
+            @Nullable Predicate<A> targetFilter,
+            @TagPattern String key,
+            String name,
+            AudienceTagResolver<A> resolver
+    ) {
+        return new AudiencePlaceholder<>(targetClass, targetFilter, requireNonNull(key), requireNonNull(name), requireNonNull(resolver));
     }
-    return resolveA(name, audience, arguments, ctx);
-  }
 
-  private @Nullable Tag resolveA(String key, A audience, ArgumentQueue queue, Context ctx) {
-    return this.has(key)
-            ? resolver.tag(audience, queue, ctx)
-            : null;
-  }
-
-  @SuppressWarnings("OverrideOnly")
-  private @Nullable A forwardingFilter(final Pointered source) {
-    //noinspection DataFlowIssue
-    if (targetClass.isInstance(source)) {
-      return targetClass.cast(source);
+    @Override
+    public @Nullable Tag resolve(final String name, final ArgumentQueue arguments, final Context ctx) {
+        final Pointered targetRaw = ctx.target();
+        if (targetRaw == null) {
+            return null;
+        }
+        if (targetClass == null) {
+            //noinspection unchecked
+            return this.resolveA(name, (A) targetRaw, arguments, ctx);
+        }
+        final @Nullable A audience = forwardingFilter(targetRaw);
+        if (audience == null) {
+            return null;
+        }
+        if (targetFilter != null && !targetFilter.test(audience)) {
+            return null;
+        }
+        return resolveA(name, audience, arguments, ctx);
     }
-    if (source instanceof final ForwardingAudience.Single forward) {
-      return forwardingFilter(forward.audience());
+
+    private @Nullable Tag resolveA(String key, A audience, ArgumentQueue queue, Context ctx) {
+        return this.has(key)
+                ? resolver.tag(audience, queue, ctx)
+                : null;
     }
-    return null;
-  }
 
-  @Override
-  public boolean has(String name) {
-    return key.equalsIgnoreCase(name);
-  }
+    @SuppressWarnings("OverrideOnly")
+    private @Nullable A forwardingFilter(final Pointered source) {
+        //noinspection DataFlowIssue
+        if (targetClass.isInstance(source)) {
+            return targetClass.cast(source);
+        }
+        if (source instanceof final ForwardingAudience.Single forward) {
+            return forwardingFilter(forward.audience());
+        }
+        return null;
+    }
 
-  @Override
-  public boolean equals(final Object o) {
-    if (o == this) return true;
-    if (!(o instanceof AudiencePlaceholder<?> that)) return false;
-    return that.key.equalsIgnoreCase(this.key);
-  }
+    @Override
+    public boolean has(String name) {
+        return key.equalsIgnoreCase(name);
+    }
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(key);
-  }
+    @Override
+    public boolean equals(final Object o) {
+        if (o == this) return true;
+        if (!(o instanceof AudiencePlaceholder<?> that)) return false;
+        return that.key.equalsIgnoreCase(this.key);
+    }
 
-  @Override
-  public String toString() {
-    return "AudiencePlaceholder{" +
-            "key='" + key + '\'' +
-            '}';
-  }
+    @Override
+    public int hashCode() {
+        return Objects.hash(key);
+    }
+
+    @Override
+    public String toString() {
+        return "AudiencePlaceholder{" +
+                "key='" + key + '\'' +
+                '}';
+    }
 }
