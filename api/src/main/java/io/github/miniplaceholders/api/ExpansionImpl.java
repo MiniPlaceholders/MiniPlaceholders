@@ -14,6 +14,7 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.NullUnmarked;
 
 import java.util.*;
+import java.util.function.Predicate;
 
 import static io.github.miniplaceholders.api.utils.Conditions.nonNullOrEmptyString;
 import static java.util.Objects.requireNonNull;
@@ -179,22 +180,23 @@ final class ExpansionImpl implements Expansion {
       this.expansionPrefix = name.toLowerCase(Locale.ROOT).concat("_");
     }
 
-    @Override
-    public <A extends Audience> @NotNull Builder audiencePlaceholder(
-            final @Nullable Class<A> targetClass,
-            @Subst("name") final @NotNull String key,
-            final @NotNull AudienceTagResolver<@NotNull A> audiencePlaceholder
-    ) {
-      nonNullOrEmptyString(key, "Placeholder key");
-      requireNonNull(audiencePlaceholder, "the audience placeholder cannot be null");
+      @Override
+      public <A extends Audience> Expansion.Builder audiencePlaceholder(
+              final @Nullable Class<A> targetClass,
+              final @Nullable Predicate<A> targetFilter,
+              final @NotNull @Subst("placeholder") String key,
+              final @NotNull AudienceTagResolver<@NotNull A> audiencePlaceholder
+      ) {
+          nonNullOrEmptyString(key, "Placeholder key");
+          requireNonNull(audiencePlaceholder, "the audience placeholder cannot be null");
 
-      if (this.audiencePlaceholders == null) this.audiencePlaceholders = new HashSet<>();
+          if (this.audiencePlaceholders == null) this.audiencePlaceholders = new HashSet<>();
 
-      this.audiencePlaceholders.add(AudiencePlaceholder.single(targetClass, expansionPrefix + key, key, audiencePlaceholder));
-      return this;
-    }
+          this.audiencePlaceholders.add(AudiencePlaceholder.single(targetClass, targetFilter, expansionPrefix + key, key, audiencePlaceholder));
+          return this;
+      }
 
-    @Override
+      @Override
     public <A extends Audience> @NotNull Builder relationalPlaceholder(
             @Nullable Class<A> targetClass,
             @Subst("relation") @NotNull String key,
