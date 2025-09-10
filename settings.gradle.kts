@@ -40,7 +40,7 @@ plugins {
     id("quiet-fabric-loom") version "1.11.325"
     id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
     id("com.vanniktech.maven.publish") version "0.34.0" apply false
-    kotlin("jvm") version "2.2.20-RC" apply false
+    kotlin("jvm") version "2.2.20" apply false
 }
 
 arrayOf(
