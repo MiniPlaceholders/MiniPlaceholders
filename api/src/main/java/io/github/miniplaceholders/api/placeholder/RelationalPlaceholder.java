@@ -9,11 +9,11 @@ import net.kyori.adventure.text.minimessage.Context;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.TagPattern;
 import net.kyori.adventure.text.minimessage.tag.resolver.ArgumentQueue;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.Objects;
+import java.util.function.Predicate;
 
 import static java.util.Objects.requireNonNull;
 
@@ -37,11 +37,20 @@ import static java.util.Objects.requireNonNull;
 @NullMarked
 public record RelationalPlaceholder<A extends Audience>(
         @Nullable Class<A> targetClass,
+        @Nullable Predicate<A> targetFilter,
         @TagPattern String key,
         String name,
         RelationalTagResolver<A> resolver
 ) implements Placeholder {
 
+    public RelationalPlaceholder(
+            @Nullable Class<A> targetClass,
+            @TagPattern String key,
+            String name,
+            RelationalTagResolver<A> resolver
+    ) {
+        this(targetClass, null, key, name, resolver);
+    }
   /**
    * Static method capable of creating an instance of a relational placeholder.
    *
@@ -84,6 +93,9 @@ public record RelationalPlaceholder<A extends Audience>(
     if (relationalAudience == null) {
       return null;
     }
+    if (targetFilter != null && (!targetFilter.test(audience) || !targetFilter.test(relationalAudience))) {
+        return null;
+    }
     return this.resolveA(name, audience, relationalAudience, arguments, ctx);
   }
 
@@ -112,7 +124,7 @@ public record RelationalPlaceholder<A extends Audience>(
   }
 
   @Override
-  public boolean has(@NotNull String name) {
+  public boolean has(String name) {
     return key.equalsIgnoreCase(name);
   }
 
