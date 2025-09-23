@@ -6,9 +6,9 @@ velocity = "3.4.0-SNAPSHOT"
 paper = "1.21.8-R0.1-SNAPSHOT"
 minecraft = "1.21.8"
 
-runtask = "2.3.1"
+runtask = "3.0.0"
 blossom = "2.1.0"
-shadow = "9.0.2"
+shadow = "9.1.0"
 jmh = "0.7.3"
 dokka = "2.0.0"
 
@@ -17,9 +17,9 @@ cloud-minecraft = "2.0.0-SNAPSHOT"
 cloud-minecraft-modded = "2.0.0-SNAPSHOT"
 adventure = "4.24.0"
 adventureModded = "6.6.0"
-kotlin = "2.2.20-RC"
+kotlin = "2.2.20"
 
-fabric-api = "0.132.0+1.21.8"
+fabric-api = "0.133.10+1.21.9"
 fabric-loader = "0.17.2"
 
 desertwell = "2.0.4"

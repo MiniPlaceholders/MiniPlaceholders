@@ -219,6 +219,7 @@ public sealed interface Expansion permits ExpansionImpl {
      * @return a shorter ToString
      */
     @ApiStatus.Internal
+    @Deprecated(forRemoval = true, since = "3.1.0")
     default String shortToString() {
         final StringBuilder builder = new StringBuilder(name()).append('[');
         if (author() != null) {
