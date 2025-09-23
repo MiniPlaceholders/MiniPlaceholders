@@ -13,7 +13,6 @@ import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NullMarked;
 
@@ -219,6 +218,7 @@ public sealed interface Expansion permits ExpansionImpl {
      * @return a shorter ToString
      */
     @ApiStatus.Internal
+    @Deprecated(forRemoval = true, since = "3.1.0")
     default String shortToString() {
         final StringBuilder builder = new StringBuilder(name()).append('[');
         if (author() != null) {
@@ -379,7 +379,7 @@ public sealed interface Expansion permits ExpansionImpl {
          * @since 2.3.0
          */
         @Contract("_ -> this")
-        @NotNull Builder author(final @Nullable String author);
+        Builder author(final @Nullable String author);
 
         /**
          * Sets the version of this expansion
@@ -389,6 +389,6 @@ public sealed interface Expansion permits ExpansionImpl {
          * @since 2.3.0
          */
         @Contract("_ -> this")
-        @NotNull Builder version(final @Nullable String version);
+        Builder version(final @Nullable String version);
     }
 }
