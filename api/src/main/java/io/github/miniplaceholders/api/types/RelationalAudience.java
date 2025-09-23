@@ -4,6 +4,8 @@ import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.ForwardingAudience;
 import org.jspecify.annotations.NullMarked;
 
+import static java.util.Objects.requireNonNull;
+
 /**
  * A relationship between 2 Audiences.
  *
@@ -14,6 +16,11 @@ import org.jspecify.annotations.NullMarked;
  */
 @NullMarked
 public record RelationalAudience<A extends Audience>(A audience, A relational) implements ForwardingAudience.Single {
+  public RelationalAudience {
+    requireNonNull(audience);
+    requireNonNull(relational);
+  }
+
   /**
    * Creates a new relation between two audiences.
    *
