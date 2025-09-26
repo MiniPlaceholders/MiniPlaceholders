@@ -17,6 +17,7 @@ import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.Collection;
+import java.util.function.Predicate;
 
 /**
  * Expansion that contains placeholders
@@ -274,8 +275,34 @@ public sealed interface Expansion permits ExpansionImpl {
          * @return the {@link Builder} itself
          * @since 1.0.0
          */
+        default <A extends Audience> Builder audiencePlaceholder(
+                final @Nullable Class<A> targetClass,
+                final String key,
+                final AudienceTagResolver<A> audiencePlaceholder
+        ) {
+            return this.audiencePlaceholder(targetClass, null, key, audiencePlaceholder);
+        }
+
+        /**
+         * Adds an audience placeholder
+         *
+         * <p>This type of Placeholder depends on a specific audience to obtain its values</p>
+         *
+         * <p>The content of this Placeholder is cached
+         * and can mutate depending on when it is invoked</p>
+         *
+         * @param targetClass the target class
+         * @param targetFilter the filter that will be applied to the audience
+         *                     before being able to evaluate its return tag
+         * @param key the placeholder key, cannot be an empty or black string
+         * @param audiencePlaceholder the single placeholder
+         * @param <A> the type of audience that this placeholder supports, must be the same as targetClass
+         * @return the {@link Builder} itself
+         * @since 1.0.0
+         */
         <A extends Audience> Builder audiencePlaceholder(
                 final @Nullable Class<A> targetClass,
+                final @Nullable Predicate<A> targetFilter,
                 final String key,
                 final AudienceTagResolver<A> audiencePlaceholder
         );
@@ -294,7 +321,30 @@ public sealed interface Expansion permits ExpansionImpl {
          * @since 3.0.0
          */
         default Builder audiencePlaceholder(final String key, final AudienceTagResolver<Audience> audiencePlaceholder) {
-            return this.audiencePlaceholder(null, key, audiencePlaceholder);
+            return this.audiencePlaceholder(null, null, key, audiencePlaceholder);
+        }
+
+        /**
+         * Adds an audience placeholder
+         *
+         * <p>This type of Placeholder depends on a specific audience to obtain its values</p>
+         *
+         * <p>The content of this Placeholder is cached
+         * and can mutate depending on when it is invoked</p>
+         *
+         * @param targetFilter the filter that will be applied to the audience
+         *                     before being able to evaluate its return tag
+         * @param key the placeholder key, cannot be an empty or black string
+         * @param audiencePlaceholder the single placeholder
+         * @return the {@link Builder} itself
+         * @since 3.0.0
+         */
+        default Builder audiencePlaceholder(
+                final @Nullable Predicate<Audience> targetFilter,
+                final String key,
+                final AudienceTagResolver<Audience> audiencePlaceholder
+        ) {
+            return this.audiencePlaceholder(null, targetFilter, key, audiencePlaceholder);
         }
 
         /**
