@@ -19,7 +19,7 @@ adventure = "4.24.0"
 adventureModded = "6.6.0"
 kotlin = "2.2.20"
 
-fabric-api = "0.133.13+1.21.9"
+fabric-api = "0.133.14+1.21.9"
 fabric-loader = "0.17.2"
 
 desertwell = "2.0.4"
