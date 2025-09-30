@@ -52,7 +52,7 @@ plugin-dokka = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version.ref
 
 desertwell = { group = "net.william278", name = "DesertWell", version.ref = "desertwell" }
 
-junit-bom = "org.junit:junit-bom:5.13.4"
+junit-bom = "org.junit:junit-bom:5.14.0"
 jspecify = "org.jspecify:jspecify:1.0.0"
 
 unnamedinject = "team.unnamed:inject:2.0.1"
