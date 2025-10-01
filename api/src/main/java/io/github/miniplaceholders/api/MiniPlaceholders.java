@@ -8,6 +8,7 @@ import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -236,6 +237,7 @@ public final class MiniPlaceholders {
      * @return all available registered expansions
      * @since 3.0.0
      */
+    @Unmodifiable
     public static Collection<Expansion> expansionsAvailable() {
         return Collections.unmodifiableSet(expansions);
     }

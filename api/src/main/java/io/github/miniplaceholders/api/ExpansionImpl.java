@@ -164,7 +164,7 @@ final class ExpansionImpl implements Expansion {
   }
 
   @NullUnmarked
-  static final class Builder implements Expansion.Builder {
+  public static final class Builder implements Expansion.Builder {
     private final String expansionName;
     @Subst("server")
     private final String expansionPrefix;
@@ -179,18 +179,36 @@ final class ExpansionImpl implements Expansion {
       this.expansionPrefix = name.toLowerCase(Locale.ROOT).concat("_");
     }
 
+      @Override
+      public <A extends Audience> Expansion.Builder audiencePlaceholder(
+              final Class<A> targetClass,
+              final @NotNull @Subst("placeholder") String key,
+              final @NotNull AudienceTagResolver<@NotNull A> audiencePlaceholder
+      ) {
+          nonNullOrEmptyString(key, "Placeholder key");
+          requireNonNull(audiencePlaceholder, "the audience placeholder cannot be null");
+
+          if (this.audiencePlaceholders == null) this.audiencePlaceholders = new HashSet<>();
+
+          this.audiencePlaceholders.add(AudiencePlaceholder.single(targetClass, expansionPrefix + key, key, audiencePlaceholder));
+          return this;
+      }
+
     @Override
-    public <A extends Audience> @NotNull Builder audiencePlaceholder(
-            final @Nullable Class<A> targetClass,
-            @Subst("name") final @NotNull String key,
-            final @NotNull AudienceTagResolver<@NotNull A> audiencePlaceholder
+    public <A extends Audience> Expansion.Builder audiencePlaceholder(
+        final @NotNull Class<A> targetClass,
+        final @NotNull AudiencePlaceholder.Builder.Provider<A> builderProvider
     ) {
-      nonNullOrEmptyString(key, "Placeholder key");
-      requireNonNull(audiencePlaceholder, "the audience placeholder cannot be null");
+      requireNonNull(targetClass, "target class");
+      requireNonNull(builderProvider, "builder");
 
       if (this.audiencePlaceholders == null) this.audiencePlaceholders = new HashSet<>();
 
-      this.audiencePlaceholders.add(AudiencePlaceholder.single(targetClass, expansionPrefix + key, key, audiencePlaceholder));
+      final AudiencePlaceholder.Builder<A> builder = AudiencePlaceholder.builder(targetClass);
+      builderProvider.provide(builder);
+      final AudiencePlaceholder<@NotNull A> placeholder = builder.build(expansionPrefix);
+
+      this.audiencePlaceholders.add(placeholder);
       return this;
     }
 

@@ -14,13 +14,13 @@ import static org.junit.jupiter.api.Assertions.*;
 class ExpansionsTest implements MiniTest {
     @Test
     @DisplayName("Expansion Equality")
-    void equalsExpansions(){
+    void equalsExpansions() {
         final Expansion firstExpansion = Expansion.builder("equals")
-            .audiencePlaceholder("test", Tags.emptyAudienceResolver())
-            .build();
+                .audiencePlaceholder("test", Tags.emptyAudienceResolver())
+                .build();
         final Expansion secondExpansion = Expansion.builder("equals")
-            .audiencePlaceholder("test", Tags.emptyAudienceResolver())
-            .build();
+                .audiencePlaceholder("test", Tags.emptyAudienceResolver())
+                .build();
 
         assertEquals(firstExpansion, secondExpansion);
     }

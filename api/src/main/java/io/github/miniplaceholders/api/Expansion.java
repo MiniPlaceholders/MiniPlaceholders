@@ -111,8 +111,6 @@ public sealed interface Expansion permits ExpansionImpl {
      */
     boolean registered();
 
-    // TODO: Docs and Tests
-
     /**
      * Get the registered audience placeholders
      *
@@ -295,6 +293,15 @@ public sealed interface Expansion permits ExpansionImpl {
          */
         default Builder audiencePlaceholder(final String key, final AudienceTagResolver<Audience> audiencePlaceholder) {
             return this.audiencePlaceholder(null, key, audiencePlaceholder);
+        }
+
+        <A extends Audience> Builder audiencePlaceholder(
+            final Class<A> targetClass,
+            final AudiencePlaceholder.Builder.Provider<A> builderProvider
+        );
+
+        default Builder audiencePlaceholder(final AudiencePlaceholder.Builder.Provider<Audience> builderProvider) {
+            return audiencePlaceholder(Audience.class, builderProvider);
         }
 
         /**
