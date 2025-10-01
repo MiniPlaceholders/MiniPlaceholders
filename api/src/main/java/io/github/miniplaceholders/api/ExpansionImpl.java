@@ -14,7 +14,6 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.NullUnmarked;
 
 import java.util.*;
-import java.util.function.Predicate;
 
 import static io.github.miniplaceholders.api.utils.Conditions.nonNullOrEmptyString;
 import static java.util.Objects.requireNonNull;
@@ -165,7 +164,7 @@ final class ExpansionImpl implements Expansion {
   }
 
   @NullUnmarked
-  static final class Builder implements Expansion.Builder {
+  public static final class Builder implements Expansion.Builder {
     private final String expansionName;
     @Subst("server")
     private final String expansionPrefix;
@@ -182,8 +181,7 @@ final class ExpansionImpl implements Expansion {
 
       @Override
       public <A extends Audience> Expansion.Builder audiencePlaceholder(
-              final @Nullable Class<A> targetClass,
-              final @Nullable Predicate<A> targetFilter,
+              final Class<A> targetClass,
               final @NotNull @Subst("placeholder") String key,
               final @NotNull AudienceTagResolver<@NotNull A> audiencePlaceholder
       ) {
@@ -192,11 +190,29 @@ final class ExpansionImpl implements Expansion {
 
           if (this.audiencePlaceholders == null) this.audiencePlaceholders = new HashSet<>();
 
-          this.audiencePlaceholders.add(AudiencePlaceholder.single(targetClass, targetFilter, expansionPrefix + key, key, audiencePlaceholder));
+          this.audiencePlaceholders.add(AudiencePlaceholder.single(targetClass, expansionPrefix + key, key, audiencePlaceholder));
           return this;
       }
 
-      @Override
+    @Override
+    public <A extends Audience> Expansion.Builder audiencePlaceholder(
+        final @NotNull Class<A> targetClass,
+        final @NotNull AudiencePlaceholder.Builder.Provider<A> builderProvider
+    ) {
+      requireNonNull(targetClass, "target class");
+      requireNonNull(builderProvider, "builder");
+
+      if (this.audiencePlaceholders == null) this.audiencePlaceholders = new HashSet<>();
+
+      final AudiencePlaceholder.Builder<A> builder = AudiencePlaceholder.builder(targetClass);
+      builderProvider.provide(builder);
+      final AudiencePlaceholder<@NotNull A> placeholder = builder.build(expansionPrefix);
+
+      this.audiencePlaceholders.add(placeholder);
+      return this;
+    }
+
+    @Override
     public <A extends Audience> @NotNull Builder relationalPlaceholder(
             @Nullable Class<A> targetClass,
             @Subst("relation") @NotNull String key,

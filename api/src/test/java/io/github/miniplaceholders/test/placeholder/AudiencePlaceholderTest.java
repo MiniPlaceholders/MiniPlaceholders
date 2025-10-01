@@ -1,6 +1,7 @@
 package io.github.miniplaceholders.test.placeholder;
 
 import io.github.miniplaceholders.api.Expansion;
+import io.github.miniplaceholders.api.placeholder.PlaceholderMetadata;
 import io.github.miniplaceholders.test.MiniTest;
 import io.github.miniplaceholders.test.instances.TestAudience;
 import io.github.miniplaceholders.test.instances.TestAudienceHolder;
@@ -66,5 +67,27 @@ public class AudiencePlaceholderTest implements MiniTest {
 
     assertContentEquals(playerExpected, MiniMessage.miniMessage().deserialize(string, player, expansion.audiencePlaceholders()));
     assertContentEquals(emptyExpected, MiniMessage.miniMessage().deserialize(string, emptyAudience, expansion.audiencePlaceholders()));
+  }
+
+  @Test
+  @DisplayName("AudiencePlaceholder Builder creation")
+  void builderAudiencePlaceholderCreation() {
+    final Expansion expansion = Expansion.builder("builder")
+        .audiencePlaceholder(
+            TestAudience.class,
+            builder -> builder.name("test")
+                .resolver((audience, queue, ctx) -> {
+                  final String name = audience.name();
+                  return Tag.preProcessParsed(name);
+                })
+                .metadata(PlaceholderMetadata.data("Builder Test", "Returns the Audience Name"))
+                .targetFilter(target -> target.name().length() <= 16)
+        ).build();
+    final TestAudience audience = new TestAudience("4drian3d");
+
+    Component expected = Component.text("My name is: 4drian3d");
+    Component parsed = miniMessage().deserialize("My name is: <builder_test>", audience, expansion.audiencePlaceholders());
+
+    assertContentEquals(expected, parsed);
   }
 }
