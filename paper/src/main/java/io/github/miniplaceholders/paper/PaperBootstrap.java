@@ -1,7 +1,7 @@
 package io.github.miniplaceholders.paper;
 
 import com.mojang.brigadier.tree.LiteralCommandNode;
-import io.github.miniplaceholders.common.command.BrigadierCommandProvider;
+import io.github.miniplaceholders.common.command.brigadier.BrigadierCommandProvider;
 import io.github.miniplaceholders.connect.InternalPlatform;
 import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;

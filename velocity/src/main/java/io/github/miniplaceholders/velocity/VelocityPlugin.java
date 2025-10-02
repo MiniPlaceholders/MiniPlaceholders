@@ -14,7 +14,7 @@ import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 import io.github.miniplaceholders.common.PlaceholdersPlugin;
 import io.github.miniplaceholders.common.PluginConstants;
-import io.github.miniplaceholders.common.command.BrigadierCommandProvider;
+import io.github.miniplaceholders.common.command.brigadier.BrigadierCommandProvider;
 import io.github.miniplaceholders.connect.InternalPlatform;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
