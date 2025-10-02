@@ -8,9 +8,7 @@ plugins {
 }
 
 dependencies {
-    implementation(projects.miniplaceholdersCommon) {
-        exclude(group = "org.incendo")
-    }
+    implementation(projects.miniplaceholdersCommon)
     implementation(projects.miniplaceholdersApi)
     implementation(projects.miniplaceholdersConnect)
 }

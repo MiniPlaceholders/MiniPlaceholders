@@ -10,7 +10,6 @@ dependencies {
     implementation(projects.miniplaceholdersCommon)
     implementation(projects.miniplaceholdersApi)
     implementation(projects.miniplaceholdersConnect)
-    implementation(libs.cloud.velocity)
 }
 
 tasks {
