@@ -86,15 +86,15 @@ public class SpongePlugin implements PlaceholdersPlugin {
         .executor(new WrappingExecutor(rootNode::execute))
         .addChildren(Map.of(
             List.of("expansions"), Command.builder()
-                .executionRequirements(cause -> expansionsNode.hasPermission(audienceExtractor.extract(cause)))
+                .permission(expansionsNode.permission())
                 .executor(new WrappingExecutor(expansionsNode::showExpansions))
                 .build(),
             List.of("help"), Command.builder()
-                .executionRequirements(cause -> helpNode.hasPermission(audienceExtractor.extract(cause)))
+                .permission(helpNode.permission())
                 .executor(new WrappingExecutor(helpNode::execute))
                 .build(),
             List.of("parse"), Command.builder()
-                .executionRequirements(cause -> parseNode.hasPermission(audienceExtractor.extract(cause)))
+                .permission(parseNode.permission())
                 .addParameter(sourceParameter)
                 .addParameter(messageParameter)
                 .executor(ctx -> {

@@ -15,7 +15,12 @@ public final class RootNode implements Node {
   @Override
   public boolean hasPermission(Audience audience) {
     return audience.get(PermissionChecker.POINTER)
-        .map(checker -> checker.value("miniplaceholders.command"))
+        .map(checker -> checker.value(permission()))
         .orElse(TriState.TRUE) != TriState.FALSE;
+  }
+
+  @Override
+  public String permission() {
+    return "miniplaceholders.command";
   }
 }

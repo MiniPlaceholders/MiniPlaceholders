@@ -45,7 +45,12 @@ public record ParseNode(
   @Override
   public boolean hasPermission(Audience audience) {
     return audience.get(PermissionChecker.POINTER)
-        .map(checker -> checker.test("miniplaceholders.command.parse"))
+        .map(checker -> checker.test(permission()))
         .orElse(false);
+  }
+
+  @Override
+  public String permission() {
+    return "miniplaceholders.command.parse";
   }
 }
