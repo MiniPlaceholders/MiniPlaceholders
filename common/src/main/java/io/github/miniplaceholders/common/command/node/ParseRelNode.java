@@ -1,6 +1,7 @@
 package io.github.miniplaceholders.common.command.node;
 
 import io.github.miniplaceholders.api.MiniPlaceholders;
+import io.github.miniplaceholders.api.types.RelationalAudience;
 import io.github.miniplaceholders.common.command.AudienceConverter;
 import io.github.miniplaceholders.common.command.PermissionTester;
 import io.github.miniplaceholders.common.command.PlayerSuggestions;
@@ -13,24 +14,35 @@ import static net.kyori.adventure.text.format.NamedTextColor.RED;
 import static net.kyori.adventure.text.minimessage.MiniMessage.miniMessage;
 
 @NullMarked
-public record ParseNode(
-        PlayerSuggestions playerSuggestions,
-        AudienceConverter audienceConverter,
-        PermissionTester permissionChecker
+public record ParseRelNode(
+    PlayerSuggestions playerSuggestions,
+    AudienceConverter audienceConverter,
+    PermissionTester permissionChecker
 ) implements Node, PlayerSuggestionProvider {
-  public void parseString(Audience sender, String source, String toParse) {
-    final Audience objective = "me".equals(source)
+
+  public void parseString(final Audience sender, final String source, final String relational, final String toParse) {
+    final Audience senderTarget = "me".equals(source)
         ? sender
         : audienceConverter.convert(source);
-    if (objective == null) {
+    if (senderTarget == null) {
       sender.sendMessage(text("You must specify a valid player", RED));
       return;
     }
 
+    final Audience relationalTarget = "me".equals(relational)
+        ? sender
+        : audienceConverter.convert(relational);
+    if (relationalTarget == null) {
+      sender.sendMessage(text("You must specify a valid relational player", RED));
+      return;
+    }
+
+    final RelationalAudience<Audience> relationalAudience = RelationalAudience.from(senderTarget, relationalTarget);
+
     final Component parsed = miniMessage().deserialize(
         toParse,
-        objective,
-        MiniPlaceholders.audienceGlobalPlaceholders()
+        relationalAudience,
+        MiniPlaceholders.relationalGlobalPlaceholders()
     );
     sender.sendMessage(parsed);
   }

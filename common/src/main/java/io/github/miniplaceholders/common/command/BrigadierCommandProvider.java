@@ -6,10 +6,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.tree.LiteralCommandNode;
-import io.github.miniplaceholders.common.command.node.ExpansionsNode;
-import io.github.miniplaceholders.common.command.node.HelpNode;
-import io.github.miniplaceholders.common.command.node.ParseNode;
-import io.github.miniplaceholders.common.command.node.RootNode;
+import io.github.miniplaceholders.common.command.node.*;
 import net.kyori.adventure.audience.Audience;
 import org.jspecify.annotations.NullMarked;
 
@@ -41,6 +38,7 @@ public final class BrigadierCommandProvider {
     final ExpansionsNode expansionsNode = new ExpansionsNode(permissionChecker);
     final HelpNode helpNode = new HelpNode(permissionChecker);
     final ParseNode parseNode = new ParseNode(playersSuggestions, audienceConverter, permissionChecker);
+    final ParseRelNode parseRelNode = new ParseRelNode(playersSuggestions, audienceConverter, permissionChecker);
     final RootNode rootNode = new RootNode(permissionChecker);
 
     return builder
@@ -73,6 +71,34 @@ public final class BrigadierCommandProvider {
                       return Command.SINGLE_SUCCESS;
                     })
                 )
+            )
+        )
+        .then(LiteralArgumentBuilder.<A>literal("parserel")
+            .requires(src -> parseRelNode.hasPermission(audienceExtractor.extract(src)))
+            .then(RequiredArgumentBuilder.<A, String>argument("source", StringArgumentType.word())
+                .suggests((ctx, suggestionsBuilder) -> {
+                  parseRelNode.providePlayerSuggestions().forEach(suggestionsBuilder::suggest);
+                  return suggestionsBuilder.buildFuture();
+                })
+                .then(RequiredArgumentBuilder.<A, String>argument("relational", StringArgumentType.word())
+                    .suggests((ctx, suggestionsBuilder) -> {
+                      parseRelNode.providePlayerSuggestions().forEach(suggestionsBuilder::suggest);
+                      return suggestionsBuilder.buildFuture();
+                    })
+                    .then(RequiredArgumentBuilder.<A, String>argument("message", StringArgumentType.greedyString())
+                        .executes(ctx -> {
+                          final Audience audience = audienceExtractor.extract(ctx.getSource());
+                          final String source = StringArgumentType.getString(ctx, "source");
+                          final String relational = StringArgumentType.getString(ctx, "source");
+                          final String message = StringArgumentType.getString(ctx, "message");
+
+                          parseRelNode.parseString(audience, source, relational, message);
+
+                          return Command.SINGLE_SUCCESS;
+                        })
+                    )
+                )
+
             )
         )
         .build();

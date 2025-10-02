@@ -2,38 +2,21 @@ package io.github.miniplaceholders.sponge;
 
 import com.google.inject.Inject;
 import io.github.miniplaceholders.common.PlaceholdersPlugin;
-import io.github.miniplaceholders.common.command.AudienceExtractor;
-import io.github.miniplaceholders.common.command.PermissionTester;
-import io.github.miniplaceholders.common.command.PlaceholderCommandExecutor;
-import io.github.miniplaceholders.common.command.node.ExpansionsNode;
-import io.github.miniplaceholders.common.command.node.HelpNode;
-import io.github.miniplaceholders.common.command.node.ParseNode;
-import io.github.miniplaceholders.common.command.node.RootNode;
 import io.github.miniplaceholders.connect.InternalPlatform;
-import net.kyori.adventure.audience.Audience;
+import io.github.miniplaceholders.sponge.command.SpongeCommand;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
-import net.kyori.adventure.util.TriState;
 import org.apache.logging.log4j.Logger;
 import org.spongepowered.api.Server;
-import org.spongepowered.api.command.*;
-import org.spongepowered.api.command.parameter.CommandContext;
-import org.spongepowered.api.command.parameter.Parameter;
+import org.spongepowered.api.command.Command;
 import org.spongepowered.api.config.ConfigDir;
-import org.spongepowered.api.entity.living.player.User;
-import org.spongepowered.api.entity.living.player.server.ServerPlayer;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.lifecycle.RegisterCommandEvent;
 import org.spongepowered.api.event.lifecycle.StartingEngineEvent;
-import org.spongepowered.api.util.Tristate;
 import org.spongepowered.plugin.PluginContainer;
 import org.spongepowered.plugin.builtin.jvm.Plugin;
 
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Plugin("miniplaceholders")
 public class SpongePlugin implements PlaceholdersPlugin {
@@ -51,8 +34,8 @@ public class SpongePlugin implements PlaceholdersPlugin {
   @Listener
   public void onServerStart(final StartingEngineEvent<Server> event) {
     this.server = event.engine();
-    logger.info("Starting MiniPlaceholders Sponge");
     InternalPlatform.platform(InternalPlatform.SPONGE);
+    logger.info("Starting MiniPlaceholders Sponge");
 
     try {
       this.loadProvidedExpansions(configDir.resolve("expansions"));
@@ -63,60 +46,7 @@ public class SpongePlugin implements PlaceholdersPlugin {
 
   @Listener
   public void onCommandRegister(final RegisterCommandEvent<Command.Parameterized> event) {
-    final AudienceExtractor<CommandCause> audienceExtractor = CommandCause::audience;
-    final PermissionTester permissionTester = (audience, permission) -> TriState.TRUE;
-    final RootNode rootNode = new RootNode(permissionTester);
-    final ExpansionsNode expansionsNode = new ExpansionsNode(permissionTester);
-    final ParseNode parseNode = new ParseNode(
-        () -> this.server.onlinePlayers()
-            .stream()
-            .map(ServerPlayer::user)
-            .map(User::name)
-            .collect(Collectors.toCollection(ArrayList::new)),
-        string -> this.server.player(string).orElse(null),
-        permissionTester
-    );
-    final HelpNode helpNode = new HelpNode(permissionTester);
-
-    final Parameter.Value<String> sourceParameter = Parameter.string().key("source")
-        .completer((context, currentInput) -> parseNode.providePlayerSuggestions()
-            .stream()
-            .map(CommandCompletion::of)
-            .toList()
-        ).build();
-    final Parameter.Value<String> messageParameter = Parameter.remainingJoinedStrings().key("message").build();
-
-    final Command.Parameterized node = Command.builder()
-        .executionRequirements(src -> src.permissionValue(rootNode.permission()) != Tristate.FALSE)
-        .executor(new WrappingExecutor(rootNode::execute))
-        .addChildren(Map.of(
-            List.of("expansions"), Command.builder()
-                .permission(expansionsNode.permission())
-                .executor(new WrappingExecutor(expansionsNode::showExpansions))
-                .build(),
-            List.of("help"), Command.builder()
-                .permission(helpNode.permission())
-                .executor(new WrappingExecutor(helpNode::execute))
-                .build(),
-            List.of("parse"), Command.builder()
-                .permission(parseNode.permission())
-                .addParameter(sourceParameter)
-                .addParameter(messageParameter)
-                .executor(ctx -> {
-                  final Audience executor = audienceExtractor.extract(ctx.cause());
-                  final String source = ctx.requireOne(sourceParameter);
-                  final String message = ctx.requireOne(messageParameter);
-
-                  parseNode.parseString(executor, source, message);
-
-                  return CommandResult.success();
-                })
-                .build()
-        ))
-        .build();
-
-
-    event.register(pluginContainer, node, "miniplaceholders");
+    event.register(pluginContainer, SpongeCommand.provideCommand(), "miniplaceholders");
   }
 
   @Override
@@ -140,11 +70,4 @@ public class SpongePlugin implements PlaceholdersPlugin {
     return this.server;
   }
 
-  private record WrappingExecutor(PlaceholderCommandExecutor executor) implements CommandExecutor {
-    @Override
-    public CommandResult execute(CommandContext context) {
-      executor.execute(context.cause().audience());
-      return CommandResult.success();
-    }
-  }
 }
