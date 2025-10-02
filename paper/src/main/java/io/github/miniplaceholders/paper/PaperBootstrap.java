@@ -8,6 +8,7 @@ import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -28,7 +29,11 @@ public final class PaperBootstrap implements PluginBootstrap {
                 .map(Player::getName)
                 .collect(Collectors.toCollection(ArrayList::new)),
             string -> Bukkit.getServer().getPlayer(string),
-            CommandSourceStack::getSender
+            CommandSourceStack::getSender,
+            (audience, permission) -> {
+              final CommandSender sender = (CommandSender) audience;
+              return sender.permissionValue(permission);
+            }
         );
         bootstrapContext.getLifecycleManager()
             .registerEventHandler(LifecycleEvents.COMMANDS,

@@ -17,7 +17,8 @@ public final class BrigadierCommandProvider {
       String command,
       PlayerSuggestions playersSuggestions,
       AudienceConverter audienceConverter,
-      AudienceExtractor<A> audienceExtractor
+      AudienceExtractor<A> audienceExtractor,
+      PermissionTester permissionChecker
   ) {
     // Inspired by MiniMotd command implementation (MIT licenced)
     class WrappingExecutor implements Command<A> {
@@ -35,10 +36,10 @@ public final class BrigadierCommandProvider {
     }
 
     final var builder = LiteralArgumentBuilder.<A>literal(command);
-    final ExpansionsNode expansionsNode = new ExpansionsNode();
-    final HelpNode helpNode = new HelpNode();
-    final ParseNode parseNode = new ParseNode(playersSuggestions, audienceConverter);
-    final RootNode rootNode = new RootNode();
+    final ExpansionsNode expansionsNode = new ExpansionsNode(permissionChecker);
+    final HelpNode helpNode = new HelpNode(permissionChecker);
+    final ParseNode parseNode = new ParseNode(playersSuggestions, audienceConverter, permissionChecker);
+    final RootNode rootNode = new RootNode(permissionChecker);
 
     return builder
         .requires(src -> rootNode.hasPermission(audienceExtractor.extract(src)))

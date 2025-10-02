@@ -3,6 +3,7 @@ package io.github.miniplaceholders.sponge;
 import com.google.inject.Inject;
 import io.github.miniplaceholders.common.PlaceholdersPlugin;
 import io.github.miniplaceholders.common.command.AudienceExtractor;
+import io.github.miniplaceholders.common.command.PermissionTester;
 import io.github.miniplaceholders.common.command.PlaceholderCommandExecutor;
 import io.github.miniplaceholders.common.command.node.ExpansionsNode;
 import io.github.miniplaceholders.common.command.node.HelpNode;
@@ -12,6 +13,7 @@ import io.github.miniplaceholders.connect.InternalPlatform;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import net.kyori.adventure.util.TriState;
 import org.apache.logging.log4j.Logger;
 import org.spongepowered.api.Server;
 import org.spongepowered.api.command.*;
@@ -23,6 +25,7 @@ import org.spongepowered.api.entity.living.player.server.ServerPlayer;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.lifecycle.RegisterCommandEvent;
 import org.spongepowered.api.event.lifecycle.StartingEngineEvent;
+import org.spongepowered.api.util.Tristate;
 import org.spongepowered.plugin.PluginContainer;
 import org.spongepowered.plugin.builtin.jvm.Plugin;
 
@@ -61,17 +64,19 @@ public class SpongePlugin implements PlaceholdersPlugin {
   @Listener
   public void onCommandRegister(final RegisterCommandEvent<Command.Parameterized> event) {
     final AudienceExtractor<CommandCause> audienceExtractor = CommandCause::audience;
-    final RootNode rootNode = new RootNode();
-    final ExpansionsNode expansionsNode = new ExpansionsNode();
+    final PermissionTester permissionTester = (audience, permission) -> TriState.TRUE;
+    final RootNode rootNode = new RootNode(permissionTester);
+    final ExpansionsNode expansionsNode = new ExpansionsNode(permissionTester);
     final ParseNode parseNode = new ParseNode(
         () -> this.server.onlinePlayers()
             .stream()
             .map(ServerPlayer::user)
             .map(User::name)
             .collect(Collectors.toCollection(ArrayList::new)),
-        string -> this.server.player(string).orElse(null)
+        string -> this.server.player(string).orElse(null),
+        permissionTester
     );
-    final HelpNode helpNode = new HelpNode();
+    final HelpNode helpNode = new HelpNode(permissionTester);
 
     final Parameter.Value<String> sourceParameter = Parameter.string().key("source")
         .completer((context, currentInput) -> parseNode.providePlayerSuggestions()
@@ -82,7 +87,7 @@ public class SpongePlugin implements PlaceholdersPlugin {
     final Parameter.Value<String> messageParameter = Parameter.remainingJoinedStrings().key("message").build();
 
     final Command.Parameterized node = Command.builder()
-        .executionRequirements(src -> rootNode.hasPermission(audienceExtractor.extract(src)))
+        .executionRequirements(src -> src.permissionValue(rootNode.permission()) != Tristate.FALSE)
         .executor(new WrappingExecutor(rootNode::execute))
         .addChildren(Map.of(
             List.of("expansions"), Command.builder()

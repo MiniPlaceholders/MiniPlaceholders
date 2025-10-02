@@ -7,6 +7,7 @@ import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
 import net.william278.desertwell.about.AboutMenu;
 import net.william278.desertwell.util.Version;
 
+import static net.kyori.adventure.text.Component.newline;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.minimessage.MiniMessage.miniMessage;
 
@@ -33,4 +34,17 @@ public final class CommandConstants {
       ).version(Version.fromString(PluginConstants.VERSION))
       .build()
       .toComponent();
+
+  public static final Component HELP = text()
+      .append(newline(), HEADER)
+      .append(newline(), miniMessage().deserialize(
+          "<gradient:#9694ff:#5269ff>Commands:</gradient>"))
+      .append(newline(), miniMessage().deserialize(
+          "<gradient:aqua:#94d1ff>/miniplaceholders</gradient> <aqua>help</aqua>"))
+      .append(newline(), miniMessage().deserialize(
+          "<gradient:aqua:#94d1ff>/miniplaceholders</gradient> <aqua>parse</aqua> <#8fadff><player | me></#8fadff> <#99ffb6><player></#99ffb6>"))
+      .append(newline(), miniMessage().deserialize(
+          "<gradient:aqua:#94d1ff>/miniplaceholders</gradient> <aqua>expansions</aqua>"))
+      .append(newline(), FOOTER)
+      .build();
 }

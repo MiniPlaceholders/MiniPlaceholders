@@ -2,9 +2,9 @@ package io.github.miniplaceholders.common.command.node;
 
 import io.github.miniplaceholders.api.MiniPlaceholders;
 import io.github.miniplaceholders.common.command.AudienceConverter;
+import io.github.miniplaceholders.common.command.PermissionTester;
 import io.github.miniplaceholders.common.command.PlayerSuggestions;
 import net.kyori.adventure.audience.Audience;
-import net.kyori.adventure.permission.PermissionChecker;
 import net.kyori.adventure.text.Component;
 import org.jspecify.annotations.NullMarked;
 
@@ -17,7 +17,8 @@ import static net.kyori.adventure.text.minimessage.MiniMessage.miniMessage;
 @NullMarked
 public record ParseNode(
         PlayerSuggestions playerSuggestions,
-        AudienceConverter audienceConverter
+        AudienceConverter audienceConverter,
+        PermissionTester permissionChecker
 ) implements Node {
   public List<String> providePlayerSuggestions() {
     final var suggestions = playerSuggestions.suggest();
@@ -44,9 +45,7 @@ public record ParseNode(
 
   @Override
   public boolean hasPermission(Audience audience) {
-    return audience.get(PermissionChecker.POINTER)
-        .map(checker -> checker.test(permission()))
-        .orElse(false);
+    return permissionChecker.permissionValue(audience, permission()).toBooleanOrElse(false);
   }
 
   @Override

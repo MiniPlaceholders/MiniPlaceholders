@@ -4,12 +4,14 @@ import com.mojang.brigadier.tree.LiteralCommandNode;
 import io.github.miniplaceholders.common.PlaceholdersPlugin;
 import io.github.miniplaceholders.common.command.BrigadierCommandProvider;
 import io.github.miniplaceholders.connect.InternalPlatform;
+import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
+import net.kyori.adventure.util.TriState;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.MinecraftServer;
 
@@ -46,7 +48,15 @@ public final class FabricMod implements ModInitializer, PlaceholdersPlugin {
         "miniplaceholders",
         () -> new ArrayList<>(List.of(this.minecraftServer.getPlayerNames())),
         string -> this.minecraftServer.getPlayerList().getPlayerByName(string),
-        aud -> aud
+        aud -> aud,
+        (audience, permission) -> {
+          final CommandSourceStack commandSourceStack = (CommandSourceStack) audience;
+          return switch (Permissions.getPermissionValue(commandSourceStack, permission)) {
+            case TRUE -> TriState.TRUE;
+            case FALSE -> TriState.FALSE;
+            case DEFAULT -> TriState.NOT_SET;
+          };
+        }
     );
     CommandRegistrationCallback.EVENT.register(
         (dispatcher, ctx, selection) ->

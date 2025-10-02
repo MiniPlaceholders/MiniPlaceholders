@@ -68,7 +68,9 @@ public final class VelocityPlugin implements PlaceholdersPlugin {
             .map(Player::getUsername)
             .collect(Collectors.toCollection(ArrayList::new)),
         str -> this.proxyServer.getPlayer(str).orElse(null),
-        aud -> aud
+        aud -> aud,
+        (audience, permission) -> ((CommandSource) audience).getPermissionValue(permission)
+            .toAdventureTriState()
     );
     final BrigadierCommand command = new BrigadierCommand(node);
     final CommandMeta meta = commandManager.metaBuilder(command)

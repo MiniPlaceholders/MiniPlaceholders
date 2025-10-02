@@ -2,8 +2,8 @@ package io.github.miniplaceholders.common.command.node;
 
 import io.github.miniplaceholders.api.Expansion;
 import io.github.miniplaceholders.api.MiniPlaceholders;
+import io.github.miniplaceholders.common.command.PermissionTester;
 import net.kyori.adventure.audience.Audience;
-import net.kyori.adventure.permission.PermissionChecker;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
@@ -15,7 +15,7 @@ import java.util.Collection;
 import static io.github.miniplaceholders.common.command.CommandConstants.FOOTER;
 import static net.kyori.adventure.text.minimessage.MiniMessage.miniMessage;
 
-public final class ExpansionsNode implements Node {
+public record ExpansionsNode(PermissionTester permissionTester) implements Node {
   public void showExpansions(Audience audience) {
     TextComponent.Builder builder = Component.text()
         .appendNewline()
@@ -65,9 +65,7 @@ public final class ExpansionsNode implements Node {
 
   @Override
   public boolean hasPermission(Audience audience) {
-    return audience.get(PermissionChecker.POINTER)
-        .map(checker -> checker.test(permission()))
-        .orElse(false);
+    return permissionTester.permissionValue(audience, permission()).toBooleanOrElse(false);
   }
 
   @Override
