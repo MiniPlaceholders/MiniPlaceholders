@@ -54,7 +54,7 @@ public final class FabricMod implements ModInitializer, PlaceholdersPlugin {
           return switch (Permissions.getPermissionValue(commandSourceStack, permission)) {
             case TRUE -> TriState.TRUE;
             case FALSE -> TriState.FALSE;
-            case DEFAULT -> TriState.NOT_SET;
+            case DEFAULT -> commandSourceStack.hasPermission(3) ? TriState.TRUE : TriState.NOT_SET;
           };
         }
     );

@@ -7,6 +7,7 @@ import io.papermc.paper.command.brigadier.CommandSourceStack;
 import io.papermc.paper.plugin.bootstrap.BootstrapContext;
 import io.papermc.paper.plugin.bootstrap.PluginBootstrap;
 import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
+import net.kyori.adventure.util.TriState;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -32,7 +33,10 @@ public final class PaperBootstrap implements PluginBootstrap {
             CommandSourceStack::getSender,
             (audience, permission) -> {
               final CommandSender sender = (CommandSender) audience;
-              return sender.permissionValue(permission);
+              final TriState triState = sender.permissionValue(permission);
+              return triState == TriState.NOT_SET
+                  ? sender.isOp() ? TriState.TRUE : TriState.NOT_SET
+                  : triState;
             }
         );
         bootstrapContext.getLifecycleManager()
