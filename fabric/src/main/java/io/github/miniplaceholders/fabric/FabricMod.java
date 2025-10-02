@@ -1,80 +1,76 @@
 package io.github.miniplaceholders.fabric;
 
+import com.mojang.brigadier.tree.LiteralCommandNode;
 import io.github.miniplaceholders.common.PlaceholdersPlugin;
-import io.github.miniplaceholders.common.command.PlaceholdersCommand;
+import io.github.miniplaceholders.common.command.BrigadierCommandProvider;
 import io.github.miniplaceholders.connect.InternalPlatform;
-import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.server.MinecraftServer;
-import org.incendo.cloud.SenderMapper;
-import org.incendo.cloud.execution.ExecutionCoordinator;
-import org.incendo.cloud.fabric.FabricServerCommandManager;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
 public final class FabricMod implements ModInitializer, PlaceholdersPlugin {
-    private final ComponentLogger componentLogger = ComponentLogger.logger("miniplaceholders");
-    private MinecraftServer minecraftServer;
+  private final ComponentLogger componentLogger = ComponentLogger.logger("miniplaceholders");
+  private MinecraftServer minecraftServer;
 
-    @Override
-    public void onInitialize() {
-        componentLogger.info("Starting MiniPlaceholders Fabric");
-        InternalPlatform.platform(InternalPlatform.FABRIC);
+  @Override
+  public void onInitialize() {
+    componentLogger.info("Starting MiniPlaceholders Fabric");
+    InternalPlatform.platform(InternalPlatform.FABRIC);
 
-        ServerLifecycleEvents.SERVER_STARTING.register(minecraftServer -> {
-            this.minecraftServer = minecraftServer;
-            try {
-                final Path expansionsFolder = FabricLoader.getInstance().getConfigDir()
-                        .resolve("miniplaceholders").resolve("expansions");
-                this.loadProvidedExpansions(expansionsFolder);
-            } catch (Throwable e) {
-                componentLogger.error("Unable to load expansion providers", e);
-            }
-        });
+    ServerLifecycleEvents.SERVER_STARTING.register(minecraftServer -> {
+      this.minecraftServer = minecraftServer;
+      try {
+        final Path expansionsFolder = FabricLoader.getInstance().getConfigDir()
+            .resolve("miniplaceholders").resolve("expansions");
+        this.loadProvidedExpansions(expansionsFolder);
+      } catch (Throwable e) {
+        componentLogger.error("Unable to load expansion providers", e);
+      }
+    });
 
-        this.registerPlatformCommand();
-    }
+    this.registerPlatformCommand();
+  }
 
-    @Override
-    public void registerPlatformCommand() {
-        final FabricServerCommandManager<CommandSourceStack> commandManager = new FabricServerCommandManager<>(
-                ExecutionCoordinator.simpleCoordinator(),
-                SenderMapper.identity()
-        );
-        PlaceholdersCommand.<CommandSourceStack>builder()
-                .hasPermissionCheck((source, permission) -> Permissions.check(source, permission, 4))
-                .toAudience(string -> this.minecraftServer.getPlayerList().getPlayerByName(string))
-                .playerSuggestions(() -> new ArrayList<>(List.of(this.minecraftServer.getPlayerNames())))
-                .manager(commandManager)
-                .command("miniplaceholders")
-                .build()
-                .register();
-    }
+  @Override
+  public void registerPlatformCommand() {
+    final LiteralCommandNode<CommandSourceStack> node = BrigadierCommandProvider.provideCommand(
+        "miniplaceholders",
+        () -> new ArrayList<>(List.of(this.minecraftServer.getPlayerNames())),
+        string -> this.minecraftServer.getPlayerList().getPlayerByName(string),
+        aud -> aud
+    );
+    CommandRegistrationCallback.EVENT.register(
+        (dispatcher, ctx, selection) ->
+            dispatcher.getRoot().addChild(node)
+    );
+  }
 
-    @Override
-    public boolean platformHasComplementLoaded(String complementName) {
-        return FabricLoader.getInstance().isModLoaded(complementName);
-    }
+  @Override
+  public boolean platformHasComplementLoaded(String complementName) {
+    return FabricLoader.getInstance().isModLoaded(complementName);
+  }
 
-    @Override
-    public void logError(Component component) {
-        componentLogger.error(component);
-    }
+  @Override
+  public void logError(Component component) {
+    componentLogger.error(component);
+  }
 
-    @Override
-    public void logInfo(Component component) {
-        componentLogger.info(component);
-    }
+  @Override
+  public void logInfo(Component component) {
+    componentLogger.info(component);
+  }
 
-    @Override
-    public Object platformServerInstance() {
-        return this.minecraftServer;
-    }
+  @Override
+  public Object platformServerInstance() {
+    return this.minecraftServer;
+  }
 }
