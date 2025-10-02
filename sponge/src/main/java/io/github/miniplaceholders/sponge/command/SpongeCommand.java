@@ -34,6 +34,7 @@ public final class SpongeCommand {
     final ExpansionsNode expansionsNode = new ExpansionsNode(permissionTester);
     final ParseNode parseNode = new ParseNode(playerSuggestions, audienceConverter, permissionTester);
     final ParseRelNode parseRelNode = new ParseRelNode(playerSuggestions, audienceConverter, permissionTester);
+    final ParseGlobalNode parseGlobalNode = new ParseGlobalNode(permissionTester);
     final HelpNode helpNode = new HelpNode(permissionTester);
 
     final Parameter.Value<String> sourceParameter = Parameter.string().key("source")
@@ -88,6 +89,18 @@ public final class SpongeCommand {
                   final String message = ctx.requireOne(messageParameter);
 
                   parseRelNode.parseString(executor, source, relational, message);
+
+                  return CommandResult.success();
+                })
+                .build(),
+            List.of("parseglobal"), Command.builder()
+                .permission(parseGlobalNode.permission())
+                .addParameter(messageParameter)
+                .executor(ctx -> {
+                  final Audience executor = audienceExtractor.extract(ctx.cause());
+                  final String message = ctx.requireOne(messageParameter);
+
+                  parseGlobalNode.parseString(executor, message);
 
                   return CommandResult.success();
                 })

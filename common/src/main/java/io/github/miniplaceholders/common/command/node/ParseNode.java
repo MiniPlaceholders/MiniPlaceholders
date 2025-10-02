@@ -18,7 +18,7 @@ public record ParseNode(
         AudienceConverter audienceConverter,
         PermissionTester permissionChecker
 ) implements Node, PlayerSuggestionProvider {
-  public void parseString(Audience sender, String source, String toParse) {
+  public void parseString(final Audience sender, final String source, final String toParse) {
     final Audience objective = "me".equals(source)
         ? sender
         : audienceConverter.convert(source);
@@ -36,7 +36,7 @@ public record ParseNode(
   }
 
   @Override
-  public boolean hasPermission(Audience audience) {
+  public boolean hasPermission(final Audience audience) {
     return permissionChecker.permissionValue(audience, permission()).toBooleanOrElse(false);
   }
 
