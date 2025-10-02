@@ -1,10 +1,10 @@
 package io.github.miniplaceholders.common.command;
 
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.ArrayList;
 
 @FunctionalInterface
 public interface PlayerSuggestions {
-  @NotNull ArrayList<String> suggest();
+  @NonNull ArrayList<String> suggest();
 }

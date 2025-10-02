@@ -9,15 +9,17 @@ import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Collection;
 
 import static io.github.miniplaceholders.common.command.CommandConstants.FOOTER;
 import static net.kyori.adventure.text.minimessage.MiniMessage.miniMessage;
 
+@NullMarked
 public record ExpansionsNode(PermissionTester permissionTester) implements Node {
   public void showExpansions(Audience audience) {
-    TextComponent.Builder builder = Component.text()
+    final TextComponent.Builder builder = Component.text()
         .appendNewline()
         .append(miniMessage().deserialize(
             "<gradient:aqua:white:aqua><st><b>          </st> <gradient:#4d8bff:#a4ff96>MiniPlaceholders</gradient> Expansions <st><b>          </gradient>"
@@ -32,7 +34,7 @@ public record ExpansionsNode(PermissionTester permissionTester) implements Node 
           .append(Component.text()
               .content("[MiniPlaceholders Expansions]")
               .color(NamedTextColor.BLUE)
-              .clickEvent(ClickEvent.openUrl("https://github.com/MiniPlaceholders/MiniPlaceholders/wiki/Placeholders"))
+              .clickEvent(ClickEvent.openUrl("https://miniplaceholders.github.io/docs/user-guide/Placeholders"))
               .hoverEvent(Component.text("Search Expansions", NamedTextColor.GOLD)));
     } else {
       builder.append(expansions.stream()

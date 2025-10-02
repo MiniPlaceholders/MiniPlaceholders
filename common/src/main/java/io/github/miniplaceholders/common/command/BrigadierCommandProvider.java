@@ -11,7 +11,9 @@ import io.github.miniplaceholders.common.command.node.HelpNode;
 import io.github.miniplaceholders.common.command.node.ParseNode;
 import io.github.miniplaceholders.common.command.node.RootNode;
 import net.kyori.adventure.audience.Audience;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public final class BrigadierCommandProvider {
   public static <A> LiteralCommandNode<A> provideCommand(
       String command,
@@ -35,7 +37,7 @@ public final class BrigadierCommandProvider {
       }
     }
 
-    final var builder = LiteralArgumentBuilder.<A>literal(command);
+    final LiteralArgumentBuilder<A> builder = LiteralArgumentBuilder.literal(command);
     final ExpansionsNode expansionsNode = new ExpansionsNode(permissionChecker);
     final HelpNode helpNode = new HelpNode(permissionChecker);
     final ParseNode parseNode = new ParseNode(playersSuggestions, audienceConverter, permissionChecker);

@@ -1,6 +1,7 @@
 package io.github.miniplaceholders.common.loader;
 
 import io.github.miniplaceholders.api.provider.ExpansionProvider;
+import org.jspecify.annotations.NullMarked;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -17,6 +18,7 @@ import java.util.Properties;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
 
+@NullMarked
 public final class ExpansionProviderLoader {
 
   public static List<ExpansionProvider> loadProvidersFromFolder(final Path folferPath) throws Exception {

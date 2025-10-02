@@ -21,7 +21,7 @@ public record ParseNode(
         PermissionTester permissionChecker
 ) implements Node {
   public List<String> providePlayerSuggestions() {
-    final var suggestions = playerSuggestions.suggest();
+    final List<String> suggestions = playerSuggestions.suggest();
     suggestions.add("me");
     return suggestions;
   }

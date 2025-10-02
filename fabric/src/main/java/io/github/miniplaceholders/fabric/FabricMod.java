@@ -5,7 +5,7 @@ import io.github.miniplaceholders.common.PlaceholdersPlugin;
 import io.github.miniplaceholders.common.command.BrigadierCommandProvider;
 import io.github.miniplaceholders.connect.InternalPlatform;
 import me.lucko.fabric.api.permissions.v0.Permissions;
-import net.fabricmc.api.ModInitializer;
+import net.fabricmc.api.DedicatedServerModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.loader.api.FabricLoader;
@@ -19,12 +19,12 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class FabricMod implements ModInitializer, PlaceholdersPlugin {
+public final class FabricMod implements DedicatedServerModInitializer, PlaceholdersPlugin {
   private final ComponentLogger componentLogger = ComponentLogger.logger("miniplaceholders");
   private MinecraftServer minecraftServer;
 
   @Override
-  public void onInitialize() {
+  public void onInitializeServer() {
     componentLogger.info("Starting MiniPlaceholders Fabric");
     InternalPlatform.platform(InternalPlatform.FABRIC);
 
