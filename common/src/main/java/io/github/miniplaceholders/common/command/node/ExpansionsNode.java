@@ -47,7 +47,7 @@ public record ExpansionsNode(PermissionTester permissionTester) implements Node 
                 .content(expansion.name())
                 .hoverEvent(expansionMetaBuilder.build())
                 .build();
-          }).collect(Component.toComponent(Component.text(" | "))));
+          }).collect(Component.toComponent(Component.text(" | ", NamedTextColor.DARK_GRAY))));
     }
     builder.appendNewline().append(FOOTER);
     audience.sendMessage(builder.build());

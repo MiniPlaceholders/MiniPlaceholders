@@ -22,21 +22,21 @@ public record ParseNode(
         PermissionTester permissionChecker
 ) implements Node, PlayerCompleterNode {
   public void parseString(final Audience sender, final String providedSource, final String providedString) {
-    final Audience objective = switch (providedSource) {
+    final Audience source = switch (providedSource) {
       case "me" -> sender;
       case "--null" -> Audience.empty();
       default -> audienceConverter.convert(providedSource);
     };
-    if (objective == null) {
+    if (source == null) {
       sender.sendMessage(text("You must specify a valid player", RED));
       return;
     }
 
-    final TagResolver resolver = objective == Audience.empty()
+    final TagResolver resolver = source == Audience.empty()
         ? MiniPlaceholders.globalPlaceholders()
         : MiniPlaceholders.audienceGlobalPlaceholders();
 
-    final Component parsed = miniMessage().deserialize(providedString, objective, resolver);
+    final Component parsed = miniMessage().deserialize(providedString, source, resolver);
     sender.sendMessage(parsed);
   }
 
