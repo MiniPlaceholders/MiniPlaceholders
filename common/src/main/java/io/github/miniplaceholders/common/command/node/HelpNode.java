@@ -9,7 +9,7 @@ import static io.github.miniplaceholders.common.command.CommandConstants.HELP;
 @NullMarked
 public record HelpNode(PermissionTester permissionChecker) implements Node {
   public void execute(final Audience audience) {
-    audience.sendMessage(HELP);
+    audience.sendMessage(HELP.get());
   }
 
   @Override

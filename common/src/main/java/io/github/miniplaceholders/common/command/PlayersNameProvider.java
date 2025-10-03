@@ -5,6 +5,6 @@ import org.jspecify.annotations.NonNull;
 import java.util.ArrayList;
 
 @FunctionalInterface
-public interface PlayerSuggestions {
-  @NonNull ArrayList<String> suggest();
+public interface PlayersNameProvider {
+  @NonNull ArrayList<String> provide();
 }

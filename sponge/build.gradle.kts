@@ -11,6 +11,8 @@ dependencies {
     implementation(projects.miniplaceholdersCommon)
     implementation(projects.miniplaceholdersApi)
     implementation(projects.miniplaceholdersConnect)
+
+    compileOnly(libs.jspecify)
 }
 
 sponge {

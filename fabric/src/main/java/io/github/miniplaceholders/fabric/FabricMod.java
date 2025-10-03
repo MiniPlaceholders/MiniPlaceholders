@@ -2,7 +2,7 @@ package io.github.miniplaceholders.fabric;
 
 import com.mojang.brigadier.tree.LiteralCommandNode;
 import io.github.miniplaceholders.common.PlaceholdersPlugin;
-import io.github.miniplaceholders.common.command.BrigadierCommandProvider;
+import io.github.miniplaceholders.common.command.brigadier.BrigadierCommandProvider;
 import io.github.miniplaceholders.connect.InternalPlatform;
 import me.lucko.fabric.api.permissions.v0.Permissions;
 import net.fabricmc.api.DedicatedServerModInitializer;
