@@ -4,7 +4,7 @@ import io.github.miniplaceholders.api.MiniPlaceholders;
 import io.github.miniplaceholders.api.types.RelationalAudience;
 import io.github.miniplaceholders.common.command.AudienceConverter;
 import io.github.miniplaceholders.common.command.PermissionTester;
-import io.github.miniplaceholders.common.command.PlayerSuggestions;
+import io.github.miniplaceholders.common.command.PlayersNameProvider;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import org.jspecify.annotations.NullMarked;
@@ -15,10 +15,10 @@ import static net.kyori.adventure.text.minimessage.MiniMessage.miniMessage;
 
 @NullMarked
 public record ParseRelNode(
-    PlayerSuggestions playerSuggestions,
+    PlayersNameProvider playersNameProvider,
     AudienceConverter audienceConverter,
     PermissionTester permissionChecker
-) implements Node, PlayerSuggestionProvider {
+) implements Node, PlayerCompleterNode {
 
   public void parseString(final Audience sender, final String source, final String relational, final String toParse) {
     final Audience senderTarget = "me".equals(source)

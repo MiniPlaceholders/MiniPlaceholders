@@ -14,11 +14,11 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public final class BrigadierCommandProvider {
   public static <A> LiteralCommandNode<A> provideCommand(
-      String command,
-      PlayerSuggestions playersSuggestions,
-      AudienceConverter audienceConverter,
-      AudienceExtractor<A> audienceExtractor,
-      PermissionTester permissionChecker
+      final String command,
+      final PlayersNameProvider playersSuggestions,
+      final AudienceConverter audienceConverter,
+      final AudienceExtractor<A> audienceExtractor,
+      final PermissionTester permissionChecker
   ) {
     // Inspired by MiniMotd command implementation (MIT licenced)
     class WrappingExecutor implements Command<A> {
@@ -35,15 +35,14 @@ public final class BrigadierCommandProvider {
       }
     }
 
-    final LiteralArgumentBuilder<A> builder = LiteralArgumentBuilder.literal(command);
+    // Command Nodes
+    final RootNode rootNode = new RootNode(permissionChecker);
     final ExpansionsNode expansionsNode = new ExpansionsNode(permissionChecker);
     final HelpNode helpNode = new HelpNode(permissionChecker);
     final ParseNode parseNode = new ParseNode(playersSuggestions, audienceConverter, permissionChecker);
     final ParseRelNode parseRelNode = new ParseRelNode(playersSuggestions, audienceConverter, permissionChecker);
-    final ParseGlobalNode parseGlobalNode = new ParseGlobalNode(permissionChecker);
-    final RootNode rootNode = new RootNode(permissionChecker);
 
-    return builder
+    return LiteralArgumentBuilder.<A>literal(command)
         .requires(src -> rootNode.hasPermission(audienceExtractor.extract(src)))
         .executes(new WrappingExecutor(rootNode::execute))
         .then(LiteralArgumentBuilder.<A>literal("expansions")
@@ -91,19 +90,6 @@ public final class BrigadierCommandProvider {
                         })
                     )
                 )
-            )
-        )
-        .then(LiteralArgumentBuilder.<A>literal("parseglobal")
-            .requires(src -> parseGlobalNode.hasPermission(audienceExtractor.extract(src)))
-            .then(RequiredArgumentBuilder.<A, String>argument("message", StringArgumentType.greedyString())
-                .executes(ctx -> {
-                  final Audience audience = audienceExtractor.extract(ctx.getSource());
-                  final String message = StringArgumentType.getString(ctx, "message");
-
-                  parseGlobalNode.parseString(audience, message);
-
-                  return Command.SINGLE_SUCCESS;
-                })
             )
         )
         .build();

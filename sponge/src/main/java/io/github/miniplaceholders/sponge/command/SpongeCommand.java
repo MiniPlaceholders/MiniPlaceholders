@@ -22,19 +22,19 @@ import java.util.stream.Collectors;
 public final class SpongeCommand {
   public static Command.Parameterized provideCommand() {
     final AudienceExtractor<CommandCause> audienceExtractor = CommandCause::audience;
-    final PermissionTester permissionTester = (audience, permission) -> TriState.NOT_SET;
-    final PlayerSuggestions playerSuggestions = () -> Sponge.server().onlinePlayers()
+    final PermissionTester permissionTester = (audience, permission) -> TriState.NOT_SET; // Not really used here
+    final PlayersNameProvider playerSuggestions = () -> Sponge.server().onlinePlayers()
         .stream()
         .map(ServerPlayer::user)
         .map(User::name)
         .collect(Collectors.toCollection(ArrayList::new));
     final AudienceConverter audienceConverter = string -> Sponge.server().player(string).orElse(null);
 
+    // Command Nodes
     final RootNode rootNode = new RootNode(permissionTester);
     final ExpansionsNode expansionsNode = new ExpansionsNode(permissionTester);
     final ParseNode parseNode = new ParseNode(playerSuggestions, audienceConverter, permissionTester);
     final ParseRelNode parseRelNode = new ParseRelNode(playerSuggestions, audienceConverter, permissionTester);
-    final ParseGlobalNode parseGlobalNode = new ParseGlobalNode(permissionTester);
     final HelpNode helpNode = new HelpNode(permissionTester);
 
     final Parameter.Value<String> sourceParameter = Parameter.string().key("source")
@@ -89,18 +89,6 @@ public final class SpongeCommand {
                   final String message = ctx.requireOne(messageParameter);
 
                   parseRelNode.parseString(executor, source, relational, message);
-
-                  return CommandResult.success();
-                })
-                .build(),
-            List.of("parseglobal"), Command.builder()
-                .permission(parseGlobalNode.permission())
-                .addParameter(messageParameter)
-                .executor(ctx -> {
-                  final Audience executor = audienceExtractor.extract(ctx.cause());
-                  final String message = ctx.requireOne(messageParameter);
-
-                  parseGlobalNode.parseString(executor, message);
 
                   return CommandResult.success();
                 })
