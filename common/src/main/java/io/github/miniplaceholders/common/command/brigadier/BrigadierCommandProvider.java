@@ -29,7 +29,7 @@ public final class BrigadierCommandProvider {
       }
 
       @Override
-      public int run(CommandContext<A> commandContext) {
+      public int run(final CommandContext<A> commandContext) {
         executor.execute(audienceExtractor.extract(commandContext.getSource()));
         return Command.SINGLE_SUCCESS;
       }
