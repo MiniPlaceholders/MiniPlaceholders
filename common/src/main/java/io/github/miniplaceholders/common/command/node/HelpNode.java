@@ -1,33 +1,24 @@
 package io.github.miniplaceholders.common.command.node;
 
+import io.github.miniplaceholders.common.command.PermissionTester;
 import net.kyori.adventure.audience.Audience;
-import net.kyori.adventure.text.Component;
-import org.incendo.cloud.Command;
+import org.jspecify.annotations.NullMarked;
 
-import static io.github.miniplaceholders.common.command.PlaceholdersCommand.FOOTER;
-import static io.github.miniplaceholders.common.command.PlaceholdersCommand.HEADER;
-import static net.kyori.adventure.text.Component.newline;
-import static net.kyori.adventure.text.Component.text;
-import static net.kyori.adventure.text.minimessage.MiniMessage.miniMessage;
+import static io.github.miniplaceholders.common.command.CommandConstants.HELP;
 
-public final class HelpNode<S extends Audience> implements Node<S> {
-  private static final Component HELP = text()
-          .append(newline(), HEADER)
-          .append(newline(), miniMessage().deserialize(
-                  "<gradient:#9694ff:#5269ff>Commands:</gradient>"))
-          .append(newline(), miniMessage().deserialize(
-                  "<gradient:aqua:#94d1ff>/miniplaceholders</gradient> <aqua>help</aqua>"))
-          .append(newline(), miniMessage().deserialize(
-                  "<gradient:aqua:#94d1ff>/miniplaceholders</gradient> <aqua>parse</aqua> <#8fadff><player | me></#8fadff> <#99ffb6><player></#99ffb6>"))
-          .append(newline(), miniMessage().deserialize(
-                  "<gradient:aqua:#94d1ff>/miniplaceholders</gradient> <aqua>expansions</aqua>"))
-          .append(newline(), FOOTER)
-          .build();
+@NullMarked
+public record HelpNode(PermissionTester permissionChecker) implements Node {
+  public void execute(final Audience audience) {
+    audience.sendMessage(HELP.get());
+  }
 
   @Override
-  public Command.Builder<S> apply(Command.Builder<S> rootBuilder) {
-    return rootBuilder.literal("help")
-            .permission("miniplaceholders.command.help")
-            .handler(handler -> handler.sender().sendMessage(HELP));
+  public boolean hasPermission(Audience audience) {
+    return permissionChecker.permissionValue(audience, permission()).toBooleanOrElse(false);
+  }
+
+  @Override
+  public String permission() {
+    return "miniplaceholders.command.help";
   }
 }

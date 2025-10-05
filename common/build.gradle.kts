@@ -9,13 +9,11 @@ dependencies {
     implementation(libs.desertwell) {
         exclude("org.json")
     }
-    implementation(libs.cloud.core)
     implementation(libs.unnamedinject)
-    implementation(libs.cloud.extras) {
-        isTransitive = false
-    }
     compileOnly(libs.adventure.api)
     compileOnly(libs.adventure.minimessage)
+    compileOnly(libs.jspecify)
+    compileOnly(libs.brigadier)
 }
 
 sourceSets {

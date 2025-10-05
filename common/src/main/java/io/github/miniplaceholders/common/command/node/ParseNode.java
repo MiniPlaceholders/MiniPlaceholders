@@ -2,15 +2,12 @@ package io.github.miniplaceholders.common.command.node;
 
 import io.github.miniplaceholders.api.MiniPlaceholders;
 import io.github.miniplaceholders.common.command.AudienceConverter;
-import io.github.miniplaceholders.common.command.PlayerSuggestions;
+import io.github.miniplaceholders.common.command.PermissionTester;
+import io.github.miniplaceholders.common.command.PlayersNameProvider;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
-import org.incendo.cloud.Command;
-import org.incendo.cloud.component.CommandComponent;
-import org.incendo.cloud.component.TypedCommandComponent;
-import org.incendo.cloud.description.Description;
-import org.incendo.cloud.parser.standard.StringParser;
-import org.incendo.cloud.suggestion.SuggestionProvider;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
 
@@ -18,48 +15,45 @@ import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.format.NamedTextColor.RED;
 import static net.kyori.adventure.text.minimessage.MiniMessage.miniMessage;
 
-public record ParseNode<S extends Audience>(
-        PlayerSuggestions playerSuggestions,
-        AudienceConverter audienceConverter
-) implements Node<S> {
+@NullMarked
+public record ParseNode(
+        PlayersNameProvider playersNameProvider,
+        AudienceConverter audienceConverter,
+        PermissionTester permissionChecker
+) implements Node, PlayerCompleterNode {
+  public void parseString(final Audience sender, final String providedSource, final String providedString) {
+    final Audience source = switch (providedSource) {
+      case "me" -> sender;
+      case "--null" -> Audience.empty();
+      default -> audienceConverter.convert(providedSource);
+    };
+    if (source == null) {
+      sender.sendMessage(text("You must specify a valid player", RED));
+      return;
+    }
+
+    final TagResolver resolver = source == Audience.empty()
+        ? MiniPlaceholders.globalPlaceholders()
+        : MiniPlaceholders.audienceGlobalPlaceholders();
+
+    final Component parsed = miniMessage().deserialize(providedString, source, resolver);
+    sender.sendMessage(parsed);
+  }
+
   @Override
-  public Command.Builder<S> apply(Command.Builder<S> rootBuilder) {
-    final TypedCommandComponent<S, String> sourceArgument = CommandComponent.<S, String>ofType(String.class, "source")
-            .parser(StringParser.stringParser(StringParser.StringMode.SINGLE))
-            .description(Description.of("The source from which the message will be parsed"))
-            .suggestionProvider(SuggestionProvider.blockingStrings((ctx, st) -> {
-              final List<String> suggestions = playerSuggestions.suggest();
-              suggestions.add("me");
-              return suggestions;
-            }))
-            .build();
-    final TypedCommandComponent<S, String> stringArgument = CommandComponent.<S, String>ofType(String.class, "message")
-            .parser(StringParser.greedyStringParser())
-            .description(Description.of("Message to be parsed"))
-            .build();
+  public boolean hasPermission(final Audience audience) {
+    return permissionChecker.permissionValue(audience, permission()).toBooleanOrElse(false);
+  }
 
-    return rootBuilder.literal("parse")
-            .argument(sourceArgument)
-            .argument(stringArgument)
-            .permission("miniplaceholders.command.parse")
-            .handler(handler -> {
-              final String source = handler.get(sourceArgument);
+  @Override
+  public String permission() {
+    return "miniplaceholders.command.parse";
+  }
 
-              final Audience objective = "me".equals(source)
-                      ? handler.sender()
-                      : audienceConverter.convert(source);
-              if (objective == null){
-                handler.sender().sendMessage(text("You must specify a valid player", RED));
-                return;
-              }
-              final String toParse = handler.get(stringArgument);
-
-              final Component parsed = miniMessage().deserialize(
-                      toParse,
-                      objective,
-                      MiniPlaceholders.audienceGlobalPlaceholders()
-              );
-              handler.sender().sendMessage(parsed);
-            });
+  @Override
+  public List<String> providePlayerSuggestions() {
+    final List<String> suggestions = PlayerCompleterNode.super.providePlayerSuggestions();
+    suggestions.add("--null");
+    return suggestions;
   }
 }

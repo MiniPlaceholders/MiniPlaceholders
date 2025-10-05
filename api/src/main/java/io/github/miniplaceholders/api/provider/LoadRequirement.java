@@ -82,7 +82,7 @@ public sealed interface LoadRequirement {
    * @return a load requirement that checks for a present class
    * @since 3.1.0
    */
-  static LoadRequirement presentClass(
+  static LoadRequirement requiredClass(
       @Pattern("^([a-z_][a-z0-9_]*)(\\.[a-z_][a-z0-9_]*)*(\\.[A-Z][A-Za-z0-9_]*)$") final String clazz
   ) {
     requireNonNull(clazz);

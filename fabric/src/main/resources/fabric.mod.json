@@ -8,14 +8,14 @@
     "4drian3d"
   ],
   "contact": {
-    "homepage": "https://github.com/MiniPlaceholders/MiniPlaceholders",
+    "homepage": "https://miniplaceholders.github.io/",
     "sources": "https://github.com/MiniPlaceholders/MiniPlaceholders",
     "issues": "https://github.com/MiniPlaceholders/MiniPlaceholders/issues"
   },
   "license": "Apache-2",
   "environment": "server",
   "entrypoints": {
-    "main": [
+    "server": [
       "io.github.miniplaceholders.fabric.FabricMod"
     ]
   },
@@ -23,9 +23,8 @@
     "fabricloader": ">=0.14.19",
     "fabric": "*",
     "java": ">=21",
-    "cloud": "*",
-    "adventure-platform-fabric": "*",
-    "minecraft": ">=1.21.6",
-    "fabric-permissions-api-v0": "*"
+    "adventure-platform-fabric": "~6.6.0",
+    "minecraft": ">=1.21.6 <=1.21.8",
+    "fabric-permissions-api-v0": "~0.4.1"
   }
 }
