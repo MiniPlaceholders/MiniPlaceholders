@@ -1,6 +1,7 @@
 package io.github.miniplaceholders.test.placeholder;
 
 import io.github.miniplaceholders.api.Expansion;
+import io.github.miniplaceholders.api.placeholder.PlaceholderMetadata;
 import io.github.miniplaceholders.api.types.RelationalAudience;
 import io.github.miniplaceholders.test.MiniTest;
 import io.github.miniplaceholders.test.instances.TestAudience;
@@ -10,6 +11,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.Tag;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -86,5 +88,30 @@ public class RelationalPlaceholderTest implements MiniTest {
         RelationalAudience.from(player, second), expansion.relationalPlaceholders()));
     assertContentEquals(emptyExpected, MiniMessage.miniMessage().deserialize(string,
         RelationalAudience.from(player, emptyAudience), expansion.relationalPlaceholders()));
+  }
+
+  @Test
+  @DisplayName("RelationalPlaceholder Builder creation")
+  void builderRelationalPlaceholderCreation() {
+    final Expansion expansion = Expansion.builder("builder")
+        .relationalPlaceholder(
+            TestAudience.class,
+            builder -> builder.name("test")
+                .resolver((audience, relational, queue, ctx) -> {
+                  final String name = audience.name();
+                  final String relationalName = relational.name();
+                  return Tag.preProcessParsed(name + " and " + relationalName);
+                })
+                .metadata(PlaceholderMetadata.data("Builder Test", "Returns the Audience plus the Relational Audience combined Names"))
+                .targetFilter(target -> target.name().length() <= 16)
+        ).build();
+    final TestAudience audience = new TestAudience("4drian3d");
+    final TestAudience relational = new TestAudience("PepitoAlcachofa");
+    final RelationalAudience<@NotNull TestAudience> relationalAudience = RelationalAudience.from(audience, relational);
+
+    Component expected = Component.text("Our names are: 4drian3d and PepitoAlcachofa");
+    Component parsed = miniMessage().deserialize("Our names are: <builder_test>", relationalAudience, expansion.relationalPlaceholders());
+
+    assertContentEquals(expected, parsed);
   }
 }

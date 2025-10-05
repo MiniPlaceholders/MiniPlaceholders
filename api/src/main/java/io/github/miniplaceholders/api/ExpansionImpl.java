@@ -229,6 +229,24 @@ final class ExpansionImpl implements Expansion {
     }
 
     @Override
+    public <A extends Audience> Expansion.Builder relationalPlaceholder(
+        final @NotNull Class<A> targetClass,
+        final @NotNull RelationalPlaceholder.Builder.Provider<A> builderProvider
+    ) {
+      requireNonNull(targetClass, "target class");
+      requireNonNull(builderProvider, "builder");
+
+      if (this.relationalPlaceholders == null) this.relationalPlaceholders = new HashSet<>();
+
+      final RelationalPlaceholder.Builder<A> builder = RelationalPlaceholder.builder(targetClass);
+      builderProvider.provide(builder);
+      final RelationalPlaceholder<@NotNull A> placeholder = builder.build(expansionPrefix);
+
+      this.relationalPlaceholders.add(placeholder);
+      return this;
+    }
+
+    @Override
     public @NotNull Builder globalPlaceholder(
             @Subst("time") @NotNull final String key,
             @NotNull final GlobalTagResolver function
