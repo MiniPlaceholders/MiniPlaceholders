@@ -38,8 +38,9 @@ adventure-serializer-legacy = { group = "net.kyori", name = "adventure-text-seri
 adventure-serializer-plain = { group = "net.kyori", name = "adventure-text-serializer-plain", version.ref = "adventure" }
 
 plugin-shadow = { module = "com.gradleup.shadow:shadow-gradle-plugin", version.ref = "shadow" }
-plugin-kotlin =  { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+plugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 plugin-dokka = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version.ref = "dokka" }
+plugin-runtask = { module = "xyz.jpenilla.run-velocity:xyz.jpenilla.run-velocity.gradle.plugin", version.ref = "runtask" }
 
 desertwell = { group = "net.william278", name = "DesertWell", version.ref = "desertwell" }
 

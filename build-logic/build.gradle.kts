@@ -5,6 +5,7 @@ plugins {
 dependencies {
     implementation(libs.plugin.shadow)
     implementation(libs.plugin.kotlin)
+    implementation(libs.plugin.runtask)
 }
 
 repositories {
