@@ -1,5 +1,8 @@
 import org.spongepowered.gradle.plugin.config.PluginLoaders
 import org.spongepowered.plugin.metadata.model.PluginDependency
+import java.nio.file.Files
+import java.nio.file.StandardCopyOption
+import kotlin.io.path.deleteIfExists
 
 plugins {
     id("miniplaceholders.auto.module")
@@ -38,6 +41,32 @@ sponge {
         dependency("spongeapi") {
             loadOrder(PluginDependency.LoadOrder.AFTER)
             optional(false)
+        }
+    }
+}
+
+tasks {
+    runServer {
+        val exampleExpansionProviderProject = project(":miniplaceholders-example-expansion-provider")
+        val exampleExpansionJarTask = exampleExpansionProviderProject.tasks.named<Jar>("jar")
+        dependsOn(exampleExpansionJarTask)
+        doFirst {
+            val expansionsDirectory = projectDir.resolve("run/config/miniplaceholders/expansions").toPath()
+            if (Files.exists(expansionsDirectory)) {
+                Files.newDirectoryStream(expansionsDirectory).use {
+                    it.forEach { file ->
+                        file.deleteIfExists()
+                    }
+                }
+            } else {
+                Files.createDirectories(expansionsDirectory)
+            }
+            val exampleExpansionFile = exampleExpansionJarTask.get().archiveFile.get().asFile.toPath()
+            Files.copy(
+                exampleExpansionFile,
+                expansionsDirectory.resolve(exampleExpansionFile.fileName),
+                StandardCopyOption.REPLACE_EXISTING
+            )
         }
     }
 }

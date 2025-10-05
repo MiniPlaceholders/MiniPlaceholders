@@ -1,3 +1,7 @@
+import java.nio.file.Files
+import java.nio.file.StandardCopyOption
+import kotlin.io.path.deleteIfExists
+
 plugins {
     id("miniplaceholders.auto.module")
     id("quiet-fabric-loom")
@@ -56,6 +60,34 @@ tasks {
     }
     shadowJar {
         configurations = listOf(shade)
+    }
+    // I know it's exactly the same logic for all modules,
+    // but for some reason in this module it only works
+    // if it's declared in the same project configuration
+    // and not with a plugin like with all other projects...
+    // ¯\_(ツ)_/¯
+    runServer {
+        val exampleExpansionProviderProject = project(":miniplaceholders-example-expansion-provider")
+        val exampleExpansionJarTask = exampleExpansionProviderProject.tasks.named<Jar>("jar")
+        dependsOn(exampleExpansionJarTask)
+        doFirst {
+            val expansionsDirectory = projectDir.resolve("run/config/miniplaceholders/expansions").toPath()
+            if (Files.exists(expansionsDirectory)) {
+                Files.newDirectoryStream(expansionsDirectory).use {
+                    it.forEach { file ->
+                        file.deleteIfExists()
+                    }
+                }
+            } else {
+                Files.createDirectories(expansionsDirectory)
+            }
+            val exampleExpansionFile = exampleExpansionJarTask.get().archiveFile.get().asFile.toPath()
+            Files.copy(
+                exampleExpansionFile,
+                expansionsDirectory.resolve(exampleExpansionFile.fileName),
+                StandardCopyOption.REPLACE_EXISTING
+            )
+        }
     }
 }
 
