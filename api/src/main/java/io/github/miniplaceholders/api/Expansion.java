@@ -216,6 +216,8 @@ public sealed interface Expansion permits ExpansionImpl {
     /**
      * Get a shorter ToString with the details of this expansion.
      * @return a shorter ToString
+     * @deprecated Starting with MiniPlaceholders 3.1, the way loaded expansions
+     *      are displayed in the console has changed, so this method is no longer used
      */
     @ApiStatus.Internal
     @Deprecated(forRemoval = true, since = "3.1.0")
