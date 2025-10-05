@@ -21,7 +21,7 @@ import java.util.jar.JarInputStream;
 @NullMarked
 public final class ExpansionProviderLoader {
 
-  public static List<ExpansionProvider> loadProvidersFromFolder(final Path folferPath) throws Exception {
+  public static List<Class<?>> loadProvidersFromFolder(final Path folferPath) throws Exception {
     if (Files.notExists(folferPath)) {
       try {
         Files.createDirectories(folferPath);
@@ -32,7 +32,7 @@ public final class ExpansionProviderLoader {
     }
     try (final DirectoryStream<Path> stream = Files.newDirectoryStream(folferPath,
             filtered -> Files.isRegularFile(filtered) && filtered.toString().endsWith(".jar"))) {
-      final List<ExpansionProvider> providerList = new ArrayList<>();
+      final List<Class<?>> providerList = new ArrayList<>();
       for (final Path possibleProviderPath : stream) {
         loadPossibleProviderFromPath(possibleProviderPath, providerList);
       }
@@ -42,7 +42,7 @@ public final class ExpansionProviderLoader {
 
   private static void loadPossibleProviderFromPath(
           final Path filePath,
-          final List<ExpansionProvider> providers
+          final List<Class<?>> providers
   ) throws Exception {
     String mainClassName = null;
     try (final JarInputStream jarStream = new JarInputStream(Files.newInputStream(filePath))) {
@@ -58,9 +58,7 @@ public final class ExpansionProviderLoader {
           mainClassName = properties.getProperty("provider-class");
           break;
         } catch (IOException e) {
-          throw new IOException(
-                  "Unable to read expansion_provider.properties from " + filePath + "file",
-                  e);
+          throw new IOException("Unable to read expansion_provider.properties from " + filePath + "file", e);
         }
       }
     }
@@ -74,7 +72,7 @@ public final class ExpansionProviderLoader {
 
   private static void loadFoundProvider(
           final String providerClass,
-          final List<ExpansionProvider> providers,
+          final List<Class<?>> providers,
           final Path providerPath
   ) throws Exception {
     //noinspection resource
@@ -90,10 +88,6 @@ public final class ExpansionProviderLoader {
     if (!ExpansionProvider.class.isAssignableFrom(mainClass) || mainClass.isInterface()) {
       return;
     }
-    try {
-      providers.add((ExpansionProvider) mainClass.getConstructors()[0].newInstance());
-    } catch (Exception e) {
-      throw new RuntimeException("Unable to create expansion provider from file " + providerPath, e);
-    }
+    providers.add(mainClass);
   }
 }

@@ -23,13 +23,13 @@ public interface PlaceholdersPlugin {
   default void registerPlatformCommand() {
   }
 
-  default void loadProvidedExpansions(Path providersFolderDirectory) throws Exception {
+  default void loadProvidedExpansions(final Path providersFolderDirectory) throws Exception {
     final List<Expansion> loadedExpansions = new ArrayList<>();
     final PlatformData platformData = new PlatformData(this.platformServerInstance(), this);
     final Injector injector = Injector.create(binder -> binder.bind(PlatformData.class).toInstance(platformData));
-    for (ExpansionProvider provider : ExpansionProviderLoader.loadProvidersFromFolder(providersFolderDirectory)) {
-      injector.injectMembers(provider);
-      ProviderLoadResult loadResult = tryLoad(provider, provider.loadRequirement());
+    for (Class<?> providerClass : ExpansionProviderLoader.loadProvidersFromFolder(providersFolderDirectory)) {
+      final ExpansionProvider provider = (ExpansionProvider) injector.getInstance(providerClass);
+      final ProviderLoadResult loadResult = tryLoad(provider, provider.loadRequirement());
       final ExpansionProvider loadedProvider = loadResult.provider();
       if (loadedProvider != null) {
         final Expansion loadedExpansion = loadedProvider.provideExpansion();
@@ -39,7 +39,7 @@ public interface PlaceholdersPlugin {
       }
       final FailedToLoadExpansion failedToLoad = loadResult.failed();
       logError(Component.text("The expansion "
-              + provider.getClass() +
+              + providerClass +
               " could not be loaded because the requirement " + failedToLoad.requirement() + " could not be resolved",
           NamedTextColor.RED));
     }

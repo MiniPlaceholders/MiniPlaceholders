@@ -5,9 +5,8 @@ import org.intellij.lang.annotations.Pattern;
 import org.jetbrains.annotations.ApiStatus;
 import org.jspecify.annotations.NullMarked;
 
+import java.util.Arrays;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static java.util.Objects.requireNonNull;
 
@@ -162,6 +161,12 @@ public sealed interface LoadRequirement {
   @ApiStatus.Internal
   @NullMarked
   record MultiLoadRequirement(LoadRequirement... requirements) implements LoadRequirement {
+    @Override
+    public String toString() {
+      return "MultiLoadRequirement{" +
+          "requirements=" + Arrays.toString(requirements) +
+          '}';
+    }
   }
 
   /**
@@ -175,11 +180,8 @@ public sealed interface LoadRequirement {
   record PlatformRequirement(Platform... platforms) implements LoadRequirement {
     @Override
     public String toString() {
-      final String platforms = Stream.of(this.platforms)
-          .map(Platform::name)
-          .collect(Collectors.joining(", "));
       return "PlatformRequirement{" +
-          "platforms=" + platforms +
+          "platforms=" + Arrays.toString(platforms()) +
           '}';
     }
   }
@@ -212,5 +214,11 @@ public sealed interface LoadRequirement {
   @ApiStatus.Internal
   @NullMarked
   record AnyOfRequirement(LoadRequirement... requirements) implements LoadRequirement {
+    @Override
+    public String toString() {
+      return "AnyOfRequirement{" +
+          "requirements=" + Arrays.toString(requirements) +
+          '}';
+    }
   }
 }
