@@ -1,7 +1,7 @@
 package io.github.miniplaceholders.api.utils;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.function.Supplier;
 
@@ -10,6 +10,7 @@ import java.util.function.Supplier;
  *
  * @since 1.0.0
  */
+@NullMarked
 public final class Conditions {
   private Conditions() {
   }
@@ -23,7 +24,7 @@ public final class Conditions {
    * @throws IllegalStateException if the provided string is empty
    * @since 1.0.0
    */
-  public static String nonNullOrEmptyString(@Nullable String string, @NotNull Supplier<@NotNull String> name) {
+  public static String nonNullOrEmptyString(final @Nullable String string, final Supplier<String> name) {
     if (string == null)
       throw new NullPointerException(name.get() + " cannot be null");
     if (string.isBlank())
@@ -40,7 +41,7 @@ public final class Conditions {
    * @throws IllegalStateException if the provided string is empty
    * @since 2.2.0
    */
-  public static String nonNullOrEmptyString(@Nullable String string, @NotNull String name) {
+  public static String nonNullOrEmptyString(final @Nullable String string, final String name) {
     if (string == null)
       throw new NullPointerException(name + " cannot be null");
     if (string.isBlank())
@@ -57,7 +58,7 @@ public final class Conditions {
    * @throws IllegalStateException if the provided string is empty
    * @since 1.0.0
    */
-  public static String nonEmptyString(@NotNull String string, @NotNull Supplier<@NotNull String> reason) {
+  public static String nonEmptyString(final String string, final Supplier<String> reason) {
     if (string.isBlank()) throw new IllegalStateException(reason.get());
     return string;
   }
@@ -71,7 +72,7 @@ public final class Conditions {
    * @throws IllegalStateException if the provided string is empty
    * @since 2.2.0
    */
-  public static String nonEmptyString(@NotNull String string, @NotNull String reason) {
+  public static String nonEmptyString(final String string, final String reason) {
     if (string.isBlank()) throw new IllegalStateException(reason);
     return string;
   }

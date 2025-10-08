@@ -10,9 +10,8 @@ import net.kyori.adventure.text.minimessage.tag.ParserDirective;
 import net.kyori.adventure.text.minimessage.tag.resolver.ArgumentQueue;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import org.junit.jupiter.api.Test;
-
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -35,7 +34,7 @@ public class TagTest implements MiniTest {
 
   public record FilteringTag(ArgumentQueue queue, Context context) implements Modifying {
     @Override
-    public Component apply(@NotNull Component current, int depth) {
+    public Component apply(@NonNull Component current, int depth) {
       if (depth != 0) {
         return Component.empty();
       }

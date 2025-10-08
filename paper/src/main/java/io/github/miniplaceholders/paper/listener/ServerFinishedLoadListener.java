@@ -6,7 +6,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.server.ServerLoadEvent;
 import org.bukkit.plugin.EventExecutor;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 public record ServerFinishedLoadListener(PaperPlugin plugin) implements Listener, EventExecutor {
 
@@ -16,9 +16,8 @@ public record ServerFinishedLoadListener(PaperPlugin plugin) implements Listener
         .registerEvent(ServerLoadEvent.class, this, EventPriority.HIGH, this, plugin);
   }
 
-
   @Override
-  public void execute(final @NotNull Listener listener, final @NotNull Event event) {
+  public void execute(final @NonNull Listener listener, final @NonNull Event event) {
     final ServerLoadEvent loadEvent = (ServerLoadEvent) event;
     if (loadEvent.getType() != ServerLoadEvent.LoadType.STARTUP) {
       return;

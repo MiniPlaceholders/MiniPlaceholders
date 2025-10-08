@@ -1,12 +1,11 @@
 package io.github.miniplaceholders.api.resolver;
 
-import org.jetbrains.annotations.Nullable;
-
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.minimessage.Context;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.ArgumentQueue;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Audience Placeholder based on an Audience

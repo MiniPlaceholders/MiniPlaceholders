@@ -11,16 +11,17 @@ import net.kyori.adventure.util.TriState;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @SuppressWarnings({"unused", "UnstableApiUsage"})
+@NullMarked
 public final class PaperBootstrap implements PluginBootstrap {
     @Override
-    public void bootstrap(@NotNull BootstrapContext bootstrapContext) {
+    public void bootstrap(final BootstrapContext bootstrapContext) {
         InternalPlatform.platform(InternalPlatform.PAPER);
         final LiteralCommandNode<CommandSourceStack> command = BrigadierCommandProvider.provideCommand(
             "miniplaceholders",

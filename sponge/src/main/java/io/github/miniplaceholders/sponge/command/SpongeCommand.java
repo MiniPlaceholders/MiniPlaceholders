@@ -3,7 +3,6 @@ package io.github.miniplaceholders.sponge.command;
 import io.github.miniplaceholders.common.command.*;
 import io.github.miniplaceholders.common.command.node.*;
 import net.kyori.adventure.audience.Audience;
-import net.kyori.adventure.util.TriState;
 import org.jspecify.annotations.NullMarked;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.*;
@@ -22,7 +21,7 @@ import java.util.stream.Collectors;
 public final class SpongeCommand {
   public static Command.Parameterized provideCommand() {
     final AudienceExtractor<CommandCause> audienceExtractor = CommandCause::audience;
-    final PermissionTester permissionTester = (audience, permission) -> TriState.NOT_SET; // Not really used here
+    final PermissionTester permissionTester = PermissionTester.NO_OP; // Not really used here
     final PlayersNameProvider playerSuggestions = () -> Sponge.server().onlinePlayers()
         .stream()
         .map(ServerPlayer::user)

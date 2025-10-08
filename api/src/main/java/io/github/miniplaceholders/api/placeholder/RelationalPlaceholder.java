@@ -9,7 +9,6 @@ import net.kyori.adventure.text.minimessage.Context;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.TagPattern;
 import net.kyori.adventure.text.minimessage.tag.resolver.ArgumentQueue;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NullMarked;
 
@@ -24,47 +23,47 @@ import static java.util.Objects.requireNonNull;
  * using a type-safe filter and a relational resolver.
  *
  * @param targetClass the target class, can be null
- * @param key the key of the entire placeholder
- * @param name the name of this placeholder
- * @param resolver the relational resolver,
- *                 in charge of obtaining data based on a relationship of 2 audiences
- * @param <A> the audience type, if not specified, will be a generic {@linkplain Audience}
- * @see RelationalTagResolver
+ * @param key         the key of the entire placeholder
+ * @param name        the name of this placeholder
+ * @param resolver    the relational resolver,
+ *                    in charge of obtaining data based on a relationship of 2 audiences
+ * @param <A>         the audience type, if not specified, will be a generic {@linkplain Audience}
  * @apiNote The {@link #key()} method returns the full name of the placeholder,
  * for example, if the placeholder is {@code <server_name>},
  * the {@linkplain #key()} method will return {@code server_name}.
+ * @see RelationalTagResolver
  */
 @NullMarked
 public record RelationalPlaceholder<A extends Audience>(
-        @Nullable Class<A> targetClass,
-        @TagPattern String key,
-        String name,
-        RelationalTagResolver<A> resolver
+    @Nullable Class<A> targetClass,
+    @TagPattern String key,
+    String name,
+    RelationalTagResolver<A> resolver
 ) implements Placeholder {
 
   /**
    * Static method capable of creating an instance of a relational placeholder.
    *
    * @param targetClass the target class, can be null
-   * @param key the key of the entire placeholder
-   * @param name the name of this placeholder
-   * @param resolver the relational resolver,
-   *                 in charge of obtaining data based on a relationship of 2 audiences
+   * @param key         the key of the entire placeholder
+   * @param name        the name of this placeholder
+   * @param resolver    the relational resolver,
+   *                    in charge of obtaining data based on a relationship of 2 audiences
+   * @param <A>         the audience type, if not specified, will be a generic {@linkplain Audience}
    * @return a new RelationalPlaceholder
-   * @param <A> the audience type, if not specified, will be a generic {@linkplain Audience}
    * @since 3.0.0
    */
   public static <A extends Audience> RelationalPlaceholder<A> relational(
-          @Nullable Class<A> targetClass,
-          @TagPattern String key,
-          String name,
-          RelationalTagResolver<A> resolver
+      final @Nullable Class<A> targetClass,
+      final @TagPattern String key,
+      final String name,
+      final RelationalTagResolver<A> resolver
   ) {
     return new RelationalPlaceholder<>(targetClass, requireNonNull(key), name, requireNonNull(resolver));
   }
 
   @Override
-  public @Nullable Tag resolve(String name, ArgumentQueue arguments, Context ctx) {
+  public @Nullable Tag resolve(final String name, final ArgumentQueue arguments, final Context ctx) {
     final Pointered targetRaw = ctx.target();
     if (targetRaw == null) {
       return null;
@@ -74,7 +73,7 @@ public record RelationalPlaceholder<A extends Audience>(
     }
     if (targetClass == null) {
       //noinspection unchecked
-      return this.resolveA(name, (A)a, (A)b, arguments, ctx);
+      return this.resolveA(name, (A) a, (A) b, arguments, ctx);
     }
     final @Nullable A audience = forwardingFilter(a);
     if (audience == null) {
@@ -88,15 +87,15 @@ public record RelationalPlaceholder<A extends Audience>(
   }
 
   private @Nullable Tag resolveA(
-          String name,
-          A audience,
-          A relationalAudience,
-          ArgumentQueue arguments,
-          Context ctx
+      final String name,
+      final A audience,
+      final A relationalAudience,
+      final ArgumentQueue arguments,
+      final Context ctx
   ) {
     return this.has(name)
-            ? resolver.tag(audience, relationalAudience, arguments, ctx)
-            : null;
+        ? resolver.tag(audience, relationalAudience, arguments, ctx)
+        : null;
   }
 
   @SuppressWarnings("OverrideOnly")
@@ -112,7 +111,7 @@ public record RelationalPlaceholder<A extends Audience>(
   }
 
   @Override
-  public boolean has(@NotNull String name) {
+  public boolean has(final String name) {
     return key.equalsIgnoreCase(name);
   }
 
@@ -131,7 +130,7 @@ public record RelationalPlaceholder<A extends Audience>(
   @Override
   public String toString() {
     return "RelationalPlaceholder{" +
-            "key='" + key + '\'' +
-            '}';
+        "key='" + key + '\'' +
+        '}';
   }
 }

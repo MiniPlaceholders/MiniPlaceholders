@@ -1,6 +1,7 @@
 package io.github.miniplaceholders.api.provider;
 
 import io.github.miniplaceholders.api.Expansion;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * An expansion provider.
@@ -9,6 +10,7 @@ import io.github.miniplaceholders.api.Expansion;
  *          by adding a non-final field of the {@link PlatformData} class
  *          with the {@link team.unnamed.inject.Inject} annotation to your ExpansionProvider class.
  */
+@NullMarked
 public interface ExpansionProvider {
     /**
      * Provides an expansion.

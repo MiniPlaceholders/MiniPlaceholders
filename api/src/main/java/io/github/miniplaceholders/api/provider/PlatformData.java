@@ -1,6 +1,7 @@
 package io.github.miniplaceholders.api.provider;
 
 import io.github.miniplaceholders.api.MiniPlaceholders;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Wrapper for platform-dependent instances.
@@ -17,5 +18,6 @@ import io.github.miniplaceholders.api.MiniPlaceholders;
  *                       and in Fabric it will be {@code net.fabricmc.api.ModInitializer}.
  * @see MiniPlaceholders#platform()
  */
+@NullMarked
 public record PlatformData(Object serverInstance, Object complementInstance) {
 }

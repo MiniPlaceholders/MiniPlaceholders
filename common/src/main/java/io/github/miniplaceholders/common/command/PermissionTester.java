@@ -8,4 +8,6 @@ import org.jspecify.annotations.NullMarked;
 @FunctionalInterface
 public interface PermissionTester {
   TriState permissionValue(Audience audience, String permission);
+
+  PermissionTester NO_OP = (audience, permission) -> TriState.NOT_SET;
 }

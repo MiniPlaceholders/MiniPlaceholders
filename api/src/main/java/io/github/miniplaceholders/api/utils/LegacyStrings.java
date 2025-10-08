@@ -4,8 +4,8 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.Context;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
-import org.jetbrains.annotations.Nullable;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.function.Function;
 
@@ -26,7 +26,10 @@ public final class LegacyStrings {
    * Legacy serializer with hex support
    * <p>Use this as the last available alternative,
    * it is recommended to use MiniMessage instead of this serializer</p>
+   *
+   * @deprecated Legacy format “support” will be removed in future versions
    */
+  @Deprecated(since = "3.1.0")
   public static final LegacyComponentSerializer LEGACY_HEX_SERIALIZER = LegacyComponentSerializer.builder()
           .character('&')
           .hexColors()

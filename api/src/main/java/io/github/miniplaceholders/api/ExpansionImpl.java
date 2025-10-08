@@ -8,8 +8,8 @@ import io.github.miniplaceholders.api.types.PlaceholderType;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.intellij.lang.annotations.Subst;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.NullUnmarked;
 
@@ -34,23 +34,23 @@ final class ExpansionImpl implements Expansion {
   private final String version;
 
   ExpansionImpl(
-          final String expansionName,
-          @Nullable final Collection<AudiencePlaceholder<?>> audiencePlaceholders,
-          @Nullable final Collection<RelationalPlaceholder<?>> relationalPlaceholders,
-          @Nullable final Collection<GlobalPlaceholder> globalPlaceholders,
-          @Nullable final String author,
-          @Nullable final String version
+      final String expansionName,
+      @Nullable final Collection<AudiencePlaceholder<?>> audiencePlaceholders,
+      @Nullable final Collection<RelationalPlaceholder<?>> relationalPlaceholders,
+      @Nullable final Collection<GlobalPlaceholder> globalPlaceholders,
+      @Nullable final String author,
+      @Nullable final String version
   ) {
     this.name = expansionName;
     this.audiencePlaceholders = audiencePlaceholders != null
-            ? new PlaceholderTagResolver(audiencePlaceholders.toArray(EMPTY_SINGLE_AUDIENCE))
-            : PlaceholderTagResolver.EMPTY;
+        ? new PlaceholderTagResolver(audiencePlaceholders.toArray(EMPTY_SINGLE_AUDIENCE))
+        : PlaceholderTagResolver.EMPTY;
     this.relationalPlaceholders = relationalPlaceholders != null
-            ? new PlaceholderTagResolver(relationalPlaceholders.toArray(EMPTY_RELATIONAL_AUDIENCE))
-            : PlaceholderTagResolver.EMPTY;
+        ? new PlaceholderTagResolver(relationalPlaceholders.toArray(EMPTY_RELATIONAL_AUDIENCE))
+        : PlaceholderTagResolver.EMPTY;
     this.globalPlaceholders = globalPlaceholders == null
-            ? PlaceholderTagResolver.EMPTY
-            : new PlaceholderTagResolver(globalPlaceholders.toArray(EMPTY_GLOBAL_PLACEHOLDER));
+        ? PlaceholderTagResolver.EMPTY
+        : new PlaceholderTagResolver(globalPlaceholders.toArray(EMPTY_GLOBAL_PLACEHOLDER));
     this.author = author;
     this.version = version;
   }
@@ -174,16 +174,16 @@ final class ExpansionImpl implements Expansion {
     private String author;
     private String version;
 
-    Builder(@NotNull final String name) {
+    Builder(final @NonNull String name) {
       this.expansionName = nonNullOrEmptyString(name, "Expansion name");
       this.expansionPrefix = name.toLowerCase(Locale.ROOT).concat("_");
     }
 
     @Override
-    public <A extends Audience> @NotNull Builder audiencePlaceholder(
-            final @Nullable Class<A> targetClass,
-            @Subst("name") final @NotNull String key,
-            final @NotNull AudienceTagResolver<@NotNull A> audiencePlaceholder
+    public <A extends Audience> @NonNull Builder audiencePlaceholder(
+        final @Nullable Class<A> targetClass,
+        final @Subst("name") @NonNull String key,
+        final @NonNull AudienceTagResolver<@NonNull A> audiencePlaceholder
     ) {
       nonNullOrEmptyString(key, "Placeholder key");
       requireNonNull(audiencePlaceholder, "the audience placeholder cannot be null");
@@ -195,10 +195,10 @@ final class ExpansionImpl implements Expansion {
     }
 
     @Override
-    public <A extends Audience> @NotNull Builder relationalPlaceholder(
-            @Nullable Class<A> targetClass,
-            @Subst("relation") @NotNull String key,
-            @NotNull RelationalTagResolver<@NotNull A> relationalPlaceholder
+    public <A extends Audience> @NonNull Builder relationalPlaceholder(
+        final Class<A> targetClass,
+        final @Subst("relation") @NonNull String key,
+        final @NonNull RelationalTagResolver<@NonNull A> relationalPlaceholder
     ) {
       nonNullOrEmptyString(key, "Placeholder key");
       requireNonNull(relationalPlaceholder, "the relational placeholder cannot be null");
@@ -211,9 +211,9 @@ final class ExpansionImpl implements Expansion {
     }
 
     @Override
-    public @NotNull Builder globalPlaceholder(
-            @Subst("time") @NotNull final String key,
-            @NotNull final GlobalTagResolver function
+    public @NonNull Builder globalPlaceholder(
+        final @Subst("time") @NonNull String key,
+        final @NonNull GlobalTagResolver function
     ) {
       nonNullOrEmptyString(key, "Placeholder key");
       requireNonNull(function, "the global placeholder cannot be null");
@@ -226,26 +226,26 @@ final class ExpansionImpl implements Expansion {
     }
 
     @Override
-    public Expansion.@NotNull Builder author(@Nullable final String author) {
+    public @NonNull Builder author(final @Nullable String author) {
       this.author = author;
       return this;
     }
 
     @Override
-    public Expansion.@NotNull Builder version(@Nullable final String version) {
+    public @NonNull Builder version(final @Nullable String version) {
       this.version = version;
       return this;
     }
 
     @Override
-    public @NotNull Expansion build() {
+    public @NonNull Expansion build() {
       return new ExpansionImpl(
-              this.expansionName,
-              this.audiencePlaceholders,
-              this.relationalPlaceholders,
-              this.globalPlaceholders,
-              this.author,
-              this.version
+          this.expansionName,
+          this.audiencePlaceholders,
+          this.relationalPlaceholders,
+          this.globalPlaceholders,
+          this.author,
+          this.version
       );
     }
   }
@@ -266,12 +266,12 @@ final class ExpansionImpl implements Expansion {
   @Override
   public String toString() {
     return "ExpansionImpl{" +
-            "name='" + name + '\'' +
-            ", audiencePlaceholders=" + audiencePlaceholders +
-            ", relationalPlaceholders=" + relationalPlaceholders +
-            ", globalPlaceholders=" + globalPlaceholders +
-            ", author='" + author + '\'' +
-            ", version='" + version + '\'' +
-            '}';
+        "name='" + name + '\'' +
+        ", audiencePlaceholders=" + audiencePlaceholders +
+        ", relationalPlaceholders=" + relationalPlaceholders +
+        ", globalPlaceholders=" + globalPlaceholders +
+        ", author='" + author + '\'' +
+        ", version='" + version + '\'' +
+        '}';
   }
 }

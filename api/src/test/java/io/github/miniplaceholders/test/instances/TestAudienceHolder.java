@@ -1,11 +1,12 @@
 package io.github.miniplaceholders.test.instances;
 
 import net.kyori.adventure.audience.ForwardingAudience;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 public record TestAudienceHolder(TestAudience audience) implements ForwardingAudience.Single {
     @Override
-    public @NotNull TestAudience audience() {
+    public TestAudience audience() {
         return audience;
     }
 }

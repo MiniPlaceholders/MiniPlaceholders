@@ -5,8 +5,8 @@ import net.kyori.adventure.text.minimessage.Context;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.TagPattern;
 import net.kyori.adventure.text.minimessage.tag.resolver.ArgumentQueue;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Objects;
 
@@ -18,19 +18,20 @@ import java.util.Objects;
  * @param name the placeholder name
  * @param resolver the object responsible for providing information
  */
+@NullMarked
 public record GlobalPlaceholder(@TagPattern String key, String name, GlobalTagResolver resolver) implements Placeholder {
   @Override
-  public @Nullable Tag resolve(@NotNull String name, @NotNull ArgumentQueue arguments, @NotNull Context ctx) {
+  public @Nullable Tag resolve(final String name, final ArgumentQueue arguments, final Context ctx) {
     return this.has(name) ? resolver.tag(arguments, ctx) : null;
   }
 
   @Override
-  public boolean has(@NotNull String name) {
+  public boolean has(final String name) {
     return key.equalsIgnoreCase(name);
   }
 
   @Override
-  public boolean equals(Object obj) {
+  public boolean equals(final Object obj) {
     if (this == obj) {
       return true;
     }

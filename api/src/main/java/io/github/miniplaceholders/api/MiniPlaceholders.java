@@ -6,8 +6,9 @@ import io.github.miniplaceholders.api.types.RelationalAudience;
 import io.github.miniplaceholders.connect.InternalPlatform;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.Unmodifiable;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -29,6 +30,7 @@ import static io.github.miniplaceholders.api.utils.Resolvers.applyIfNotEmpty;
  * @see Expansion
  * @since 1.0.0
  */
+@NullMarked
 public final class MiniPlaceholders {
     private MiniPlaceholders() {}
     static final Set<Expansion> expansions = ConcurrentHashMap.newKeySet();
@@ -39,7 +41,7 @@ public final class MiniPlaceholders {
      * @return the platform
      * @since 3.0.0
      */
-    public static @NotNull Platform platform() {
+    public static Platform platform() {
         return switch (InternalPlatform.platform()) {
             case PAPER -> Platform.PAPER;
             case VELOCITY -> Platform.VELOCITY;
@@ -58,7 +60,7 @@ public final class MiniPlaceholders {
      * @see TagResolver
      * @since 3.0.0
      */
-    public static @NotNull TagResolver globalPlaceholders() {
+    public static TagResolver globalPlaceholders() {
         final TagResolver.Builder builder = TagResolver.builder();
         for (final Expansion expansion : expansions) {
             final TagResolver resolver = expansion.globalPlaceholders();
@@ -79,7 +81,7 @@ public final class MiniPlaceholders {
      * @return {@link TagResolver} with placeholders based on an audience
      * @since 3.0.0
      */
-    public static @NotNull TagResolver audiencePlaceholders() {
+    public static TagResolver audiencePlaceholders() {
         final TagResolver.Builder resolvers = TagResolver.builder();
         for (final Expansion expansion : expansions) {
             final TagResolver resolver = expansion.audiencePlaceholders();
@@ -103,7 +105,7 @@ public final class MiniPlaceholders {
      * @since 3.0.0
      * @see RelationalAudience
      */
-    public static @NotNull TagResolver relationalPlaceholders() {
+    public static TagResolver relationalPlaceholders() {
         final TagResolver.Builder builder = TagResolver.builder();
         for (final Expansion expansion : expansions) {
             applyIfNotEmpty(expansion.relationalPlaceholders(), builder);
@@ -132,7 +134,7 @@ public final class MiniPlaceholders {
      * @return {@link TagResolver} with placeholders based on an audience and the global placeholders
      * @since 1.1.0
      */
-    public static @NotNull TagResolver audienceGlobalPlaceholders() {
+    public static TagResolver audienceGlobalPlaceholders() {
         final TagResolver.Builder builder = TagResolver.builder();
 
         for (final Expansion expansion : expansions) {
@@ -164,7 +166,7 @@ public final class MiniPlaceholders {
      * @apiNote In the case of audience placeholders, the audience to be used will be the {@link RelationalAudience#audience()}
      * @see RelationalAudience
      */
-    public static @NotNull TagResolver relationalGlobalPlaceholders() {
+    public static TagResolver relationalGlobalPlaceholders() {
         final TagResolver.Builder builder = TagResolver.builder();
         for (final Expansion expansion : expansions) {
             applyIfNotEmpty(expansion.audiencePlaceholders(), builder);
@@ -221,7 +223,7 @@ public final class MiniPlaceholders {
      * @see Expansion#builder(String)
      * @since 3.0.0
      */
-    public static @Nullable Expansion expansionByName(final @NotNull String name) {
+    public static @Nullable Expansion expansionByName(final String name) {
         for (final Expansion expansion : expansions) {
             if (Objects.equals(expansion.name(), name)) {
                 return expansion;
@@ -236,6 +238,7 @@ public final class MiniPlaceholders {
      * @return all available registered expansions
      * @since 3.0.0
      */
+    @Unmodifiable
     public static Collection<Expansion> expansionsAvailable() {
         return Collections.unmodifiableSet(expansions);
     }
