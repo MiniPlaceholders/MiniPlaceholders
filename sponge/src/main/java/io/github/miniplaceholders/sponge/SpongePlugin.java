@@ -12,6 +12,7 @@ import org.spongepowered.api.command.Command;
 import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.lifecycle.RegisterCommandEvent;
+import org.spongepowered.api.event.lifecycle.StartedEngineEvent;
 import org.spongepowered.api.event.lifecycle.StartingEngineEvent;
 import org.spongepowered.plugin.PluginContainer;
 import org.spongepowered.plugin.builtin.jvm.Plugin;
@@ -36,7 +37,10 @@ public class SpongePlugin implements PlaceholdersPlugin {
     this.server = event.engine();
     InternalPlatform.platform(InternalPlatform.SPONGE);
     logger.info("Starting MiniPlaceholders Sponge");
+  }
 
+  @Listener
+  public void onLateServerStart(final StartedEngineEvent<Server> event) {
     try {
       this.loadProvidedExpansions(configDir.resolve("expansions"));
     } catch (Throwable e) {

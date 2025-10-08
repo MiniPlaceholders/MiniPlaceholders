@@ -1,6 +1,7 @@
 package io.github.miniplaceholders.paper;
 
 import io.github.miniplaceholders.common.PlaceholdersPlugin;
+import io.github.miniplaceholders.paper.listener.ServerFinishedLoadListener;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
@@ -15,11 +16,7 @@ public final class PaperPlugin extends JavaPlugin implements PlaceholdersPlugin 
         final ComponentLogger componentLogger = getComponentLogger();
         componentLogger.info(text("Starting MiniPlaceholders Paper", NamedTextColor.GREEN));
 
-        try {
-            this.loadProvidedExpansions(getDataPath().resolve("expansions"));
-        } catch (Throwable e) {
-            componentLogger.error("Unable to load expansion providers", e);
-        }
+        new ServerFinishedLoadListener(this).register();
     }
 
     @Override

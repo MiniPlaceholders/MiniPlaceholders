@@ -76,9 +76,11 @@ public final class ExpansionProviderLoader {
           final Path providerPath
   ) throws Exception {
     //noinspection resource
-    final URLClassLoader classLoader = new URLClassLoader(new URL[] {
-            providerPath.toUri().toURL(),
-    }, ExpansionProviderLoader.class.getClassLoader());
+    final URLClassLoader classLoader = new URLClassLoader(
+        "MiniPlaceholders ClassLoader",
+        new URL[] { providerPath.toUri().toURL() },
+        ExpansionProviderLoader.class.getClassLoader()
+    );
     Class<?> mainClass;
     try {
       mainClass = classLoader.loadClass(providerClass);
