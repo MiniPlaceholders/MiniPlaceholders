@@ -6,7 +6,7 @@ velocity = "3.4.0-SNAPSHOT"
 paper = "1.21.8-R0.1-SNAPSHOT"
 minecraft = "1.21.8"
 
-runtask = "3.0.0"
+runtask = "3.0.1"
 blossom = "2.1.0"
 shadow = "9.2.2"
 jmh = "0.7.3"
