@@ -2,11 +2,14 @@ package io.github.miniplaceholders.sponge;
 
 import com.google.inject.Inject;
 import io.github.miniplaceholders.common.PlaceholdersPlugin;
+import io.github.miniplaceholders.common.metrics.LoadedExpansionsMetric;
 import io.github.miniplaceholders.connect.InternalPlatform;
 import io.github.miniplaceholders.sponge.command.SpongeCommand;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.apache.logging.log4j.Logger;
+import org.bstats.charts.SingleLineChart;
+import org.bstats.sponge.Metrics;
 import org.spongepowered.api.Server;
 import org.spongepowered.api.command.Command;
 import org.spongepowered.api.config.ConfigDir;
@@ -29,14 +32,19 @@ public class SpongePlugin implements PlaceholdersPlugin {
   private Path configDir;
   @Inject
   private PluginContainer pluginContainer;
+  @Inject
+  private Metrics.Factory factory;
 
   private Server server;
+  private Metrics metrics;
 
   @Listener
   public void onServerStart(final StartingEngineEvent<Server> event) {
     this.server = event.engine();
     InternalPlatform.platform(InternalPlatform.SPONGE);
     logger.info("Starting MiniPlaceholders Sponge");
+
+    this.metrics = factory.make(27517);
   }
 
   @Listener
@@ -46,6 +54,10 @@ public class SpongePlugin implements PlaceholdersPlugin {
     } catch (Throwable e) {
       logger.error("Unable to load expansion providers", e);
     }
+
+    // bstats sponge weird initialization workaround
+    this.metrics.startup(null);
+    this.metrics.addCustomChart(new SingleLineChart("expansions_loaded", new LoadedExpansionsMetric()));
   }
 
   @Listener

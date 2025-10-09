@@ -20,6 +20,7 @@ fabric-api = "0.134.0+1.21.8"
 fabric-loader = "0.17.2"
 
 desertwell = "2.0.4"
+bstats = "3.1.0"
 
 [libraries]
 
@@ -49,6 +50,11 @@ jspecify = "org.jspecify:jspecify:1.0.0"
 
 unnamedinject = "team.unnamed:inject:2.0.1"
 brigadier = "com.mojang:brigadier:1.0.500"
+
+bstats-core = { group = "org.bstats", name = "bstats-base", version.ref = "bstats" }
+bstats-velocity = { group = "org.bstats", name = "bstats-velocity", version.ref = "bstats" }
+bstats-sponge = { group = "org.bstats", name = "bstats-sponge", version.ref = "bstats" }
+bstats-bukkit = { group = "org.bstats", name = "bstats-bukkit", version.ref = "bstats" }
 
 [plugins]
 

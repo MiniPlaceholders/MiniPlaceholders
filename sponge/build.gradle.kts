@@ -16,6 +16,7 @@ dependencies {
     implementation(projects.miniplaceholdersConnect)
 
     compileOnly(libs.jspecify)
+    implementation(libs.bstats.sponge)
 }
 
 sponge {

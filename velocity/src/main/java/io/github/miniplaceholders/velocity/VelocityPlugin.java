@@ -15,10 +15,13 @@ import com.velocitypowered.api.proxy.ProxyServer;
 import io.github.miniplaceholders.common.PlaceholdersPlugin;
 import io.github.miniplaceholders.common.PluginConstants;
 import io.github.miniplaceholders.common.command.brigadier.BrigadierCommandProvider;
+import io.github.miniplaceholders.common.metrics.LoadedExpansionsMetric;
 import io.github.miniplaceholders.connect.InternalPlatform;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
+import org.bstats.charts.SingleLineChart;
+import org.bstats.velocity.Metrics;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -41,6 +44,8 @@ public final class VelocityPlugin implements PlaceholdersPlugin {
   private CommandManager commandManager;
   @Inject
   private ComponentLogger componentLogger;
+  @Inject
+  private Metrics.Factory metricsFactory;
 
   @Subscribe(priority = 999)
   public void onEarlyProxyInitialize(final ProxyInitializeEvent event) {
@@ -48,6 +53,9 @@ public final class VelocityPlugin implements PlaceholdersPlugin {
     componentLogger.info(Component.text("Starting MiniPlaceholders Velocity", NamedTextColor.GREEN));
 
     this.registerPlatformCommand();
+
+    final Metrics metrics = metricsFactory.make(this, 27516);
+    metrics.addCustomChart(new SingleLineChart("expansions_count", new LoadedExpansionsMetric()));
   }
 
   @Subscribe(priority = -404)
@@ -63,7 +71,7 @@ public final class VelocityPlugin implements PlaceholdersPlugin {
   public void registerPlatformCommand() {
     final LiteralCommandNode<CommandSource> node = BrigadierCommandProvider.provideCommand(
         "vminiplaceholders",
-        () -> proxyServer.getAllPlayers()
+        () -> this.proxyServer.getAllPlayers()
             .stream()
             .map(Player::getUsername)
             .collect(Collectors.toCollection(ArrayList::new)),
@@ -73,10 +81,10 @@ public final class VelocityPlugin implements PlaceholdersPlugin {
             .toAdventureTriState()
     );
     final BrigadierCommand command = new BrigadierCommand(node);
-    final CommandMeta meta = commandManager.metaBuilder(command)
+    final CommandMeta meta = this.commandManager.metaBuilder(command)
         .plugin(this)
         .build();
-    commandManager.register(meta, command);
+    this.commandManager.register(meta, command);
   }
 
   @Override

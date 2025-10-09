@@ -10,6 +10,8 @@ dependencies {
     implementation(projects.miniplaceholdersCommon)
     implementation(projects.miniplaceholdersApi)
     implementation(projects.miniplaceholdersConnect)
+
+    implementation(libs.bstats.bukkit)
 }
 
 tasks {

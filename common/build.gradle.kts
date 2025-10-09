@@ -14,6 +14,7 @@ dependencies {
     compileOnly(libs.adventure.minimessage)
     compileOnly(libs.jspecify)
     compileOnly(libs.brigadier)
+    compileOnly(libs.bstats.core)
 }
 
 sourceSets {

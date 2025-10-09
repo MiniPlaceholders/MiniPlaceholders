@@ -9,10 +9,8 @@ tasks {
         archiveClassifier.set("")
         duplicatesStrategy = DuplicatesStrategy.EXCLUDE
         relocate("net.william278.desertwell", "io.github.miniplaceholders.libs.desertwell")
-        relocate("org.incendo.cloud", "io.github.miniplaceholders.libs.cloud")
-//        if (project.simpleName() != "sponge") {
-//            relocate("io.leangen.geantyref", "io.github.miniplaceholders.libs.geantyref")
-//        }
+        relocate("org.bstats", "io.github.miniplaceholders.libs.bstats")
+
         destinationDirectory.set(file("${project.rootDir}/jar"))
     }
     build {
