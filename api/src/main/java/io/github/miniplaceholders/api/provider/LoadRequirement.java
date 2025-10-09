@@ -16,7 +16,6 @@ import static java.util.Objects.requireNonNull;
  *
  * @since 3.0.0
  */
-@NullMarked
 public sealed interface LoadRequirement {
 
   /**

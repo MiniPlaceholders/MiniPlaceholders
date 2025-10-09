@@ -1,6 +1,5 @@
 package io.github.miniplaceholders.api.utils;
 
-import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.function.Supplier;
@@ -10,7 +9,6 @@ import java.util.function.Supplier;
  *
  * @since 1.0.0
  */
-@NullMarked
 public final class Conditions {
   private Conditions() {
   }

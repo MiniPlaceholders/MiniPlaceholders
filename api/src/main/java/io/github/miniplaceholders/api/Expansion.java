@@ -37,7 +37,6 @@ import java.util.Collection;
  * 
  * @since 1.0.0
  */
-@NullMarked
 public sealed interface Expansion permits ExpansionImpl {
     /**
      * Get the expansion name

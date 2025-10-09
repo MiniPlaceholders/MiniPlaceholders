@@ -7,7 +7,6 @@ import io.github.miniplaceholders.connect.InternalPlatform;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.jetbrains.annotations.Unmodifiable;
-import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
@@ -30,7 +29,6 @@ import static io.github.miniplaceholders.api.utils.Resolvers.applyIfNotEmpty;
  * @see Expansion
  * @since 1.0.0
  */
-@NullMarked
 public final class MiniPlaceholders {
     private MiniPlaceholders() {}
     static final Set<Expansion> expansions = ConcurrentHashMap.newKeySet();

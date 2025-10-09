@@ -1,6 +1,9 @@
+import org.jspecify.annotations.NullMarked;
+
 /**
  * MiniPlaceholders API Module
  */
+@NullMarked
 open module io.github.miniplaceholders.api {
   requires io.github.miniplaceholders.connect;
 

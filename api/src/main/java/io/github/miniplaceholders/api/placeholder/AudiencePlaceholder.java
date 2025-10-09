@@ -9,7 +9,6 @@ import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.TagPattern;
 import net.kyori.adventure.text.minimessage.tag.resolver.ArgumentQueue;
 import org.jetbrains.annotations.Nullable;
-import org.jspecify.annotations.NullMarked;
 
 import java.util.Objects;
 
@@ -24,7 +23,6 @@ import static java.util.Objects.requireNonNull;
  * @param resolver the object responsible for obtaining audience information
  * @param <A> the parametrized type
  */
-@NullMarked
 public record AudiencePlaceholder<A extends Audience>(
         @Nullable Class<A> targetClass,
         @TagPattern String key,

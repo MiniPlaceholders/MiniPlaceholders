@@ -4,7 +4,6 @@ import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.minimessage.Context;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.ArgumentQueue;
-import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 /**
@@ -15,7 +14,6 @@ import org.jspecify.annotations.Nullable;
  * @since 3.0.0
  */
 @FunctionalInterface
-@NullMarked
 public interface RelationalTagResolver<A extends Audience> {
   /**
    * A Tag based on two audiences

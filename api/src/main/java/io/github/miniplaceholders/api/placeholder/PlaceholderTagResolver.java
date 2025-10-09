@@ -6,13 +6,11 @@ import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.ArgumentQueue;
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.jetbrains.annotations.Nullable;
-import org.jspecify.annotations.NullMarked;
 
 /**
  * A TagResolver responsible for containing and processing multiple placeholders.
  * @param placeholders the placeholders to process
  */
-@NullMarked
 public record PlaceholderTagResolver(Placeholder... placeholders) implements TagResolver {
   public static final PlaceholderTagResolver EMPTY = new PlaceholderTagResolver();
 

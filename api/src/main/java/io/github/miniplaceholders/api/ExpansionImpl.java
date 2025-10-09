@@ -10,7 +10,6 @@ import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.intellij.lang.annotations.Subst;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.NullUnmarked;
 
 import java.util.*;
@@ -18,7 +17,6 @@ import java.util.*;
 import static io.github.miniplaceholders.api.utils.Conditions.nonNullOrEmptyString;
 import static java.util.Objects.requireNonNull;
 
-@NullMarked
 final class ExpansionImpl implements Expansion {
   private static final AudiencePlaceholder<?>[] EMPTY_SINGLE_AUDIENCE = new AudiencePlaceholder[0];
   private static final RelationalPlaceholder<?>[] EMPTY_RELATIONAL_AUDIENCE = new RelationalPlaceholder[0];

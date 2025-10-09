@@ -1,14 +1,12 @@
 package io.github.miniplaceholders.api.utils;
 
 import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
-import org.jspecify.annotations.NullMarked;
 
 /**
  * Class of utilities to manage TagResolvers.
  *
  * @since 1.2.0
  */
-@NullMarked
 public final class Resolvers {
     private Resolvers() {}
 

@@ -2,7 +2,6 @@ package io.github.miniplaceholders.api.types;
 
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.audience.ForwardingAudience;
-import org.jspecify.annotations.NullMarked;
 
 import static java.util.Objects.requireNonNull;
 
@@ -14,7 +13,6 @@ import static java.util.Objects.requireNonNull;
  * @param <A> the audiences type
  * @since 3.0.0
  */
-@NullMarked
 public record RelationalAudience<A extends Audience>(A audience, A relational) implements ForwardingAudience.Single {
   public RelationalAudience {
     requireNonNull(audience);

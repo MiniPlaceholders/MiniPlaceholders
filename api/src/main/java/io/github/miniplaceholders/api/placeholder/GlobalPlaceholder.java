@@ -6,7 +6,6 @@ import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.TagPattern;
 import net.kyori.adventure.text.minimessage.tag.resolver.ArgumentQueue;
 import org.jspecify.annotations.Nullable;
-import org.jspecify.annotations.NullMarked;
 
 import java.util.Objects;
 
@@ -18,7 +17,6 @@ import java.util.Objects;
  * @param name the placeholder name
  * @param resolver the object responsible for providing information
  */
-@NullMarked
 public record GlobalPlaceholder(@TagPattern String key, String name, GlobalTagResolver resolver) implements Placeholder {
   @Override
   public @Nullable Tag resolve(final String name, final ArgumentQueue arguments, final Context ctx) {

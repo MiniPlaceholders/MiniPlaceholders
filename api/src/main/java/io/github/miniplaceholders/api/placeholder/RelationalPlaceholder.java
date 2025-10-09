@@ -10,7 +10,6 @@ import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.TagPattern;
 import net.kyori.adventure.text.minimessage.tag.resolver.ArgumentQueue;
 import org.jetbrains.annotations.Nullable;
-import org.jspecify.annotations.NullMarked;
 
 import java.util.Objects;
 
@@ -33,7 +32,6 @@ import static java.util.Objects.requireNonNull;
  * the {@linkplain #key()} method will return {@code server_name}.
  * @see RelationalTagResolver
  */
-@NullMarked
 public record RelationalPlaceholder<A extends Audience>(
     @Nullable Class<A> targetClass,
     @TagPattern String key,

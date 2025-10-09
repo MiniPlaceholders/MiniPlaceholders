@@ -3,7 +3,6 @@ package io.github.miniplaceholders.api.resolver;
 import net.kyori.adventure.text.minimessage.Context;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.ArgumentQueue;
-import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 /**
@@ -20,5 +19,5 @@ public interface GlobalTagResolver {
    * @since 3.0.0
    */
   @Nullable
-  Tag tag(@NonNull ArgumentQueue queue, @NonNull Context context);
+  Tag tag(ArgumentQueue queue, Context context);
 }

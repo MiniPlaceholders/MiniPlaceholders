@@ -4,7 +4,6 @@ import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.minimessage.Context;
 import net.kyori.adventure.text.minimessage.tag.Tag;
 import net.kyori.adventure.text.minimessage.tag.resolver.ArgumentQueue;
-import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 /**
@@ -13,7 +12,6 @@ import org.jspecify.annotations.Nullable;
  * @param <A> the audience type
  */
 @FunctionalInterface
-@NullMarked
 public interface AudienceTagResolver<A extends Audience> {
     /**
      * A Tag based on an Audience

@@ -6,7 +6,6 @@ import io.github.miniplaceholders.api.resolver.RelationalTagResolver;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.tag.Tag;
-import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 /**
@@ -14,7 +13,6 @@ import org.jspecify.annotations.Nullable;
  *
  * @since 3.0.0
  */
-@NullMarked
 public final class Tags {
     private Tags() {
     }
