@@ -2,7 +2,7 @@
 MiniPlaceholders Changelog
 -->
 
-## 3.1.0 (unreleased)
+## 3.1.0 (10/10/2025)
 
 ### Features
 
@@ -18,8 +18,9 @@ MiniPlaceholders Changelog
 - [fix: Fixed command formatting](https://github.com/MiniPlaceholders/MiniPlaceholders/commit/de7d14d55d6aeff8dbaf1706dd06bb6812b54390)
 
 
-## API Additions
+### API Additions
 
 - [feat: Added LoadRequirement#requiredClass and LoadRequirement#anyOf](https://github.com/MiniPlaceholders/MiniPlaceholders/commit/31ee16e41234cabf992736f81eda5bbbdc09d954)
 - [docs: Replaced some uses of JetBrains annotations with jspecify](https://github.com/MiniPlaceholders/MiniPlaceholders/commit/0f48a4baed91ec5d0fe285649822f189e69a5b57)
+- [feat: Allow the use of injected constructors when creating an ExpansionProvider](https://github.com/MiniPlaceholders/MiniPlaceholders/commit/bf995b71030064a174532d38282407ab6baa7170)
 

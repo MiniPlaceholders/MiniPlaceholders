@@ -42,8 +42,6 @@ fun DependencyHandlerScope.includeDependency(dependency: Any) {
     include(dependency)
 }
 
-
-
 tasks {
     val projectVersion = project.version
     val rootDir = project.rootDir
