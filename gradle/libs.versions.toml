@@ -4,7 +4,7 @@ metadata.format.version = "1.1"
 
 velocity = "3.4.0-SNAPSHOT"
 paper = "1.21.8-R0.1-SNAPSHOT"
-minecraft = "1.21.8"
+minecraft = "1.21.10"
 
 runtask = "3.0.1"
 blossom = "2.1.0"
@@ -16,7 +16,7 @@ adventure = "4.25.0"
 adventureModded = "6.7.0"
 kotlin = "2.2.20"
 
-fabric-api = "0.134.0+1.21.8"
+fabric-api = "0.135.0+1.21.10"
 fabric-loader = "0.17.3"
 
 desertwell = "2.0.4"

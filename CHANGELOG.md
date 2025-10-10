@@ -5,7 +5,7 @@ MiniPlaceholders Changelog
 ## 3.1.1 (unreleased)
 
 ### Features
-
+- Added support to Fabric 1.21.9+
 
 
 ### Fixes
