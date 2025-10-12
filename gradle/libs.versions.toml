@@ -7,7 +7,7 @@ paper = "1.21.8-R0.1-SNAPSHOT"
 minecraft = "1.21.10"
 
 runtask = "3.0.2"
-blossom = "2.1.0"
+blossom = "2.2.0"
 shadow = "9.2.2"
 jmh = "0.7.3"
 dokka = "2.0.0"
