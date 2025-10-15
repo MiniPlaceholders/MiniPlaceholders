@@ -10,7 +10,7 @@ runtask = "3.0.2"
 blossom = "2.2.0"
 shadow = "9.2.2"
 jmh = "0.7.3"
-dokka = "2.0.0"
+dokka = "2.1.0"
 
 adventure = "4.25.0"
 adventureModded = "6.7.0"
