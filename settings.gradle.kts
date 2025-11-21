@@ -37,7 +37,7 @@ dependencyResolutionManagement {
 }
 
 plugins {
-    id("quiet-fabric-loom") version "1.12.326"
+    id("quiet-fabric-loom") version "1.13.328"
     id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
     id("com.vanniktech.maven.publish") version "0.35.0" apply false
     kotlin("jvm") version "2.2.21" apply false
