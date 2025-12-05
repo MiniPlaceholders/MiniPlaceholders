@@ -8,7 +8,7 @@ minecraft = "1.21.10"
 
 runtask = "3.0.2"
 blossom = "2.2.0"
-shadow = "9.2.2"
+shadow = "9.3.0"
 jmh = "0.7.3"
 dokka = "2.1.0"
 
