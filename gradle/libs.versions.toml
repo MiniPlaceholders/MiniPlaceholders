@@ -12,7 +12,7 @@ shadow = "9.3.0"
 jmh = "0.7.3"
 dokka = "2.1.0"
 
-adventure = "4.25.0"
+adventure = "4.26.1"
 adventureModded = "6.8.0"
 kotlin = "2.2.21"
 
