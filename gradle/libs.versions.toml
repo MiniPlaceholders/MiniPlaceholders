@@ -63,5 +63,5 @@ runvelocity = { id = "xyz.jpenilla.run-velocity", version.ref = "runtask" }
 blossom = { id = "net.kyori.blossom", version.ref = "blossom" }
 shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }
 jmh = { id = "me.champeau.jmh", version.ref = "jmh" }
-idea-ext = { id = "org.jetbrains.gradle.plugin.idea-ext", version = "1.4" }
+idea-ext = { id = "org.jetbrains.gradle.plugin.idea-ext", version = "1.4.1" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
