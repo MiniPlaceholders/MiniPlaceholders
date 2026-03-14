@@ -54,7 +54,9 @@ public final class FabricMod implements DedicatedServerModInitializer, Placehold
           return switch (Permissions.getPermissionValue(commandSourceStack, permission)) {
             case TRUE -> TriState.TRUE;
             case FALSE -> TriState.FALSE;
-            case DEFAULT -> commandSourceStack.hasPermission(3) ? TriState.TRUE : TriState.NOT_SET;
+            case DEFAULT -> commandSourceStack.permissions()
+                .hasPermission(net.minecraft.server.permissions.Permissions.COMMANDS_GAMEMASTER)
+                ? TriState.TRUE : TriState.NOT_SET;
           };
         }
     );

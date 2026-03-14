@@ -3,8 +3,8 @@ metadata.format.version = "1.1"
 [versions]
 
 velocity = "3.4.0"
-paper = "1.21.8-R0.1-SNAPSHOT"
-minecraft = "1.21.10"
+paper = "1.21.11-R0.1-SNAPSHOT"
+minecraft = "1.21.11"
 
 runtask = "3.0.2"
 blossom = "2.2.0"
