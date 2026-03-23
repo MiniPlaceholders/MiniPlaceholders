@@ -80,7 +80,7 @@ public final class CommandConstants {
         )
         .append(newline(), miniMessage().deserialize(
             "<gradient:aqua:#94d1ff>" + command + "</gradient> <aqua>expansions</aqua>")
-            .clickEvent(ClickEvent.runCommand(command + " help"))
+            .clickEvent(ClickEvent.runCommand(command + " expansions"))
         )
         .append(newline(), FOOTER)
         .build();
