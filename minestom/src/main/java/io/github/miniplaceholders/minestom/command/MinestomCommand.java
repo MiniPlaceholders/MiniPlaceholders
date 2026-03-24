@@ -78,7 +78,10 @@ public class MinestomCommand extends Command {
             final Argument<String> sourceArgument = ArgumentType.String("source")
                     .setSuggestionCallback((_, _, suggestion) -> parseNode.providePlayerSuggestions()
                             .stream()
-                            .filter(s -> s.toLowerCase().startsWith(suggestion.getInput().toLowerCase()))
+                            .filter(s -> {
+                                final String[] args = suggestion.getInput().replace("\0", "").split(" ");
+                                return args.length < 3 || s.toLowerCase().startsWith(args[2].toLowerCase());
+                            })
                             .map(SuggestionEntry::new)
                             .forEach(suggestion::addEntry));
             final Argument<String> messageArgument = ArgumentType.String("message");
@@ -101,13 +104,19 @@ public class MinestomCommand extends Command {
             final Argument<String> sourceArgument = ArgumentType.String("source")
                     .setSuggestionCallback((_, _, suggestion) -> parseRelNode.providePlayerSuggestions()
                             .stream()
-                            .filter(s -> s.toLowerCase().startsWith(suggestion.getInput().toLowerCase()))
+                            .filter(s -> {
+                                final String[] args = suggestion.getInput().replace("\0", "").split(" ");
+                                return args.length < 3 || s.toLowerCase().startsWith(args[2].toLowerCase());
+                            })
                             .map(SuggestionEntry::new)
                             .forEach(suggestion::addEntry));
-            final Argument<String> relationalSourceArgument = ArgumentType.String("source")
+            final Argument<String> relationalSourceArgument = ArgumentType.String("relational")
                     .setSuggestionCallback((_, _, suggestion) -> parseRelNode.providePlayerSuggestions()
                             .stream()
-                            .filter(s -> s.toLowerCase().startsWith(suggestion.getInput().toLowerCase()))
+                            .filter(s -> {
+                                final String[] args = suggestion.getInput().replace("\0", "").split(" ");
+                                return args.length < 4 || s.toLowerCase().startsWith(args[3].toLowerCase());
+                            })
                             .map(SuggestionEntry::new)
                             .forEach(suggestion::addEntry));
             final Argument<String> messageArgument = ArgumentType.String("message");
