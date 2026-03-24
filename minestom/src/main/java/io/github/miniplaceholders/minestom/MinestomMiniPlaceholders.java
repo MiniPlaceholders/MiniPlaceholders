@@ -48,12 +48,7 @@ public class MinestomMiniPlaceholders implements PlaceholdersPlugin {
 
     @Override
     public boolean platformHasComplementLoaded(String complementName) {
-        try {
-            Class.forName(complementName);
-            return true;
-        } catch (ClassNotFoundException ignored) {
-            return false;
-        }
+        return false; // Minestom doesn't plugins.
     }
 
     @Override

@@ -15,7 +15,7 @@ public enum Platform {
   /**
    * Minestom Platform
    *
-   * @since 3.1.1
+   * @since 3.2.0
    */
   MINESTOM,
   /**
