@@ -18,3 +18,7 @@ dependencies {
     testImplementation("ch.qos.logback:logback-classic:1.5.32") // logger
     testImplementation("com.google.guava:guava:33.5.0-jre")
 }
+
+tasks.test {
+    failOnNoDiscoveredTests = false
+}
