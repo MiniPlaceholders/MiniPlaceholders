@@ -84,14 +84,14 @@ public class MinestomCommand extends Command {
                             })
                             .map(SuggestionEntry::new)
                             .forEach(suggestion::addEntry));
-            final Argument<String> messageArgument = ArgumentType.String("message");
+            final Argument<String[]> messageArgument = ArgumentType.StringArray("message");
 
             this.setCondition(new WrappingCondition(parseNode::hasPermission));
             this.addSyntax((sender, context) -> {
                 final String source = context.get(sourceArgument);
-                final String message = context.get(messageArgument);
+                final String[] message = context.get(messageArgument);
 
-                parseNode.parseString(sender, source, message);
+                parseNode.parseString(sender, source, String.join(" ", message));
             }, sourceArgument, messageArgument);
         }
     }
@@ -119,15 +119,15 @@ public class MinestomCommand extends Command {
                             })
                             .map(SuggestionEntry::new)
                             .forEach(suggestion::addEntry));
-            final Argument<String> messageArgument = ArgumentType.String("message");
+            final Argument<String[]> messageArgument = ArgumentType.StringArray("message");
 
             this.setCondition(new WrappingCondition(parseRelNode::hasPermission));
             this.addSyntax((sender, context) -> {
                 final String source = context.get(sourceArgument);
                 final String relationalSource = context.get(relationalSourceArgument);
-                final String message = context.get(messageArgument);
+                final String[] message = context.get(messageArgument);
 
-                parseRelNode.parseString(sender, source, relationalSource, message);
+                parseRelNode.parseString(sender, source, relationalSource, String.join(" ", message));
             }, sourceArgument, relationalSourceArgument, messageArgument);
         }
     }
