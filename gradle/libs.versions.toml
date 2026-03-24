@@ -4,7 +4,7 @@ metadata.format.version = "1.1"
 
 velocity = "3.4.0"
 paper = "1.21.11-R0.1-SNAPSHOT"
-minecraft = "1.21.11"
+minecraft = "26.1"
 
 runtask = "3.0.2"
 blossom = "2.2.0"
@@ -16,7 +16,7 @@ adventure = "4.26.1"
 adventureModded = "6.8.0"
 kotlin = "2.3.20"
 
-fabric-api = "0.139.4+1.21.11"
+fabric-api = "0.144.0+26.1"
 fabric-loader = "0.18.4"
 
 desertwell = "2.0.4"
@@ -42,7 +42,7 @@ plugin-shadow = { module = "com.gradleup.shadow:shadow-gradle-plugin", version.r
 plugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 plugin-dokka = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version.ref = "dokka" }
 plugin-runtask = { module = "xyz.jpenilla.run-velocity:xyz.jpenilla.run-velocity.gradle.plugin", version.ref = "runtask" }
-
+#net.william278:DesertWell:2.0.4
 desertwell = { group = "net.william278", name = "DesertWell", version.ref = "desertwell" }
 
 junit-bom = "org.junit:junit-bom:6.0.3"

@@ -22,9 +22,10 @@
   "depends": {
     "fabricloader": ">=0.17.0",
     "fabric": "*",
-    "java": ">=21",
-    "adventure-platform-fabric": "~6.8.0",
-    "minecraft": ">=1.21.9",
-    "fabric-permissions-api-v0": "~0.6.0"
+    "java": ">=25",
+    "adventure-platform-fabric": ">6.8.0",
+    "minecraft": ">=26.1",
+    "fabric-permissions-api-v0": ">0.6.0",
+    "adventure-platform-mod": ">=6.9.0"
   }
 }

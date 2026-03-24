@@ -4,24 +4,28 @@ import kotlin.io.path.deleteIfExists
 
 plugins {
     id("miniplaceholders.auto.module")
-    id("quiet-fabric-loom")
+    id("net.fabricmc.fabric-loom") version "1.15.5"
+
     alias(libs.plugins.shadow)
+}
+
+repositories {
+    maven("https://jitpack.io")
 }
 
 val shade: Configuration by configurations.creating
 
 dependencies {
     minecraft(libs.minecraft)
-    mappings(loom.officialMojangMappings())
-    modImplementation(libs.fabric.loader)
-    modImplementation(libs.fabric.api)
+    compileOnly(libs.fabric.loader)
+    compileOnly(libs.fabric.api)
 
     includeDependency(libs.adventure.platform.fabric)
     includeDependency(libs.adventure.serializer.legacy)
     includeDependency(libs.adventure.minimessage)
     includeDependency(libs.luckopermissionsapi)
-    includeDependency(libs.desertwell)
     includeDependency(libs.unnamedinject)
+    includeDependency(libs.desertwell)
 
     shadeModule(projects.miniplaceholdersApi)
     shadeModule(projects.miniplaceholdersCommon)
@@ -38,7 +42,7 @@ fun DependencyHandlerScope.shadeModule(module: ProjectDependency) {
 }
 
 fun DependencyHandlerScope.includeDependency(dependency: Any) {
-    modImplementation(dependency)
+    implementation(dependency)
     include(dependency)
 }
 
@@ -51,8 +55,9 @@ tasks {
             expand("version" to projectVersion)
         }
     }
-    remapJar {
-        inputFile.set(shadowJar.get().archiveFile)
+    jar {
+
+        //inputFile.set(shadowJar.get().archiveFile)
         archiveFileName.set("MiniPlaceholders-Fabric-${projectVersion}.jar")
         destinationDirectory.set(file("${rootDir}/jar"))
     }
