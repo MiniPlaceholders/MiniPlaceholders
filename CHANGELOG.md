@@ -2,10 +2,10 @@
 MiniPlaceholders Changelog
 -->
 
-## 3.1.1 (unreleased)
+## 3.2.0 (unreleased)
 
 ### Features
-- Added support to Fabric 1.21.9+
+- Added support to Fabric 26.1+
 
 
 ### Fixes

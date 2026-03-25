@@ -21,6 +21,7 @@ fabric-loader = "0.18.5"
 
 desertwell = "2.0.4"
 bstats = "3.2.1"
+jspecify = "1.0.0"
 
 [libraries]
 
@@ -44,7 +45,7 @@ plugin-runtask = { module = "xyz.jpenilla.run-velocity:xyz.jpenilla.run-velocity
 desertwell = { group = "net.william278", name = "DesertWell", version.ref = "desertwell" }
 
 junit-bom = "org.junit:junit-bom:6.0.3"
-jspecify = "org.jspecify:jspecify:1.0.0"
+jspecify = { module = "org.jspecify:jspecify", version.ref = "jspecify" }
 
 unnamedinject = "team.unnamed:inject:2.0.1"
 brigadier = "com.mojang:brigadier:1.0.500"
