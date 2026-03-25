@@ -3,25 +3,33 @@ import java.nio.file.StandardCopyOption
 import kotlin.io.path.deleteIfExists
 
 plugins {
+    id("net.fabricmc.fabric-loom") version "1.15.5"
     id("miniplaceholders.auto.module")
-    id("quiet-fabric-loom")
-    alias(libs.plugins.shadow)
+}
+
+repositories {
+    maven("https://central.sonatype.com/repository/maven-snapshots/") {
+        name = "sonatype-snapshots"
+            mavenContent {
+                snapshotsOnly()
+            }
+    }
+    maven("https://jitpack.io")
 }
 
 val shade: Configuration by configurations.creating
 
 dependencies {
     minecraft(libs.minecraft)
-    mappings(loom.officialMojangMappings())
-    modImplementation(libs.fabric.loader)
-    modImplementation(libs.fabric.api)
+    compileOnly(libs.fabric.loader)
+    compileOnly(libs.fabric.api)
 
     includeDependency(libs.adventure.platform.fabric)
     includeDependency(libs.adventure.serializer.legacy)
     includeDependency(libs.adventure.minimessage)
     includeDependency(libs.luckopermissionsapi)
-    includeDependency(libs.desertwell)
     includeDependency(libs.unnamedinject)
+    includeDependency(libs.desertwell)
 
     shadeModule(projects.miniplaceholdersApi)
     shadeModule(projects.miniplaceholdersCommon)
@@ -29,16 +37,16 @@ dependencies {
 }
 
 fun DependencyHandlerScope.shadeModule(module: ProjectDependency) {
-    shade(module) {
+    implementation(module) {
         isTransitive = false
     }
-    implementation(module) {
+    include(module) {
         isTransitive = false
     }
 }
 
 fun DependencyHandlerScope.includeDependency(dependency: Any) {
-    modImplementation(dependency)
+    implementation(dependency)
     include(dependency)
 }
 
@@ -51,13 +59,9 @@ tasks {
             expand("version" to projectVersion)
         }
     }
-    remapJar {
-        inputFile.set(shadowJar.get().archiveFile)
+    jar {
         archiveFileName.set("MiniPlaceholders-Fabric-${projectVersion}.jar")
         destinationDirectory.set(file("${rootDir}/jar"))
-    }
-    shadowJar {
-        configurations = listOf(shade)
     }
     // I know it's exactly the same logic for all modules,
     // but for some reason in this module it only works
