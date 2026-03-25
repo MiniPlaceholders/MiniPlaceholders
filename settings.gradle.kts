@@ -16,28 +16,16 @@ pluginManagement {
 }
 
 dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
-        maven("https://central.sonatype.com/repository/maven-snapshots/") {
-            name = "sonatype-snapshots"
-            mavenContent {
-                snapshotsOnly()
-            }
-        }
         maven("https://repo.papermc.io/repository/maven-public/")
         maven("https://repo.maven.apache.org/maven2/")
         maven("https://repo.spongepowered.org/repository/")
-        maven("https://jitpack.io") {
-            mavenContent {
-                includeGroup("net.william278")
-            }
-        }
+        maven("https://jitpack.io")
         maven("https://repo.jpenilla.xyz/snapshots/")
     }
 }
 
 plugins {
-    id("quiet-fabric-loom") version "1.15.332"
     id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
     id("com.vanniktech.maven.publish") version "0.36.0" apply false
     kotlin("jvm") version "2.3.20" apply false
