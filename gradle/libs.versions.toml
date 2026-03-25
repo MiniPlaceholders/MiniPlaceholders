@@ -40,9 +40,7 @@ adventure-serializer-plain = { group = "net.kyori", name = "adventure-text-seria
 
 plugin-shadow = { module = "com.gradleup.shadow:shadow-gradle-plugin", version.ref = "shadow" }
 plugin-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
-plugin-dokka = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version.ref = "dokka" }
 plugin-runtask = { module = "xyz.jpenilla.run-velocity:xyz.jpenilla.run-velocity.gradle.plugin", version.ref = "runtask" }
-#net.william278:DesertWell:2.0.4
 desertwell = { group = "net.william278", name = "DesertWell", version.ref = "desertwell" }
 
 junit-bom = "org.junit:junit-bom:6.0.3"
@@ -61,7 +59,6 @@ bstats-bukkit = { group = "org.bstats", name = "bstats-bukkit", version.ref = "b
 runpaper = { id = "xyz.jpenilla.run-paper", version.ref = "runtask" }
 runvelocity = { id = "xyz.jpenilla.run-velocity", version.ref = "runtask" }
 blossom = { id = "net.kyori.blossom", version.ref = "blossom" }
-shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }
 jmh = { id = "me.champeau.jmh", version.ref = "jmh" }
 idea-ext = { id = "org.jetbrains.gradle.plugin.idea-ext", version = "1.4.1" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }

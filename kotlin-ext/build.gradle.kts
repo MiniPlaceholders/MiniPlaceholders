@@ -6,7 +6,7 @@ import java.time.LocalDate
 plugins {
     kotlin("jvm")
     id("com.vanniktech.maven.publish")
-    id("org.jetbrains.dokka") version "2.1.0"
+    alias(libs.plugins.dokka)
 }
 
 dependencies {
