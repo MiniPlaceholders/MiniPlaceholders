@@ -6,7 +6,7 @@ MiniPlaceholders Changelog
 
 ### Features
 - Added support to Fabric 1.21.9+
-
+- Added Minestom support
 
 ### Fixes
 

@@ -15,8 +15,10 @@ public class MinestomServer {
 
         MinecraftServer.getGlobalEventHandler().addListener(new AsyncPlayerConfigurationListener());
 
-        final MinestomMiniPlaceholders miniPlaceholders = new MinestomMiniPlaceholders();
-        miniPlaceholders.init(Path.of("miniplaceholders"), (_, _) -> TriState.TRUE);
+        MinestomMiniPlaceholders.initialize(
+            Path.of("miniplaceholders"),
+            (_, _) -> TriState.TRUE
+        );
 
         OpenToLAN.open();
         server.start("0.0.0.0", 25565);

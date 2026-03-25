@@ -11,34 +11,35 @@ import net.minestom.server.MinecraftServer;
 
 import java.nio.file.Path;
 
-public class MinestomMiniPlaceholders implements PlaceholdersPlugin {
-    private final ComponentLogger componentLogger = ComponentLogger.logger("miniplaceholders");
-    private PermissionTester permissionTester;
+public final class MinestomMiniPlaceholders implements PlaceholdersPlugin {
+    private static final ComponentLogger LOGGER = ComponentLogger.logger("miniplaceholders");
+    private final PermissionTester permissionTester;
 
-    public MinestomMiniPlaceholders() {
-        InternalPlatform.platform(InternalPlatform.MINESTOM);
-        componentLogger.info(Component.text("Starting MiniPlaceholders Minestom", NamedTextColor.GREEN));
+    private MinestomMiniPlaceholders(PermissionTester permissionTester) {
+        this.permissionTester = permissionTester;
     }
 
-    public void init(Path dataDirectory, PermissionTester permissionTester) {
-        componentLogger.info(Component.text("Initializing MiniPlaceholders", NamedTextColor.GREEN));
-        this.permissionTester = permissionTester;
-
-        this.registerPlatformCommand();
+    public static MinestomMiniPlaceholders initialize(Path dataDirectory, PermissionTester permissionTester) {
+        InternalPlatform.platform(InternalPlatform.MINESTOM);
+        LOGGER.info(Component.text("Initializing MiniPlaceholders", NamedTextColor.GREEN));
+        final MinestomMiniPlaceholders miniPlaceholders = new MinestomMiniPlaceholders(permissionTester);
+        miniPlaceholders.registerPlatformCommand();
 
         try {
-            this.loadProvidedExpansions(dataDirectory.resolve("expansions"));
+            miniPlaceholders.loadProvidedExpansions(dataDirectory.resolve("expansions"));
         } catch (Throwable e) {
-            componentLogger.error("Unable to load expansion providers", e);
+            LOGGER.error("Unable to load expansion providers", e);
         }
+
+        return miniPlaceholders;
     }
 
     /**
      * Initializes MiniPlaceholders with a default no-op permission tester.
      * This is not recommended for production use!
      */
-    public void init(Path dataDirectory) {
-        this.init(dataDirectory, PermissionTester.NO_OP);
+    public static MinestomMiniPlaceholders initialize(final Path dataDirectory) {
+        return MinestomMiniPlaceholders.initialize(dataDirectory, PermissionTester.NO_OP);
     }
 
     @Override
@@ -58,11 +59,11 @@ public class MinestomMiniPlaceholders implements PlaceholdersPlugin {
 
     @Override
     public void logInfo(Component component) {
-        componentLogger.info(component);
+        LOGGER.info(component);
     }
 
     @Override
     public void logError(Component component) {
-        componentLogger.error(component);
+        LOGGER.error(component);
     }
 }
