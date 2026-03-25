@@ -5,7 +5,9 @@ MiniPlaceholders Changelog
 ## 3.2.0 (unreleased)
 
 ### Features
+
 - Added support to Fabric 26.1+
+- Added Minestom support
 
 
 ### Fixes

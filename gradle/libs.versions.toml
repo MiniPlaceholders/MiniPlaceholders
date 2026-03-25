@@ -4,6 +4,7 @@ metadata.format.version = "1.1"
 
 velocity = "3.4.0"
 paper = "1.21.11-R0.1-SNAPSHOT"
+minestom = "2026.03.03-1.21.11"
 minecraft = "26.1"
 
 runtask = "3.0.2"
@@ -27,6 +28,7 @@ jspecify = "1.0.0"
 
 velocity = { group = "com.velocitypowered", name = "velocity-api", version.ref = "velocity" }
 paper = { group = "io.papermc.paper", name = "paper-api", version.ref = "paper" }
+minestom = { group = "net.minestom", name = "minestom", version.ref = "minestom" }
 minecraft = { group = "com.mojang", name = "minecraft", version.ref = "minecraft" }
 
 fabric-api = { group = "net.fabricmc.fabric-api", name = "fabric-api", version.ref = "fabric-api" }

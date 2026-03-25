@@ -25,6 +25,24 @@ public record ExampleProvider(PlatformData platformData) implements ExpansionPro
                 platformData.serverInstance(),
                 platformData.complementInstance()
             )))
+            .audiencePlaceholder("audience", (audience, queue, ctx) -> Tag.preProcessParsed("""
+                    Audience Instance Class: %s
+                    MiniPlaceholders Instance Class: %s
+                    """.formatted(
+                    audience,
+                    platformData.complementInstance()
+            )))
+            .relationalPlaceholder("test", (audience, relational, queue, ctx) -> Tag.preProcessParsed("""
+                    Audience Instance Class: %s
+                    Relational Instance Class: %s
+                    Is Audience equals Relational? %s
+                    MiniPlaceholders Instance Class: %s
+                    """.formatted(
+                    audience,
+                    relational,
+                    audience.equals(relational),
+                    platformData.complementInstance()
+            )))
         .version(ExpansionConstants.VERSION)
         .build();
   }

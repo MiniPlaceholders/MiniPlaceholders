@@ -37,6 +37,7 @@ arrayOf(
     "kotlin-ext",
     "common",
     "paper",
+    "minestom",
     "velocity",
     "fabric",
     "sponge",

@@ -12,6 +12,7 @@ MiniMessage Component-based Placeholders API for Minecraft Platforms.
 
 ## Compatibility
 - Paper 1.21+
+- Minestom 1.21.11+
 - Velocity 3.4+
 - Fabric 1.21.6+
 - Sponge API 12+

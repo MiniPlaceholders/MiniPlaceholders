@@ -4,7 +4,7 @@ plugins {
     alias(libs.plugins.blossom)
 }
 
-version = "1.3.5"
+version = "1.4.0"
 
 dependencies {
     compileOnly(projects.miniplaceholdersApi)

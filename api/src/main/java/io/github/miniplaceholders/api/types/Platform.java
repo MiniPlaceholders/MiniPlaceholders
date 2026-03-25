@@ -13,6 +13,12 @@ public enum Platform {
    */
   PAPER,
   /**
+   * Minestom Platform
+   *
+   * @since 3.2.0
+   */
+  MINESTOM,
+  /**
    * Velocity Platform
    *
    * @since 1.0.0
