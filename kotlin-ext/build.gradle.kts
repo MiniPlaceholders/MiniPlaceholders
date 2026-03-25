@@ -1,5 +1,6 @@
 import com.vanniktech.maven.publish.KotlinJvm
 import com.vanniktech.maven.publish.JavadocJar
+import com.vanniktech.maven.publish.SourcesJar
 import java.time.LocalDate
 
 plugins {
@@ -18,7 +19,7 @@ dependencies {
 kotlin {
     explicitApi()
     jvmToolchain {
-        languageVersion.set(JavaLanguageVersion.of(21))
+        languageVersion.set(JavaLanguageVersion.of(25))
     }
 }
 
@@ -75,12 +76,8 @@ mavenPublishing {
         }
     }
     configure(KotlinJvm(
-        // configures the -javadoc artifact, possible values:
-        // - `JavadocJar.None()` don't publish this artifact
-        // - `JavadocJar.Empty()` publish an empty jar
-        // - `JavadocJar.Dokka("dokkaHtml")` when using Kotlin with Dokka, where `dokkaHtml` is the name of the Dokka task that should be used as input
         javadocJar = JavadocJar.Dokka("dokkaGeneratePublicationHtml"),
-        sourcesJar = true,
+        sourcesJar = SourcesJar.Sources(),
     ))
 }
 

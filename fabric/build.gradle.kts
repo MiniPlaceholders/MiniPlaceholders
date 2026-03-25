@@ -3,13 +3,17 @@ import java.nio.file.StandardCopyOption
 import kotlin.io.path.deleteIfExists
 
 plugins {
-    id("miniplaceholders.auto.module")
     id("net.fabricmc.fabric-loom") version "1.15.5"
-
-    alias(libs.plugins.shadow)
+    id("miniplaceholders.auto.module")
 }
 
 repositories {
+    maven("https://central.sonatype.com/repository/maven-snapshots/") {
+        name = "sonatype-snapshots"
+            mavenContent {
+                snapshotsOnly()
+            }
+    }
     maven("https://jitpack.io")
 }
 
@@ -33,10 +37,10 @@ dependencies {
 }
 
 fun DependencyHandlerScope.shadeModule(module: ProjectDependency) {
-    shade(module) {
+    implementation(module) {
         isTransitive = false
     }
-    implementation(module) {
+    include(module) {
         isTransitive = false
     }
 }
@@ -56,13 +60,8 @@ tasks {
         }
     }
     jar {
-
-        //inputFile.set(shadowJar.get().archiveFile)
         archiveFileName.set("MiniPlaceholders-Fabric-${projectVersion}.jar")
         destinationDirectory.set(file("${rootDir}/jar"))
-    }
-    shadowJar {
-        configurations = listOf(shade)
     }
     // I know it's exactly the same logic for all modules,
     // but for some reason in this module it only works

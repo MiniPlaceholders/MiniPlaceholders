@@ -20,12 +20,11 @@
     ]
   },
   "depends": {
-    "fabricloader": ">=0.17.0",
-    "fabric": "*",
+    "fabricloader": ">=0.18.0",
+    "fabric-api": "*",
     "java": ">=25",
     "adventure-platform-fabric": ">6.8.0",
     "minecraft": ">=26.1",
-    "fabric-permissions-api-v0": ">0.6.0",
-    "adventure-platform-mod": ">=6.9.0"
+    "fabric-permissions-api-v0": ">=0.7.0"
   }
 }

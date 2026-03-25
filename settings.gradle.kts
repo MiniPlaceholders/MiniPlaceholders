@@ -18,12 +18,6 @@ pluginManagement {
 dependencyResolutionManagement {
     //repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
-        maven("https://central.sonatype.com/repository/maven-snapshots/") {
-            name = "sonatype-snapshots"
-            mavenContent {
-                snapshotsOnly()
-            }
-        }
         maven("https://repo.papermc.io/repository/maven-public/")
         maven("https://repo.maven.apache.org/maven2/")
         maven("https://repo.spongepowered.org/repository/")
