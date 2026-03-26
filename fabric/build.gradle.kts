@@ -3,7 +3,7 @@ import java.nio.file.StandardCopyOption
 import kotlin.io.path.deleteIfExists
 
 plugins {
-    id("net.fabricmc.fabric-loom") version "1.15.5"
+    alias(libs.plugins.fabric.loom)
     id("miniplaceholders.auto.module")
 }
 

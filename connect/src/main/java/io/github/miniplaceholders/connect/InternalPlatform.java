@@ -2,8 +2,8 @@ package io.github.miniplaceholders.connect;
 
 public enum InternalPlatform {
 
-    PAPER, MINESTOM, VELOCITY,
-    FABRIC, SPONGE;
+    PAPER, VELOCITY,
+    FABRIC, SPONGE, MINESTOM;
 
     private static InternalPlatform actualPlatform;
 

@@ -7,7 +7,7 @@ import kotlin.io.path.deleteIfExists
 plugins {
     id("miniplaceholders.auto.module")
     id("miniplaceholders.shadow")
-    id("org.spongepowered.gradle.plugin") version "2.3.0"
+    alias(libs.plugins.spongegradle)
 }
 
 dependencies {

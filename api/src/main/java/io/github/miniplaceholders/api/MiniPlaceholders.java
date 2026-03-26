@@ -42,10 +42,10 @@ public final class MiniPlaceholders {
     public static Platform platform() {
         return switch (InternalPlatform.platform()) {
             case PAPER -> Platform.PAPER;
-            case MINESTOM -> Platform.MINESTOM;
             case VELOCITY -> Platform.VELOCITY;
             case FABRIC -> Platform.FABRIC;
             case SPONGE -> Platform.SPONGE;
+            case MINESTOM -> Platform.MINESTOM;
         };
     }
 

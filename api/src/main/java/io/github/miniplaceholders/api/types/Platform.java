@@ -13,12 +13,6 @@ public enum Platform {
    */
   PAPER,
   /**
-   * Minestom Platform
-   *
-   * @since 3.2.0
-   */
-  MINESTOM,
-  /**
    * Velocity Platform
    *
    * @since 1.0.0
@@ -35,5 +29,11 @@ public enum Platform {
    *
    * @since 2.2.0
    */
-  SPONGE
+  SPONGE,
+  /**
+   * Minestom Platform
+   *
+   * @since 3.2.0
+   */
+  MINESTOM,
 }
