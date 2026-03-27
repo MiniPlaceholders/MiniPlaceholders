@@ -2,20 +2,25 @@
 MiniPlaceholders Changelog
 -->
 
-## 3.2.0 (unreleased)
+# 3.2.1 (unreleased)
 
 ### Features
-
-- Added support to Fabric 26.1+
-- Added Minestom support
 
 
 ### Fixes
 
 
-
 ### API Additions
 
+
+<!--                                 -->
+
+## 3.2.0 (27/03/2026)
+
+### Features
+
+- Added support to Fabric 26.1+
+- Added Minestom support
 
 
 ## 3.1.0 (10/10/2025)

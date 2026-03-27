@@ -17,7 +17,7 @@ dependencies {
 tasks {
     runServer {
         jvmArgs("-Dcom.mojang.eula.agree=true")
-        minecraftVersion(libs.versions.minecraft.get())
+        minecraftVersion(libs.versions.paper.get().substringBefore('-'))
     }
     val projectVersion = project.version
     processResources {
