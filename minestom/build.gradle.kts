@@ -64,4 +64,19 @@ mavenPublishing {
             url.set("https://github.com/MiniPlaceholders/MiniPlaceholders/issues")
         }
     }
+
+    configurations {
+        named("runtimeElements") {
+            outgoing {
+                artifacts.clear()
+                artifact(tasks.shadowJar)
+            }
+        }
+        named("apiElements") {
+            outgoing {
+                artifacts.clear()
+                artifact(tasks.shadowJar)
+            }
+        }
+    }
 }
