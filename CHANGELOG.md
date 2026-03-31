@@ -21,6 +21,7 @@ MiniPlaceholders Changelog
 
 - Added support to Fabric 26.1+
 - Added Minestom support
+- Updated to Java 25
 
 
 ## 3.1.0 (10/10/2025)

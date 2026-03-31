@@ -4,16 +4,24 @@ plugins {
     id("miniplaceholders.shadow")
     id("miniplaceholders.auto.module")
     id("miniplaceholders.runtask")
+    `java-library`
     id("com.vanniktech.maven.publish")
+}
+
+val shadowInclude by configurations.creating
+
+configurations {
+    compileOnly.get().extendsFrom(shadowInclude)
+    testImplementation.get().extendsFrom(shadowInclude)
 }
 
 dependencies {
     compileOnly(libs.minestom)
     compileOnly(libs.adventure.api)
     annotationProcessor(libs.minestom)
-    implementation(projects.miniplaceholdersCommon)
-    implementation(projects.miniplaceholdersApi)
-    implementation(projects.miniplaceholdersConnect)
+    shadowInclude(projects.miniplaceholdersCommon)
+    api(projects.miniplaceholdersApi)
+    shadowInclude(projects.miniplaceholdersConnect)
 
     testImplementation(libs.minestom)
     testImplementation(libs.adventure.api)
@@ -22,8 +30,13 @@ dependencies {
     testImplementation("com.google.guava:guava:33.5.0-jre")
 }
 
-tasks.test {
-    failOnNoDiscoveredTests = false
+tasks {
+    shadowJar {
+        configurations = listOf(shadowInclude)
+    }
+    test {
+        failOnNoDiscoveredTests = false
+    }
 }
 
 mavenPublishing {
