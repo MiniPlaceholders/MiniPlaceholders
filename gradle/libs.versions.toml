@@ -66,7 +66,7 @@ bstats-bukkit = { group = "org.bstats", name = "bstats-bukkit", version.ref = "b
 # Platform Plugins
 runpaper = { id = "xyz.jpenilla.run-paper", version.ref = "runtask" }
 runvelocity = { id = "xyz.jpenilla.run-velocity", version.ref = "runtask" }
-fabric-loom = { id = "net.fabricmc.fabric-loom", version = "1.15.5"}
+fabric-loom = { id = "net.fabricmc.fabric-loom", version = "1.16.1"}
 spongegradle = { id = "org.spongepowered.gradle.plugin", version = "2.3.0" }
 
 # General Plugins
