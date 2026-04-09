@@ -7,7 +7,7 @@ minecraft = "26.1"
 paper = "1.21.11-R0.1-SNAPSHOT"
 velocity = "3.5.0-SNAPSHOT"
 minestom = "2026.03.25-1.21.11"
-fabric-loader = "0.18.5"
+fabric-loader = "0.19.1"
 fabric-api = "0.145.0+26.1"
 
 # Libraries
