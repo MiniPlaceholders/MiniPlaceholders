@@ -13,7 +13,7 @@ fabric-api = "0.145.0+26.1"
 # Libraries
 kotlin = "2.3.20"
 adventure = "4.26.1"
-adventureModded = "6.9.0-SNAPSHOT"
+adventureModded = "6.9.0"
 desertwell = "2.0.4"
 bstats = "3.2.1"
 jspecify = "1.0.0"
