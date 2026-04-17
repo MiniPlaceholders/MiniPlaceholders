@@ -12,7 +12,7 @@ fabric-api = "0.145.0+26.1"
 
 # Libraries
 kotlin = "2.3.20"
-adventure = "4.26.1"
+adventure = "5.0.1"
 adventureModded = "6.9.0"
 desertwell = "2.0.4"
 bstats = "3.2.1"
@@ -54,6 +54,7 @@ jspecify = { module = "org.jspecify:jspecify", version.ref = "jspecify" }
 luckopermissionsapi = { group = "me.lucko", name = "fabric-permissions-api", version = "0.7.0" }
 unnamedinject = "team.unnamed:inject:2.0.1"
 brigadier = "com.mojang:brigadier:1.0.500"
+slf4j = "org.slf4j:slf4j-api:2.0.17"
 
 # Bstats
 bstats-core = { group = "org.bstats", name = "bstats-base", version.ref = "bstats" }

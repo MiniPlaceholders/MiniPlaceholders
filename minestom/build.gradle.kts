@@ -18,6 +18,7 @@ configurations {
 dependencies {
     compileOnly(libs.minestom)
     compileOnly(libs.adventure.api)
+    compileOnly(libs.slf4j)
     annotationProcessor(libs.minestom)
     shadowInclude(projects.miniplaceholdersCommon)
     api(projects.miniplaceholdersApi)
