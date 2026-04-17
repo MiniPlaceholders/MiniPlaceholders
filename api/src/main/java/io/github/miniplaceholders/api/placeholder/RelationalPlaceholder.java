@@ -96,7 +96,6 @@ public record RelationalPlaceholder<A extends Audience>(
         : null;
   }
 
-  @SuppressWarnings("OverrideOnly")
   private @Nullable A forwardingFilter(final Pointered source) {
     //noinspection DataFlowIssue
     if (targetClass.isInstance(source)) {

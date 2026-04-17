@@ -33,7 +33,7 @@ public record GlobalPlaceholder(@TagPattern String key, String name, GlobalTagRe
     if (this == obj) {
       return true;
     }
-    if (obj instanceof GlobalPlaceholder(var oKey, var __, var ___)) {
+    if (obj instanceof GlobalPlaceholder(var oKey, var _, var _)) {
       return Objects.equals(oKey, this.key);
     }
     return false;
