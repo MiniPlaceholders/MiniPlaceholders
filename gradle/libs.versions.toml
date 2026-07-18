@@ -8,7 +8,7 @@ paper = "1.21.11-R0.1-SNAPSHOT"
 velocity = "3.5.1"
 minestom = "2026.04.13-1.21.11"
 fabric-loader = "0.19.3"
-fabric-api = "0.145.0+26.1"
+fabric-api = "0.155.2+26.3"
 
 # Libraries
 kotlin = "2.4.10"
