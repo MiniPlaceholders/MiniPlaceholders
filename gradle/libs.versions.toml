@@ -19,7 +19,7 @@ bstats = "3.2.1"
 jspecify = "1.0.1"
 
 # Gradle Plugins
-runtask = "3.0.2"
+runtask = "3.1.0"
 blossom = "2.2.0"
 shadow = "9.6.1"
 jmh = "0.7.3"
