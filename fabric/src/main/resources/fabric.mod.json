@@ -24,7 +24,7 @@
     "fabric-api": "*",
     "java": ">=25",
     "adventure-platform-fabric": ">6.8.0",
-    "minecraft": ">=26.1",
+    "minecraft": ">=26.2",
     "fabric-permissions-api-v0": ">=0.7.0"
   }
 }
