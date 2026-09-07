@@ -7,10 +7,9 @@ import org.jspecify.annotations.NullMarked;
 open module io.github.miniplaceholders.api {
   requires io.github.miniplaceholders.connect;
 
-  requires net.kyori.adventure;
+  requires net.kyori.adventure.api;
   requires net.kyori.adventure.text.minimessage;
   requires net.kyori.adventure.text.serializer.legacy;
-  requires net.kyori.examination.api;
 
   requires static org.jetbrains.annotations;
   requires static org.jspecify;
