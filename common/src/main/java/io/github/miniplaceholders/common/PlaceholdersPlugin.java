@@ -10,6 +10,7 @@ import io.github.miniplaceholders.common.loader.ExpansionProviderLoader;
 import io.github.miniplaceholders.common.loader.FailedToLoadExpansion;
 import io.github.miniplaceholders.common.loader.ProviderLoadResult;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
@@ -51,11 +52,13 @@ public interface PlaceholdersPlugin {
 
     final Component expansionsInfo = loadedExpansions.stream()
         .map(this::expansionInfo)
+        // Adventure 5.x/4.x support
+        .map(ComponentLike::asComponent)
         .collect(Component.toComponent(Component.text(", ", NamedTextColor.WHITE)));
     logInfo(Component.text("Loaded expansions: ", NamedTextColor.GREEN).append(expansionsInfo));
   }
 
-  private Component expansionInfo(Expansion expansion) {
+  private ComponentLike expansionInfo(Expansion expansion) {
     final TextComponent.Builder builder = Component.text();
     builder.append(Component.text(expansion.name(), NamedTextColor.AQUA));
     final String author = expansion.author();
@@ -84,7 +87,7 @@ public interface PlaceholdersPlugin {
       );
     }
     builder.append(Component.text(']', NamedTextColor.DARK_GRAY));
-    return builder.build();
+    return builder;
   }
 
   default ProviderLoadResult tryLoad(final ExpansionProvider provider, final LoadRequirement loadRequirement) {
