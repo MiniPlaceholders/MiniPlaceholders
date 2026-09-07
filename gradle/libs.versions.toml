@@ -5,23 +5,23 @@ metadata.format.version = "1.1"
 # Platform
 minecraft = "26.1"
 paper = "1.21.11-R0.1-SNAPSHOT"
-velocity = "3.5.0-SNAPSHOT"
+velocity = "4.1.1"
 minestom = "2026.04.13-1.21.11"
-fabric-loader = "0.19.2"
+fabric-loader = "0.19.5"
 fabric-api = "0.145.0+26.1"
 
 # Libraries
-kotlin = "2.3.20"
-adventure = "5.0.1"
-adventureModded = "6.9.0"
+kotlin = "2.4.20"
+adventure = "5.2.0"
+adventureModded = "7.1.1"
 desertwell = "2.0.4"
 bstats = "3.2.1"
-jspecify = "1.0.0"
+jspecify = "1.0.1"
 
 # Gradle Plugins
-runtask = "3.0.2"
+runtask = "3.1.0"
 blossom = "2.2.0"
-shadow = "9.4.1"
+shadow = "9.6.1"
 jmh = "0.7.3"
 dokka = "2.2.0"
 
@@ -49,7 +49,7 @@ plugin-runtask = { module = "xyz.jpenilla.run-velocity:xyz.jpenilla.run-velocity
 
 # Libraries
 desertwell = { group = "net.william278", name = "DesertWell", version.ref = "desertwell" }
-junit-bom = "org.junit:junit-bom:6.0.3"
+junit-bom = "org.junit:junit-bom:6.1.3"
 jspecify = { module = "org.jspecify:jspecify", version.ref = "jspecify" }
 luckopermissionsapi = { group = "me.lucko", name = "fabric-permissions-api", version = "0.7.0" }
 unnamedinject = "team.unnamed:inject:2.0.1"
@@ -67,7 +67,7 @@ bstats-bukkit = { group = "org.bstats", name = "bstats-bukkit", version.ref = "b
 # Platform Plugins
 runpaper = { id = "xyz.jpenilla.run-paper", version.ref = "runtask" }
 runvelocity = { id = "xyz.jpenilla.run-velocity", version.ref = "runtask" }
-fabric-loom = { id = "net.fabricmc.fabric-loom", version = "1.16.1"}
+fabric-loom = { id = "net.fabricmc.fabric-loom", version = "1.17.20"}
 spongegradle = { id = "org.spongepowered.gradle.plugin", version = "2.3.0" }
 
 # General Plugins
