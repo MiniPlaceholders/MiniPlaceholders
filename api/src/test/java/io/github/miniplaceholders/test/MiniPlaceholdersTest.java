@@ -13,7 +13,7 @@ class MiniPlaceholdersTest implements MiniTest {
     void methodEquality(){
         Expansion.builder("equality")
             .audiencePlaceholder("audience", Tags.emptyAudienceResolver())
-            .globalPlaceholder("global", (queue, ctx) -> Tags.EMPTY_TAG)
+            .globalPlaceholder("global", (_, _) -> Tags.EMPTY_TAG)
             .build()
         .register();
 

@@ -13,6 +13,7 @@ open module io.github.miniplaceholders.api {
 
   requires static org.jetbrains.annotations;
   requires static org.jspecify;
+  requires static team.unnamed.inject;
 
   exports io.github.miniplaceholders.api;
   exports io.github.miniplaceholders.api.types;
