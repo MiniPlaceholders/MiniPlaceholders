@@ -2,7 +2,7 @@
 MiniPlaceholders Changelog
 -->
 
-# 3.2.1 (unreleased)
+# 3.2.2 (unreleased)
 
 ### Features
 
@@ -14,6 +14,13 @@ MiniPlaceholders Changelog
 
 
 <!--                                 -->
+
+# 3.2.1 (07/09/2026)
+
+### Fixes
+
+- Fixed Fabric 26.2 support
+
 
 ## 3.2.0 (27/03/2026)
 
