@@ -23,7 +23,7 @@ runtask = "3.1.0"
 blossom = "2.2.0"
 shadow = "9.6.1"
 jmh = "0.7.3"
-dokka = "2.2.0"
+dokka = "2.3.0"
 
 [libraries]
 
