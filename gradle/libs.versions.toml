@@ -22,7 +22,7 @@ jspecify = "1.0.1"
 runtask = "3.1.0"
 blossom = "2.2.0"
 shadow = "9.6.1"
-jmh = "0.7.3"
+jmh = "0.7.4"
 dokka = "2.2.0"
 
 [libraries]
