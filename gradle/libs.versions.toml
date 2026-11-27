@@ -51,7 +51,7 @@ plugin-runtask = { module = "xyz.jpenilla.run-velocity:xyz.jpenilla.run-velocity
 desertwell = { group = "net.william278", name = "DesertWell", version.ref = "desertwell" }
 junit-bom = "org.junit:junit-bom:6.1.3"
 jspecify = { module = "org.jspecify:jspecify", version.ref = "jspecify" }
-luckopermissionsapi = { group = "me.lucko", name = "fabric-permissions-api", version = "0.7.0" }
+luckopermissionsapi = { group = "me.lucko", name = "fabric-permissions-api", version = "0.7.2" }
 unnamedinject = "team.unnamed:inject:2.0.1"
 brigadier = "com.mojang:brigadier:1.0.500"
 slf4j = "org.slf4j:slf4j-api:2.0.20"
